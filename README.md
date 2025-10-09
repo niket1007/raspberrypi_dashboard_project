@@ -1,0 +1,2 @@
+# raspberrypi_dashboard_project
+Dashboard Application for raspberrypi
