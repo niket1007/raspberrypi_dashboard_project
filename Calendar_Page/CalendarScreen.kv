@@ -1,0 +1,75 @@
+# calendarscreen.kv
+
+# This rule styles our custom DateLabel
+<DateLabel>:
+    background_color: 0, 0, 0, 0
+    canvas.before:
+        Color:
+            # Draw the accent color circle only if it's the current day
+            rgba: app.theme_colors[2] if self.is_today else (0,0,0,0)
+        RoundedRectangle:
+            radius: [dp(18)]
+            size: dp(36), dp(36)
+            pos: self.center_x - dp(18), self.center_y - dp(18)
+
+
+<CalendarScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 10
+        spacing: 10
+        
+        # Label for the Month and Year
+        Label:
+            id: month_label
+            text: "Month Year"
+            font_name: 'Roboto-Regular'
+            font_size: '26sp'
+            color: app.theme_colors[1]
+            size_hint_y: 0.15
+            
+        # Grid for the days of the week headers
+        GridLayout:
+            cols: 7
+            size_hint_y: 0.1
+            Label:
+                text: 'Mo'
+                font_name: 'Roboto-Regular'
+                color: app.theme_colors[1]
+            Label:
+                text: 'Tu'
+                font_name: 'Roboto-Regular'
+                color: app.theme_colors[1]
+            Label:
+                text: 'We'
+                font_name: 'Roboto-Regular'
+                color: app.theme_colors[1]
+            Label:
+                text: 'Th'
+                font_name: 'Roboto-Regular'
+                color: app.theme_colors[1]
+            Label:
+                text: 'Fr'
+                font_name: 'Roboto-Regular'
+                color: app.theme_colors[1]
+            Label:
+                text: 'Sa'
+                font_name: 'Roboto-Regular'
+                color: app.theme_colors[1]
+            Label:
+                text: 'Su'
+                font_name: 'Roboto-Regular'
+                color: app.theme_colors[1]
+
+        # This grid will be populated with dates from Python
+        GridLayout:
+            id: date_grid
+            cols: 7
+
+        # --- NEW: Add a label at the bottom to show holiday info ---
+        Label:
+            id: holiday_info_label
+            text: "Tap a date for info"
+            font_name: 'Roboto-Regular'
+            size_hint_y: 0.1
+            color: app.theme_colors[1]

@@ -1,0 +1,45 @@
+<WeatherScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 20
+        spacing: 10
+
+        canvas.before:
+            Color:
+                rgba: root.background_color
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        BoxLayout:
+            size_hint_y: None
+            height: '20dp'
+            Label:
+                text: root.city
+                font_name: 'Roboto-Regular'
+                font_size: '16sp'
+                color: app.theme_colors[1]
+                halign: 'left'
+                valign: 'center'
+                text_size: self.size
+
+        Label:
+            text: root.temp
+            font_name: 'Roboto-Regular'
+            font_size: '64sp'
+            color: app.theme_colors[1]
+            size_hint_y: 0.2
+
+        Label:
+            text: root.description
+            font_name: 'Roboto-Regular'
+            font_size: '20sp'
+            color: app.theme_colors[1]
+            size_hint_y: 0.15
+
+        Label:
+            text: root.min_max_temp
+            font_name: 'Roboto-Regular'
+            font_size: '16sp'
+            color: app.theme_colors[2]
+            size_hint_y: 0.15

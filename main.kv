@@ -1,0 +1,18 @@
+#:import SlideTransition kivy.uix.screenmanager.SlideTransition
+#:include Quote_Page/QuoteScreen.kv
+#:include Weather_Page/WeatherScreen.kv
+#:include Todo_Page/TodoScreen.kv
+#:include Calendar_Page/CalendarScreen.kv
+
+# The root widget is now a BoxLayout
+BoxLayout:
+    orientation: 'vertical'
+    canvas.before:
+        Color:
+            rgba: app.theme_colors[0] # Dark background color
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    DashboardManager:
+        id: screen_manager # Give the manager an id
