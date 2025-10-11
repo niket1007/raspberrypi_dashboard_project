@@ -1,0 +1,34 @@
+# welcomescreen.kv
+
+<GreetingsScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(30)
+        spacing: dp(5)
+
+        Label:
+            text: root.greeting_text
+            font_name: 'Roboto-Regular'
+            font_size: '32sp'
+            color: app.theme_colors[1]
+            size_hint_y: 0.3
+            halign: 'center'
+
+        Label:
+            text: root.date_text
+            font_name: 'Roboto-Regular'
+            font_size: '50sp'
+            color: app.theme_colors[1]
+            size_hint_y: 0.3
+            halign: 'center'
+
+        Label:
+            text: root.time_text
+            font_name: 'Roboto-Regular'
+            font_size: '30sp'
+            bold: True
+            color: app.theme_colors[1]
+            size_hint_y: 0.4
+            halign: 'center'
+
+        

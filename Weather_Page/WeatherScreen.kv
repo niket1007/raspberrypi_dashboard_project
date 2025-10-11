@@ -6,12 +6,13 @@
 
         canvas.before:
             Color:
-                rgba: root.background_color
+                rgba: (0.961, 0.965, 0.98, 1)
             Rectangle:
                 pos: self.pos
                 size: self.size
 
         BoxLayout:
+            orientation: "horizontal"
             size_hint_y: None
             height: '20dp'
             Label:
@@ -32,10 +33,13 @@
 
         Label:
             text: root.description
+            text_size: self.width, None
             font_name: 'Roboto-Regular'
             font_size: '20sp'
             color: app.theme_colors[1]
             size_hint_y: 0.15
+            halign: 'center'
+            valign: 'center'
 
         Label:
             text: root.min_max_temp
