@@ -1,0 +1,66 @@
+<InternetSpeedTestScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 20
+        spacing: 15
+
+        # --- Wi-Fi Info ---
+        BoxLayout:
+            size_hint_y: 0.15
+            Label:
+                text: "Wi-Fi Network:"
+                font_name: 'Roboto-Regular'
+                color: app.theme_colors[1]
+                halign: 'left'
+                text_size: self.size
+            Label:
+                text: root.wifi_name
+                font_name: 'Roboto-Regular'
+                font_size: '20sp'
+                color: app.theme_colors[1]
+                halign: 'right'
+                text_size: self.size
+
+        # --- Speeds Display ---
+        GridLayout:
+            cols: 2
+            size_hint_y: 0.5
+            # Download
+            Label:
+                text: "Download"
+                font_name: 'Roboto-Regular'
+                font_size: '22sp'
+                color: app.theme_colors[1]
+            Label:
+                text: f"{root.download_speed} Mbps"
+                font_name: 'Roboto-Regular'
+                font_size: '32sp'
+                bold: True
+                color: app.theme_colors[2]
+            # Upload
+            Label:
+                text: "Upload"
+                font_name: 'Roboto-Regular'
+                font_size: '22sp'
+                color: app.theme_colors[1]
+            Label:
+                text: f"{root.upload_speed} Mbps"
+                font_name: 'Roboto-Regular'
+                font_size: '32sp'
+                bold: True
+                color: app.theme_colors[2]
+
+        # --- Status and Button ---
+        Label:
+            id: status_label
+            text: root.status_text
+            font_name: 'Roboto-Regular'
+            size_hint_y: 0.15
+            color: app.theme_colors[1]
+
+        Button:
+            id: start_button
+            text: 'Start Test'
+            font_name: 'Roboto-Regular'
+            size_hint_y: 0.2
+            on_release: root.start_speed_test()

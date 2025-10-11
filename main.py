@@ -16,6 +16,7 @@ from Quote_Page.QuoteScreen import QuoteScreen
 from Calendar_Page.CalendarScreen import CalendarScreen
 from ScreenSaver_Page.ScreenSaverScreen import ScreenSaverScreen
 from Greetings_Page.GreetingsScreen import GreetingsScreen
+from InternetSpeedTest_Page.InternetSpeedTestScreen import InternetSpeedTestScreen
 ##### Screen Imports #####
 
 Config.set('graphics', 'width', '480')
@@ -68,7 +69,8 @@ class DashboardApp(App):
             "weather": WeatherScreen(name='weather'),
             "todo": TodoScreen(name='todo'),
             "quote": QuoteScreen(name='quote'),
-            "calendar": CalendarScreen(name="calendar")
+            "calendar": CalendarScreen(name="calendar"),
+            "internet-speed-test": InternetSpeedTestScreen(name="internet-speed-test")
         }
         for screen in self.screens:
             if screen["visibility"]:
