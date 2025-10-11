@@ -64,14 +64,16 @@ class DashboardApp(App):
         self.root.ids.screen_manager.add_widget(ScreenSaverScreen(name='screensaver'))
         self.root.ids.screen_manager.add_widget(GreetingsScreen(name='greetings'))
         
-        if self.screens["weather"]:    
-            self.root.ids.screen_manager.add_widget(WeatherScreen(name='weather'))
-        if self.screens["todo"]:
-            self.root.ids.screen_manager.add_widget(TodoScreen(name='todo'))
-        if self.screens["quote"]:
-            self.root.ids.screen_manager.add_widget(QuoteScreen(name='quote'))
-        if self.screens["calendar"]:
-            self.root.ids.screen_manager.add_widget(CalendarScreen(name="calendar"))
+        screen_classes = {
+            "weather": WeatherScreen(name='weather'),
+            "todo": TodoScreen(name='todo'),
+            "quote": QuoteScreen(name='quote'),
+            "calendar": CalendarScreen(name="calendar")
+        }
+        for screen in self.screens:
+            if screen["visibility"]:
+                self.root.ids.screen_manager.add_widget(screen_classes[screen["name"]])
+
 
 if __name__ == '__main__':
     DashboardApp().run()
