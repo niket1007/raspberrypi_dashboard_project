@@ -40,6 +40,7 @@ class InternetSpeedTestScreen(CustomScreen):
                 args=["speedtest-cli", "--secure", "--csv"], 
                 capture_output=True, text=True, shell=True, check=True)
             data = command_result.stdout.split(",")
+            log.debug(f"speedtest-cli command output is {str(data)}")
             download = float(data[-4]) / 1_000_000
             upload = float(data[-3]) / 1_000_000
         except Exception as e:
