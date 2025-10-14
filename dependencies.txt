@@ -1,0 +1,7 @@
+1) Command: sudo apt install __________
+    Dependencies:
+        python3-kivy
+        python3-redis   
+        python3-holidays 
+        python3-decouple
+        speedtest-cli
