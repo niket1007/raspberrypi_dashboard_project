@@ -37,7 +37,7 @@ class InternetSpeedTestScreen(CustomScreen):
         try:
             self.ids.start_button.disabled = True
             command_result = subprocess.run(
-                args=["speedtest-cli", "--csv"], 
+                args=["speedtest-cli", "--secure", "--csv"], 
                 capture_output=True, text=True, shell=True, check=True)
             data = command_result.stdout.split(",")
             download = float(data[-4]) / 1_000_000
