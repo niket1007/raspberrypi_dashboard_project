@@ -66,3 +66,13 @@ QUOTE_UPDATE_SCREEN_DATA = "Updating screen data"
 QUOTE_API_CALL_INITIATE = "Cahce data is not available, making quote api call"
 QUOTE_API_RESPONSE_DATA = "Quote API response payload is {}"
 ####### QuoteScreen.py #######
+
+####### InternetSpeedTestScreen.py #######
+IST_ON_ENTER_EVENT = "on_enter event triggered"
+IST_WIFI_NAME_INITIATE = "starting get wifi name process"
+IST_WINDOWS_PLATFORM = "Windows Platform"
+IST_LINUX_PLATFORM = "Linux Platform"
+IST_INITIATE_SPEED_TEST = "Starting the speed test"
+IST_COMMAND_OUTPUT = "speedtest-cli command output is {}"
+IST_UPDATE_VALUES_ON_SCREEN = "setting values on screen"
+####### InternetSpeedTestScreen.py #######
