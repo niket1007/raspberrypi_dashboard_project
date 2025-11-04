@@ -3,7 +3,11 @@ from logging.handlers import TimedRotatingFileHandler
 import os
 from decouple import config
 
+def create_log_directory():
+    os.makedirs(os.getcwd() + "/Log")
+
 def setup_logger():
+    create_log_directory()
     log_file_path = os.getcwd() + "/Log/logs.log"
 
     file_handler = TimedRotatingFileHandler(
