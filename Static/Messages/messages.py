@@ -33,6 +33,7 @@ CACHE_CREATE_INSTANCE = "Create Cache instance"
 CACHE_REDIS_INITIATION = "Initiating Redis connection"
 CACHE_SET_KEY_VALUE = "Setting weather api data in redis key {} with ttl is {} and data is {}"
 CACHE_GET_KEY_VALUE = "Fetching cache data from {} and data is {}"
+CACHE_DEFAULT_DATA = "Using config:screens default data"
 ####### Cache.py #######
 
 ####### GreetingsScreen.py #######

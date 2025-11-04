@@ -1,8 +1,9 @@
 from redis import Redis
 from decouple import config
+from Static.Default_Data.redis_config_screen import config_screen
 from Logger.Logger import log
 from Static.Messages.messages import (
-    CACHE_NEW_MAGIC_METHOD, CACHE_REDIS_INITIATION,
+    CACHE_NEW_MAGIC_METHOD, CACHE_REDIS_INITIATION, CACHE_DEFAULT_DATA,
     CACHE_SET_KEY_VALUE, CACHE_GET_KEY_VALUE, CACHE_CREATE_INSTANCE)
 
 class Cache:
@@ -37,8 +38,15 @@ class Cache:
         log.debug(CACHE_GET_KEY_VALUE.format("weather:api_data", str(data)))
         return data
 
+    def set_screen_config(self) -> None:
+        self.redis.json().set("config:screens", path="$", obj=config_screen) 
+       
     def get_screen_config(self) -> dict|None:
         data = self.redis.json().get("config:screens")
+        if data is None:
+            log.debug(CACHE_DEFAULT_DATA)
+            data = config_screen
+            self.set_screen_config()
         log.debug(CACHE_GET_KEY_VALUE.format("config:screens", str(data)))
         return data    
     

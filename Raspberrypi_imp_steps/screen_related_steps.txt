@@ -1,0 +1,23 @@
+Screen Information: https://www.waveshare.com/wiki/3.5inch_RPi_LCD_(A)
+
+Screen Driver: 
+1) https://github.com/katzenjens/lcd32
+2) https://github.com/waveshare/LCD-show.git  [Preferred]
+
+################################# Calibration #################################
+1) sudo apt-get install xinput-calibrator 
+
+2) sudo mkdir /etc/X11/xorg.conf.d
+
+3) sudo vim /etc/X11/xorg.conf.d/99-calibration.conf
+
+**enter the script below into the file ans save***
+
+Section "InputClass"
+ Identifier "Calibration"
+ MatchProduct "ADS7846 Touchscreen"
+ Option "Calibration" "3919 208 236 3913"
+ Option "SwapAxes"  "0"
+EndSection
+
+################################# Calibration #################################
