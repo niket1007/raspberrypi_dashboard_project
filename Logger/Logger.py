@@ -4,7 +4,7 @@ import os
 from decouple import config
 
 def create_log_directory():
-    os.makedirs(os.getcwd() + "/Log")
+    os.makedirs(os.getcwd() + "/Log", exist_ok=True)
 
 def setup_logger():
     create_log_directory()
