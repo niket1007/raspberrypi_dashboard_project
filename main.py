@@ -1,79 +1,80 @@
-import tkinter as tk
-from tkinter import font  # Used for styling
+import ttkbootstrap as ttk
+# We no longer need the 'font' module, ttkbootstrap handles it.
 
 # Import your page modules
 from weather import WeatherPage
 from quote import QuotePage
 # from todo_page import TodoPage
 
-class DashboardApp(tk.Tk):
+class DashboardApp(ttk.Window):
     def __init__(self, *args, **kwargs):
-        tk.Tk.__init__(self, *args, **kwargs)
+        # Initialize the ttk.Window
+        # We set a theme here. "darkly" is a great-looking dark theme.
+        # Other options: "cyborg", "superhero", "vapor", "litera" (light)
+        super().__init__(*args, **kwargs, themename="darkly")
 
         # --- Basic Window Setup ---
         self.title("Raspberry Pi Dashboard")
-        self.geometry("408x320")  # Set to your screen size
+        self.geometry("480x320")  # Set to your screen size
         # self.attributes("-fullscreen", True) # Uncomment for fullscreen on Pi
-        self.configure(bg="black")
-
-        # --- Font Styles ---
-        self.title_font = font.Font(family='Helvetica', size=18, weight="bold")
-        self.body_font = font.Font(family='Helvetica', size=12)
-        self.quote_font = font.Font(family='Helvetica', size=14, weight="bold", slant="italic")
-        self.quote_char_font = font.Font(family='Helvetica', size=12)
 
         # --- Main Container for Pages ---
-        container = tk.Frame(self, bg="black")
+        container = ttk.Frame(self, bootstyle="dark")
         container.pack(side="top", fill="both", expand=True)
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
 
         # --- Navigation Bar ---
-        nav_frame = tk.Frame(self, bg="gray20")
+        # Using "secondary" bootstyle for a different color
+        nav_frame = ttk.Frame(self, bootstyle="secondary")
         nav_frame.pack(side="bottom", fill="x")
 
         # --- Page Dictionary ---
         self.frames = {}
 
         # --- Instantiate and Add Pages ---
-        # Add all your page classes here
-        for PageClass in (GreetingsPage, WeatherPage, QuotePage): # Added QuotePage
+        for PageClass in (GreetingsPage, WeatherPage, QuotePage):
             page_name = PageClass.__name__
             frame = PageClass(parent=container, controller=self)
             self.frames[page_name] = frame
             frame.grid(row=0, column=0, sticky="nsew")
 
         # --- Add Navigation Buttons ---
-        btn_greeting = tk.Button(nav_frame, text="Home", 
-                                 command=lambda: self.show_frame("GreetingsPage"))
-        btn_weather = tk.Button(nav_frame, text="Weather", 
-                                command=lambda: self.show_frame("WeatherPage"))
-        btn_quote = tk.Button(nav_frame, text="Quote", 
+        # 'bootstyle="primary"' makes them the main accent color
+        btn_greeting = ttk.Button(nav_frame, text="Home", 
+                                  bootstyle="primary",
+                                  command=lambda: self.show_frame("GreetingsPage"))
+        btn_weather = ttk.Button(nav_frame, text="Weather", 
+                                 bootstyle="primary",
+                                 command=lambda: self.show_frame("WeatherPage"))
+        btn_quote = ttk.Button(nav_frame, text="Quote", 
+                                bootstyle="primary",
                                 command=lambda: self.show_frame("QuotePage"))
         
-        btn_greeting.pack(side="left", fill="x", expand=True)
-        btn_weather.pack(side="left", fill="x", expand=True)
-        btn_quote.pack(side="left", fill="x", expand=True)
-
+        # We use 'fill' and 'expand' to make buttons equal width
+        btn_greeting.pack(side="left", fill="x", expand=True, padx=2, pady=2)
+        btn_weather.pack(side="left", fill="x", expand=True, padx=2, pady=2)
+        btn_quote.pack(side="left", fill="x", expand=True, padx=2, pady=2)
 
         # --- Show the first page ---
         self.show_frame("GreetingsPage")
 
     def show_frame(self, page_name):
-        # Bring the requested frame to the front
         frame = self.frames[page_name]
         frame.tkraise()
 
 # --- A simple "Home" page to start ---
-class GreetingsPage(tk.Frame):
+class GreetingsPage(ttk.Frame):
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent, bg="black")
+        ttk.Frame.__init__(self, parent)
         self.controller = controller
         
-        label = tk.Label(self, text="Welcome to your Dashboard!",
-                         font=controller.title_font, 
-                         bg="black", fg="white")
-        label.pack(side="top", fill="both", expand=True)
+        # 'bootstyle="inverse-dark"' makes the text white on a dark bg
+        # 'font="Helvetica 24 bold"' is an easier way to set font
+        label = ttk.Label(self, text="Welcome to your Dashboard!",
+                         font="Helvetica 24 bold", 
+                         bootstyle="inverse-dark")
+        label.pack(side="top", fill="both", expand=True, padx=20, pady=20)
 
 
 # --- Main entry point ---
