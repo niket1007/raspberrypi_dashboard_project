@@ -51,15 +51,17 @@ class DashboardApp(tk.Tk):
         btn_next = ttk.Button(nav_frame, text="Next >>", 
                               command=lambda: self.switch_page(1))
         
-        label = ttk.Label(nav_frame, text="Here display screen name", border=2, borderwidth=2, relief="solid")
-        btn_prev.pack(side="left", fill="x", expand=True, padx=2, pady=2)
-        label.pack(side="left", fill="x", expand=True, padx=2, pady=2)
-        btn_next.pack(side="left", fill="x", expand=True, padx=2, pady=2)
+        self.page_label = ttk.Label(nav_frame, text=self.frames[0].widgetName, 
+                               border=2, borderwidth=2, relief="solid", 
+                               font=("Helvetica", 10, "bold"), justify="center", background="white")
+        btn_prev.pack(side="left", fill="x", expand=True, padx=0, pady=2, ipady=5)
+        self.page_label.pack(side="left", fill="x", expand=True, padx=0, pady=2, ipady=5)
+        btn_next.pack(side="left", fill="x", expand=True, padx=0, pady=2, ipady=5)
 
         # --- Show the first page ---
         self.show_frame(self.frames[0])
 
-    def show_frame(self, page_frame):
+    def show_frame(self, page_frame: ttk.Frame):
         """Brings the specified frame to the front."""
         frame = page_frame
         frame.tkraise()
@@ -75,11 +77,12 @@ class DashboardApp(tk.Tk):
         # Get the name of the new page
         page_frame = self.frames[new_index]
         self.current_page_index = new_index
+        self.page_label.config(text=page_frame.widgetName)
         # Show it
         self.show_frame(page_frame)
 
 # --- Main entry point ---
 if __name__ == "__main__":
     app = DashboardApp()
-    app.config(cursor="none")
+    # app.config(cursor="none")
     app.mainloop()

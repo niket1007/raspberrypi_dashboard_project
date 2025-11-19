@@ -7,6 +7,7 @@ class GreetingsPage(ttk.Frame):
     def __init__(self, parent, controller):
         ttk.Frame.__init__(self, parent)
         self.controller = controller
+        self.widgetName = "Home"
 
         # --- Create a Split Layout ---
         left_frame = ttk.Frame(self)

@@ -16,7 +16,7 @@ class WeatherPage(ttk.Frame):
     def __init__(self, parent, controller):
         ttk.Frame.__init__(self, parent)
         self.controller = controller
-
+        self.widgetName = "Weather"
         # --- Create UI Elements ---
         self.title_label = ttk.Label(self, text="Weather", 
                                     font=(Style.font, 24, "bold"))
