@@ -13,7 +13,7 @@ class DashboardApp(tk.Tk):
         # --- Basic Window Setup ---
         self.title("Raspberry Pi Dashboard")
         self.geometry("480x320")
-        self.attributes("-fullscreen", True) 
+        # self.attributes("-fullscreen", True) 
 
         # --- Main Container for Pages ---
         container = ttk.Frame(self)
@@ -51,7 +51,7 @@ class DashboardApp(tk.Tk):
         btn_next = ttk.Button(nav_frame, text="Next >>", 
                               command=lambda: self.switch_page(1))
         
-        label = ttk.Label(nav_frame, text="Here display screen name")
+        label = ttk.Label(nav_frame, text="Here display screen name", border=2, borderwidth=2, relief="solid")
         btn_prev.pack(side="left", fill="x", expand=True, padx=2, pady=2)
         label.pack(side="left", fill="x", expand=True, padx=2, pady=2)
         btn_next.pack(side="left", fill="x", expand=True, padx=2, pady=2)
@@ -81,4 +81,5 @@ class DashboardApp(tk.Tk):
 # --- Main entry point ---
 if __name__ == "__main__":
     app = DashboardApp()
+    app.config(cursor="none")
     app.mainloop()
