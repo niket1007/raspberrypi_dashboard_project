@@ -5,6 +5,7 @@ from tkinter import ttk
 from Page.greetings import GreetingsPage
 from Page.weather import WeatherPage
 # from quote import QuotePage
+from decouple import config
 
 class DashboardApp(tk.Tk):
     def __init__(self, *args, **kwargs):
@@ -13,7 +14,11 @@ class DashboardApp(tk.Tk):
         # --- Basic Window Setup ---
         self.title("Raspberry Pi Dashboard")
         self.geometry("480x320")
-        # self.attributes("-fullscreen", True) 
+        if config("app_platform", "windows") == "windows":
+            self.attributes("-fullscreen", False)
+        else:
+            self.attributes("-fullscreen", True)
+            self.config(cursor="none")
 
         # --- Main Container for Pages ---
         container = ttk.Frame(self)
@@ -84,5 +89,4 @@ class DashboardApp(tk.Tk):
 # --- Main entry point ---
 if __name__ == "__main__":
     app = DashboardApp()
-    # app.config(cursor="none")
     app.mainloop()
