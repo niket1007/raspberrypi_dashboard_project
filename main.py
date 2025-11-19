@@ -13,7 +13,7 @@ class DashboardApp(tk.Tk):
         # --- Basic Window Setup ---
         self.title("Raspberry Pi Dashboard")
         self.geometry("480x320")
-        # self.attributes("-fullscreen", True) 
+        self.attributes("-fullscreen", True) 
 
         # --- Main Container for Pages ---
         container = ttk.Frame(self)
