@@ -51,7 +51,9 @@ class DashboardApp(tk.Tk):
         btn_next = ttk.Button(nav_frame, text="Next >>", 
                               command=lambda: self.switch_page(1))
         
+        label = ttk.Label(nav_frame, text="Here display screen name")
         btn_prev.pack(side="left", fill="x", expand=True, padx=2, pady=2)
+        label.pack(side="left", fill="x", expand=True, padx=2, pady=2)
         btn_next.pack(side="left", fill="x", expand=True, padx=2, pady=2)
 
         # --- Show the first page ---
