@@ -1,8 +1,13 @@
-Screen Information: https://www.waveshare.com/wiki/3.5inch_RPi_LCD_(A)
+sudo raspi-config
+Go to interface option
+Enable "SPI"
+
+creen Information: https://www.waveshare.com/wiki/3.5inch_RPi_LCD_(A)
 
 Screen Driver: 
-1) https://github.com/katzenjens/lcd32
-2) https://github.com/waveshare/LCD-show.git  [Preferred]
+First install this https://github.com/waveshare/LCD-show.git
+Then this, https://github.com/katzenjens/lcd32
+
 
 ################################# Calibration #################################
 1) sudo apt-get install xinput-calibrator 

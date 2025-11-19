@@ -1,4 +1,5 @@
-import ttkbootstrap as ttk
+import tkinter as tk
+from tkinter import ttk
 import requests
 import threading
 import time
@@ -13,31 +14,25 @@ class QuotePage(ttk.Frame):
 
         # --- Create UI Elements ---
         self.title_label = ttk.Label(self, text="Quote of the Moment", 
-                                    font="Helvetica 18 bold", 
-                                    bootstyle="primary")
+                                    font=("Helvetica", 18, "bold"))
         self.title_label.pack(side="top", pady=10, padx=20)
 
         center_frame = ttk.Frame(self)
         center_frame.pack(fill="both", expand=True)
 
-        # 'wraplength' is still important for long quotes
         self.quote_label = ttk.Label(center_frame, text="Loading quote...", 
-                                      font="Helvetica 16 bold italic", 
-                                      bootstyle="inverse-dark",
+                                      font=("Helvetica", 16, "bold", "italic"), 
                                       wraplength=750,
                                       anchor="center")
         self.quote_label.pack(side="top", pady=(20, 10), padx=20)
         
-        # 'bootstyle="secondary"' for the muted/gray text
         self.char_label = ttk.Label(center_frame, text="", 
-                                      font="Helvetica 12", 
-                                      bootstyle="secondary",
+                                      font=("Helvetica", 12), 
                                       anchor="center")
         self.char_label.pack(side="top", pady=(0, 20), padx=20)
 
         self.last_updated_label = ttk.Label(self, text="Last updated: Never",
-                                           font="Helvetica 8",
-                                           bootstyle="secondary")
+                                           font=("Helvetica", 8))
         self.last_updated_label.pack(side="bottom", pady=5)
         
         # --- Start the update loop ---
@@ -52,7 +47,6 @@ class QuotePage(ttk.Frame):
             response.raise_for_status()
             
             data = response.json()
-            print(data)
             data = data['data']
 
             quote = f"\"{data['content']}\""
@@ -63,16 +57,15 @@ class QuotePage(ttk.Frame):
 
         except requests.exceptions.RequestException as e :
             print(e)
-            self.after(0, self.update_ui, "Error: Could not fetch quote.", "", "", "danger")
+            self.after(0, self.update_ui, "Error: Could not fetch quote.", "", "", "red")
         
         except Exception as e:
-            self.after(0, self.update_ui, f"An error occurred: {e}", "", "", "danger")
+            self.after(0, self.update_ui, f"An error occurred: {e}", "", "", "red")
         
         finally:
-            # This is the 5-minute scheduler
             self.after(UPDATE_INTERVAL_MS, self.start_quote_update)
 
-    def update_ui(self, quote, character, anime, style="inverse-dark"):
-        self.quote_label.config(text=quote, bootstyle=style)
+    def update_ui(self, quote, character, anime, text_color="black"):
+        self.quote_label.config(text=quote, foreground=text_color)
         self.char_label.config(text=f"{character} {anime}")
         self.last_updated_label.config(text=f"Last updated: {time.strftime('%I:%M:%S %p')}")

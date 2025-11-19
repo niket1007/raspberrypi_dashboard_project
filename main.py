@@ -1,81 +1,80 @@
-import ttkbootstrap as ttk
-# We no longer need the 'font' module, ttkbootstrap handles it.
+import tkinter as tk
+from tkinter import ttk
 
-# Import your page modules
-from weather import WeatherPage
-from quote import QuotePage
-# from todo_page import TodoPage
+# Import all our page modules
+from Page.greetings import GreetingsPage
+from Page.weather import WeatherPage
+# from quote import QuotePage
 
-class DashboardApp(ttk.Window):
+class DashboardApp(tk.Tk):
     def __init__(self, *args, **kwargs):
-        # Initialize the ttk.Window
-        # We set a theme here. "darkly" is a great-looking dark theme.
-        # Other options: "cyborg", "superhero", "vapor", "litera" (light)
-        super().__init__(*args, **kwargs, themename="darkly")
+        super().__init__(*args, **kwargs)
 
         # --- Basic Window Setup ---
         self.title("Raspberry Pi Dashboard")
-        self.geometry("480x320")  # Set to your screen size
-        # self.attributes("-fullscreen", True) # Uncomment for fullscreen on Pi
+        self.geometry("480x320")
+        # self.attributes("-fullscreen", True) 
 
         # --- Main Container for Pages ---
-        container = ttk.Frame(self, bootstyle="dark")
+        container = ttk.Frame(self)
         container.pack(side="top", fill="both", expand=True)
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
 
         # --- Navigation Bar ---
-        # Using "secondary" bootstyle for a different color
-        nav_frame = ttk.Frame(self, bootstyle="secondary")
+        nav_frame = ttk.Frame(self)
         nav_frame.pack(side="bottom", fill="x")
 
-        # --- Page Dictionary ---
-        self.frames = {}
+        # --- Page Dictionary & List ---
+        self.frames = {
+            0: GreetingsPage,
+            1: WeatherPage
+            # 2: QuotePage,
+        }
+        self.page_list = [] # To keep track of the order
+        self.current_page_index = 0
 
         # --- Instantiate and Add Pages ---
-        for PageClass in (GreetingsPage, WeatherPage, QuotePage):
-            page_name = PageClass.__name__
-            frame = PageClass(parent=container, controller=self)
-            self.frames[page_name] = frame
+        # Add QuotePage to this tuple if you uncomment the import
+        for index in self.frames:
+            frame = self.frames[index](parent=container, controller=self)
+            
+            self.frames[index] = frame
+            
             frame.grid(row=0, column=0, sticky="nsew")
 
-        # --- Add Navigation Buttons ---
-        # 'bootstyle="primary"' makes them the main accent color
-        btn_greeting = ttk.Button(nav_frame, text="Home", 
-                                  bootstyle="primary",
-                                  command=lambda: self.show_frame("GreetingsPage"))
-        btn_weather = ttk.Button(nav_frame, text="Weather", 
-                                 bootstyle="primary",
-                                 command=lambda: self.show_frame("WeatherPage"))
-        btn_quote = ttk.Button(nav_frame, text="Quote", 
-                                bootstyle="primary",
-                                command=lambda: self.show_frame("QuotePage"))
+        # --- Add Navigation Buttons (Next / Prev) ---
+        # We use a single function 'switch_page' with a direction parameter
+        btn_prev = ttk.Button(nav_frame, text="<< Prev", 
+                              command=lambda: self.switch_page(-1))
         
-        # We use 'fill' and 'expand' to make buttons equal width
-        btn_greeting.pack(side="left", fill="x", expand=True, padx=2, pady=2)
-        btn_weather.pack(side="left", fill="x", expand=True, padx=2, pady=2)
-        btn_quote.pack(side="left", fill="x", expand=True, padx=2, pady=2)
+        btn_next = ttk.Button(nav_frame, text="Next >>", 
+                              command=lambda: self.switch_page(1))
+        
+        btn_prev.pack(side="left", fill="x", expand=True, padx=2, pady=2)
+        btn_next.pack(side="left", fill="x", expand=True, padx=2, pady=2)
 
         # --- Show the first page ---
-        self.show_frame("GreetingsPage")
+        self.show_frame(self.frames[0])
 
-    def show_frame(self, page_name):
-        frame = self.frames[page_name]
+    def show_frame(self, page_frame):
+        """Brings the specified frame to the front."""
+        frame = page_frame
         frame.tkraise()
 
-# --- A simple "Home" page to start ---
-class GreetingsPage(ttk.Frame):
-    def __init__(self, parent, controller):
-        ttk.Frame.__init__(self, parent)
-        self.controller = controller
+    def switch_page(self, delta):
+        """
+        Moves to the next or previous page.
+        delta = 1 for Next, -1 for Prev
+        """
+        # Calculate new index with wrap-around (modulo operator)
+        new_index = (self.current_page_index + delta) % len(self.frames)
         
-        # 'bootstyle="inverse-dark"' makes the text white on a dark bg
-        # 'font="Helvetica 24 bold"' is an easier way to set font
-        label = ttk.Label(self, text="Welcome to your Dashboard!",
-                         font="Helvetica 24 bold", 
-                         bootstyle="inverse-dark")
-        label.pack(side="top", fill="both", expand=True, padx=20, pady=20)
-
+        # Get the name of the new page
+        page_frame = self.frames[new_index]
+        self.current_page_index = new_index
+        # Show it
+        self.show_frame(page_frame)
 
 # --- Main entry point ---
 if __name__ == "__main__":
