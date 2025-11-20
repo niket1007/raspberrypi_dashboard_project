@@ -112,6 +112,8 @@ class CalendarPage(ttk.Frame):
                                 text=str(day),
                                 bg=bg_color,
                                 fg=fg_color,
+                                activebackground=bg_color,
+                                activeforeground=fg_color,
                                 font=font_style,
                                 relief="flat",
                                 borderwidth=0,
