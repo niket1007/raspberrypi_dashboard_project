@@ -35,10 +35,10 @@ class QuotePage(tk.Frame):
                                            font=("Helvetica", 8))
         self.last_updated_label.pack(side="bottom", pady=5)
         
-        self.fetch_quote()
+        self.start_quote_update()
 
     def start_quote_update(self):
-        self.fetch_quote()
+        threading.Thread(target=self.fetch_quote, daemon=True).start()
 
     def fetch_quote(self):
         try:

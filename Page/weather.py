@@ -3,6 +3,7 @@ import requests
 import time
 from decouple import config
 from Configs.Style import Style
+import threading
 
 WEATHER_API_KEY = config("weather_api_key", cast=str)
 WEATHER_API_URL = config("weather_api_path", cast=str)
@@ -29,11 +30,14 @@ class WeatherPage(tk.Frame):
                                            font=(Style.font, 8))
         self.last_updated_label.pack(side="bottom", pady=5)
         
-        self.fetch_weather()
+        self.update_weather_data()
 
     def update_ui(self, weather_text, text_color="black"):
         self.weather_label.config(text=weather_text, foreground=text_color)
         self.last_updated_label.config(text=f"Last updated: {time.strftime('%I:%M:%S %p')}")
+
+    def update_weather_data(self):
+        threading.Thread(target=self.fetch_weather, daemon=True).start()
 
     def fetch_weather(self):
         try:
@@ -61,4 +65,4 @@ class WeatherPage(tk.Frame):
             self.after(0, self.update_ui, f"An error occurred:\n{e}", "red")
         
         finally:
-            self.after(UPDATE_INTERVAL_MS, self.fetch_weather)
+            self.after(UPDATE_INTERVAL_MS, self.update_weather_data)
