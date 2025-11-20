@@ -9,6 +9,7 @@ class CalendarPage(ttk.Frame):
         super().__init__(parent)
         self.controller = controller
         self.widgetName = "Calendar"
+        self.config(cursor="none")
 
         # --- Mock Data (Replacing Storage.Cache) ---
         # In your real app, you would fetch this from your data source
@@ -24,6 +25,7 @@ class CalendarPage(ttk.Frame):
 
         # 2. Middle: Calendar Grid Container
         self.calendar_frame = ttk.Frame(self)
+        self.calendar_frame.config(cursor="none")
         self.calendar_frame.pack(expand=True, fill="both", padx=20)
 
         # 3. Bottom: Info Label (equivalent to holiday_info_label)
@@ -113,7 +115,7 @@ class CalendarPage(ttk.Frame):
                                 font=font_style,
                                 relief="flat",
                                 borderwidth=0,
-                                cursor="hand2",
+                                cursor="none",
                                 # Pass data to the click handler using lambda defaults
                                 command=lambda d=day, h=holiday_text, u=user_text: self.on_date_click(d, h, u))
                 
