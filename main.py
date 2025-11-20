@@ -39,7 +39,7 @@ class DashboardApp(tk.Tk):
             0: GreetingsPage,
             1: WeatherPage,
             2: QuotePage,
-            2: CalendarPage,
+            3: CalendarPage,
         }
         self.page_list = [] # To keep track of the order
         self.current_page_index = 0
