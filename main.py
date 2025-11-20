@@ -5,6 +5,7 @@ from tkinter import ttk
 from Page.greetings import GreetingsPage
 from Page.weather import WeatherPage
 # from quote import QuotePage
+from Page.calendar import CalendarPage
 from decouple import config
 
 class DashboardApp(tk.Tk):
@@ -33,8 +34,9 @@ class DashboardApp(tk.Tk):
         # --- Page Dictionary & List ---
         self.frames = {
             0: GreetingsPage,
-            1: WeatherPage
+            1: WeatherPage,
             # 2: QuotePage,
+            2: CalendarPage,
         }
         self.page_list = [] # To keep track of the order
         self.current_page_index = 0

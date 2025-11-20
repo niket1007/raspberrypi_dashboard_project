@@ -1,45 +1,44 @@
 import tkinter as tk
-from tkinter import ttk
 import requests
 import threading
 import time
+from decouple import config
 
-QUOTE_API_URL = "https://api.animechan.io/v1/quotes/random"
-UPDATE_INTERVAL_MS = 300000 # 5 minutes
+QUOTE_API_URL = config("quote_api_path", cast=str)
+UPDATE_INTERVAL_MS = config("quote_api_call_frequency", cast=int)
 
-class QuotePage(ttk.Frame):
+class QuotePage(tk.Frame):
     def __init__(self, parent, controller):
-        ttk.Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent)
         self.controller = controller
 
         # --- Create UI Elements ---
-        self.title_label = ttk.Label(self, text="Quote of the Moment", 
+        self.title_label = tk.Label(self, text="Quote of the Moment", 
                                     font=("Helvetica", 18, "bold"))
         self.title_label.pack(side="top", pady=10, padx=20)
 
-        center_frame = ttk.Frame(self)
+        center_frame = tk.Frame(self)
         center_frame.pack(fill="both", expand=True)
 
-        self.quote_label = ttk.Label(center_frame, text="Loading quote...", 
+        self.quote_label = tk.Label(center_frame, text="Loading quote...", 
                                       font=("Helvetica", 16, "bold", "italic"), 
                                       wraplength=750,
                                       anchor="center")
         self.quote_label.pack(side="top", pady=(20, 10), padx=20)
         
-        self.char_label = ttk.Label(center_frame, text="", 
+        self.char_label = tk.Label(center_frame, text="", 
                                       font=("Helvetica", 12), 
                                       anchor="center")
         self.char_label.pack(side="top", pady=(0, 20), padx=20)
 
-        self.last_updated_label = ttk.Label(self, text="Last updated: Never",
+        self.last_updated_label = tk.Label(self, text="Last updated: Never",
                                            font=("Helvetica", 8))
         self.last_updated_label.pack(side="bottom", pady=5)
         
-        # --- Start the update loop ---
-        self.start_quote_update()
+        self.fetch_quote()
 
     def start_quote_update(self):
-        threading.Thread(target=self.fetch_quote, daemon=True).start()
+        self.fetch_quote()
 
     def fetch_quote(self):
         try:

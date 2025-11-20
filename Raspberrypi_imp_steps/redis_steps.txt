@@ -1,0 +1,21 @@
+Install Redis
+    1) sudo apt install redis-server
+    2) if it fails
+        1) sudo dpkg --configure -a
+        2) if it fails, then 
+            1) sudo nano /etc/initramfs-tools/initramfs.conf
+            2) Modify Module from dep to most
+            3) rerun sudo dpkg --configure -a
+            4) sudo systemctl status redis-server
+
+Start redis server
+sudo systemctl enable redis-server
+
+Stop redis server
+sudo systemctl disable redis-server
+
+Status redis server
+sudo systemctl status redis-server
+
+Auto-Start redis server when system boots up
+sudo systemctl enable redis-server

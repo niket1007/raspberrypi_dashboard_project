@@ -1,27 +1,26 @@
 import tkinter as tk
-from tkinter import ttk
 import time
 import datetime
 
-class GreetingsPage(ttk.Frame):
+class GreetingsPage(tk.Frame):
     def __init__(self, parent, controller):
-        ttk.Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent)
         self.controller = controller
         self.widgetName = "Home"
 
         # --- Create a Split Layout ---
-        left_frame = ttk.Frame(self)
+        left_frame = tk.Frame(self)
         left_frame.pack(side="top", fill="both", expand=True, padx=20, pady=20)
 
-        self.time_label = ttk.Label(left_frame, 
+        self.time_label = tk.Label(left_frame, 
                                     font=("Helvetica", 55, "bold"))
         self.time_label.pack(side="top", expand=True, anchor="center")
         
-        self.date_label = ttk.Label(left_frame, 
+        self.date_label = tk.Label(left_frame, 
                                     font=("Helvetica", 18, "bold"))
         self.date_label.pack(side="top", expand=True, anchor="center")
 
-        self.greeting_label = ttk.Label(left_frame, 
+        self.greeting_label = tk.Label(left_frame, 
                                     font=("Helvetica", 18, "bold"))
         self.greeting_label.pack(side="top", expand=True, anchor="center")
 
