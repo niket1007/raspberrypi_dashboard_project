@@ -128,9 +128,9 @@ class CalendarPage(ttk.Frame):
         """Updates the info label when a date is clicked."""
         info_parts = []
         if holiday_text:
-            info_parts.append(f"Holiday: {holiday_text}")
+            info_parts.append(f"Holiday({day}): {holiday_text}")
         if user_text:
-            info_parts.append(f"Event: {user_text}")
+            info_parts.append(f"Event({day}): {user_text}")
             
         if info_parts:
             self.info_label.config(text="; ".join(info_parts), foreground="red")
