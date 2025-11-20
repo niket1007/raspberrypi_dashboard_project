@@ -19,3 +19,6 @@ sudo systemctl status redis-server
 
 Auto-Start redis server when system boots up
 sudo systemctl enable redis-server
+
+Restart redis server
+sudo systemctl restart redis-server
