@@ -7,6 +7,7 @@ from Page.weather import WeatherPage
 # from quote import QuotePage
 from Page.calendar import CalendarPage
 from decouple import config
+from Configs.Style import NavigationBarStyle
 
 class DashboardApp(tk.Tk):
     def __init__(self, *args, **kwargs):
@@ -57,10 +58,7 @@ class DashboardApp(tk.Tk):
         
         btn_next = ttk.Button(nav_frame, text="Next >>", 
                               command=lambda: self.switch_page(1))
-        
-        self.page_label = ttk.Label(nav_frame, text=self.frames[0].widgetName, 
-                               border=2, borderwidth=2, relief="solid", 
-                               font=("Helvetica", 10, "bold"), anchor="center")
+        self.page_label = ttk.Label(nav_frame, text=self.frames[0].widgetName, **NavigationBarStyle.ScreenInfo)
         btn_prev.pack(side="left", fill="x", expand=True, padx=0, pady=0, ipady=5)
         self.page_label.pack(side="left", fill="x", expand=True, padx=0, pady=2, ipady=5)
         btn_next.pack(side="left", fill="x", expand=True, padx=0, pady=0, ipady=5)

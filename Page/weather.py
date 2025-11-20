@@ -2,7 +2,7 @@ import tkinter as tk
 import requests
 import time
 from decouple import config
-from Style import Style
+from Configs.Style import Style
 
 WEATHER_API_KEY = config("weather_api_key", cast=str)
 WEATHER_API_URL = config("weather_api_path", cast=str)
