@@ -16,10 +16,6 @@ class WeatherPage(tk.Frame):
         self.controller = controller
         self.widgetName = "Weather"
         # --- Create UI Elements ---
-        self.title_label = tk.Label(self, text="Weather", 
-                                    font=(Style.font, 24, "bold"))
-        self.title_label.pack(side="top", pady=10)
-
         self.weather_label = tk.Label(self, text="Loading weather...", 
                                       font=(Style.font, 18),
                                       justify="left")

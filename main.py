@@ -6,15 +6,17 @@ from Page.greetings import GreetingsPage
 from Page.weather import WeatherPage
 from Page.quote import QuotePage
 from Page.calendar import CalendarPage
+from Page.todo import TodoPage
 from decouple import config
 from Configs.Style import NavigationBarStyle
-from redis import Redis
+from Services.Redis.redis import RedisStorage
+
 from decouple import Config
 
 class DashboardApp(tk.Tk):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
+        redis = RedisStorage()
         # --- Basic Window Setup ---
         self.title("Raspberry Pi Dashboard")
         self.geometry("480x320")
@@ -33,13 +35,14 @@ class DashboardApp(tk.Tk):
         # --- Navigation Bar ---
         nav_frame = ttk.Frame(self)
         nav_frame.pack(side="bottom", fill="x")
-
+        print(redis.get_screen_configuration())
         # --- Page Dictionary & List ---
         self.frames = {
             0: GreetingsPage,
             1: WeatherPage,
             2: QuotePage,
             3: CalendarPage,
+            4: TodoPage
         }
         self.page_list = [] # To keep track of the order
         self.current_page_index = 0
@@ -66,7 +69,6 @@ class DashboardApp(tk.Tk):
         btn_next.pack(side="left", fill="x", expand=True, padx=0, pady=0, ipady=5)
 
         # --- Show the first page ---
-        self.redis_connection()
         self.show_frame(self.frames[0])
 
     def show_frame(self, page_frame: ttk.Frame):
@@ -88,16 +90,6 @@ class DashboardApp(tk.Tk):
         self.page_label.config(text=page_frame.widgetName)
         # Show it
         self.show_frame(page_frame)
-
-    def redis_connection(self):
-        redis = Redis(
-            host=config("redis_host", cast=str),
-            port=config("redis_port", cast=int),
-            username=config("redis_username", cast=str, default=None),
-            password=config("redis_password", cast=str, default=None),
-            decode_responses=True
-        )
-        print(redis.get("config:screens"))
 
 # --- Main entry point ---
 if __name__ == "__main__":
