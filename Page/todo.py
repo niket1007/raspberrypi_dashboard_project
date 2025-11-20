@@ -23,4 +23,3 @@ class TodoPage(tk.Frame):
     def load_todos(self):
         todo_text = self.redis.get_todo_data()
         self.todo_label.config(text=todo_text)
-        self.after()
