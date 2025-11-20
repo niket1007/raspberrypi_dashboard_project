@@ -4,7 +4,7 @@ from tkinter import ttk
 # Import all our page modules
 from Page.greetings import GreetingsPage
 from Page.weather import WeatherPage
-# from quote import QuotePage
+from Page.quote import QuotePage
 from Page.calendar import CalendarPage
 from decouple import config
 from Configs.Style import NavigationBarStyle
@@ -38,7 +38,7 @@ class DashboardApp(tk.Tk):
         self.frames = {
             0: GreetingsPage,
             1: WeatherPage,
-            # 2: QuotePage,
+            2: QuotePage,
             2: CalendarPage,
         }
         self.page_list = [] # To keep track of the order
