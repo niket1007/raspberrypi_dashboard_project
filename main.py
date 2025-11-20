@@ -61,9 +61,9 @@ class DashboardApp(tk.Tk):
         self.page_label = ttk.Label(nav_frame, text=self.frames[0].widgetName, 
                                border=2, borderwidth=2, relief="solid", 
                                font=("Helvetica", 10, "bold"), justify="center", background="white")
-        btn_prev.pack(side="left", fill="x", expand=True, padx=0, pady=2, ipady=5)
+        btn_prev.pack(side="left", fill="x", expand=True, padx=0, pady=0, ipady=5)
         self.page_label.pack(side="left", fill="x", expand=True, padx=0, pady=2, ipady=5)
-        btn_next.pack(side="left", fill="x", expand=True, padx=0, pady=2, ipady=5)
+        btn_next.pack(side="left", fill="x", expand=True, padx=0, pady=0, ipady=5)
 
         # --- Show the first page ---
         self.show_frame(self.frames[0])

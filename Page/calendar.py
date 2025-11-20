@@ -32,7 +32,7 @@ class CalendarPage(ttk.Frame):
         self.info_label = ttk.Label(self, text="Tap a date for info", 
                                     font=("Helvetica", 10), 
                                     foreground="gray")
-        self.info_label.pack(pady=10)
+        self.info_label.pack(pady=5)
 
         # --- Draw Weekday Headers ---
         days = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
@@ -95,15 +95,15 @@ class CalendarPage(ttk.Frame):
                 if is_today and (is_holiday or is_user_event):
                     bg_color = "#007bff"
                     fg_color = "red"  
-                    font_style = ("Helvetica", 9, "bold")
+                    font_style = ("Helvetica", 11, "bold")
                 elif is_today:
                     bg_color = "#007bff" # Blue background for "Today"
                     fg_color = "white"   
-                    font_style = ("Helvetica", 9, "bold")
+                    font_style = ("Helvetica", 11, "bold")
                 elif is_holiday or is_user_event:
                     if not is_today:
                         fg_color = "red" # Red text for holidays not on today
-                        font_style = ("Helvetica", 9, "bold")
+                        font_style = ("Helvetica", 11, "bold")
                     # If it IS today, we keep white text on blue bg
 
                 # We use standard tk.Button (not ttk) because ttk makes changing 
