@@ -35,6 +35,7 @@ class WeatherPage(tk.Frame):
     def update_ui(self, weather_text, text_color="black"):
         self.weather_label.config(text=weather_text, foreground=text_color)
         self.last_updated_label.config(text=f"Last updated: {time.strftime('%I:%M:%S %p')}")
+        self.after(UPDATE_INTERVAL_MS, self.update_weather_data)
 
     def update_weather_data(self):
         threading.Thread(target=self.fetch_weather, daemon=True).start()
@@ -63,6 +64,3 @@ class WeatherPage(tk.Frame):
         
         except Exception as e:
             self.after(0, self.update_ui, f"An error occurred:\n{e}", "red")
-        
-        finally:
-            self.after(UPDATE_INTERVAL_MS, self.update_weather_data)
