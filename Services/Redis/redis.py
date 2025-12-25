@@ -44,6 +44,3 @@ class RedisStorage:
         if data is None:
             return TODO_DATA
         return data
-
-
-

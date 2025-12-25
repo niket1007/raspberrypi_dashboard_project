@@ -11,8 +11,6 @@ from decouple import config
 from Configs.Style import NavigationBarStyle
 from Services.Redis.redis import RedisStorage
 
-from decouple import Config
-
 class DashboardApp(tk.Tk):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -26,33 +24,34 @@ class DashboardApp(tk.Tk):
             self.attributes("-fullscreen", True)
             self.config(cursor="none")
 
+        # --- Navigation Bar ---
+        nav_frame = ttk.Frame(self)
+        nav_frame.pack(side="bottom", fill="x")
+
         # --- Main Container for Pages ---
         container = ttk.Frame(self)
         container.pack(side="top", fill="both", expand=True)
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
 
-        # --- Navigation Bar ---
-        nav_frame = ttk.Frame(self)
-        nav_frame.pack(side="bottom", fill="x")
+        
         print(redis.get_screen_configuration())
         # --- Page Dictionary & List ---
-        self.frames = {
-            0: GreetingsPage,
-            1: WeatherPage,
-            2: QuotePage,
-            3: CalendarPage,
-            4: TodoPage
-        }
-        self.page_list = [] # To keep track of the order
+        self.page_list = [
+            GreetingsPage,
+            WeatherPage,
+            QuotePage,
+            CalendarPage,
+            TodoPage
+        ]
         self.current_page_index = 0
 
         # --- Instantiate and Add Pages ---
         # Add QuotePage to this tuple if you uncomment the import
-        for index in self.frames:
-            frame = self.frames[index](parent=container, controller=self)
+        for index in range(len(self.page_list)):
+            frame = self.page_list[index](parent=container, controller=self)
             
-            self.frames[index] = frame
+            self.page_list[index] = frame
             
             frame.grid(row=0, column=0, sticky="nsew")
 
@@ -63,18 +62,17 @@ class DashboardApp(tk.Tk):
         
         btn_next = ttk.Button(nav_frame, text="Next >>", 
                               command=lambda: self.switch_page(1))
-        self.page_label = ttk.Label(nav_frame, text=self.frames[0].widgetName, **NavigationBarStyle.ScreenInfo)
+        self.page_label = ttk.Label(nav_frame, text=self.page_list[0].widgetName, **NavigationBarStyle.ScreenInfo)
         btn_prev.pack(side="left", fill="x", expand=True, padx=0, pady=0, ipady=5)
         self.page_label.pack(side="left", fill="x", expand=True, padx=0, pady=2, ipady=5)
         btn_next.pack(side="left", fill="x", expand=True, padx=0, pady=0, ipady=5)
 
         # --- Show the first page ---
-        self.show_frame(self.frames[0])
+        self.show_frame(self.page_list[0])
 
     def show_frame(self, page_frame: ttk.Frame):
         """Brings the specified frame to the front."""
-        frame = page_frame
-        frame.tkraise()
+        page_frame.tkraise()
 
     def switch_page(self, delta):
         """
@@ -82,10 +80,10 @@ class DashboardApp(tk.Tk):
         delta = 1 for Next, -1 for Prev
         """
         # Calculate new index with wrap-around (modulo operator)
-        new_index = (self.current_page_index + delta) % len(self.frames)
+        new_index = (self.current_page_index + delta) % len(self.page_list)
         
         # Get the name of the new page
-        page_frame = self.frames[new_index]
+        page_frame = self.page_list[new_index]
         self.current_page_index = new_index
         self.page_label.config(text=page_frame.widgetName)
         # Show it

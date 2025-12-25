@@ -4,13 +4,14 @@ import time
 from decouple import config
 from Configs.Style import Style
 
-WEATHER_API_KEY = config("weather_api_key", cast=str)
-WEATHER_API_URL = config("weather_api_path", cast=str)
-LAT, LONG = 28.6, 77.2
-UNITS = "metric"
-UPDATE_INTERVAL_MS = config("weather_api_call_frequency", cast=int)
-
 class WeatherPage(tk.Frame):
+
+    WEATHER_API_KEY = config("weather_api_key", cast=str)
+    WEATHER_API_URL = config("weather_api_path", cast=str)
+    LAT, LONG = 28.6, 77.2
+    UNITS = "metric"
+    UPDATE_INTERVAL_MS = config("weather_api_call_frequency", cast=int)
+
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
@@ -28,12 +29,14 @@ class WeatherPage(tk.Frame):
         self.fetch_weather()
 
     def update_ui(self, weather_text, text_color="black"):
+        """Updates the weather data on the screen."""
         self.weather_label.config(text=weather_text, foreground=text_color)
         self.last_updated_label.config(text=f"Last updated: {time.strftime('%I:%M:%S %p')}")
     
     def fetch_weather(self):
+        """Updates the weather data through api call."""
         try:
-            url = f"{WEATHER_API_URL}?key={WEATHER_API_KEY}&q={LAT},{LONG}"
+            url = f"{self.WEATHER_API_URL}?key={self.WEATHER_API_KEY}&q={self.LAT},{self.LONG}"
             
             response = requests.get(url, timeout=10)
             response.raise_for_status()
@@ -57,4 +60,4 @@ class WeatherPage(tk.Frame):
             self.after(0, self.update_ui, f"An error occurred:\n{e}", "red")
         
         finally:
-            self.after(UPDATE_INTERVAL_MS, self.fetch_weather)
+            self.after(self.UPDATE_INTERVAL_MS, self.fetch_weather)

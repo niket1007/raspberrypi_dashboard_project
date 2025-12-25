@@ -4,10 +4,11 @@ import time
 from decouple import config
 from Configs.Style import QuotePageStyle
 
-QUOTE_API_URL = config("quote_api_path", cast=str)
-UPDATE_INTERVAL_MS = config("quote_api_call_frequency", cast=int)
-
 class QuotePage(tk.Frame):
+    
+    QUOTE_API_URL = config("quote_api_path", cast=str)
+    UPDATE_INTERVAL_MS = config("quote_api_call_frequency", cast=int)
+    
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
@@ -15,7 +16,7 @@ class QuotePage(tk.Frame):
 
         # --- Create UI Elements ---
         center_frame = tk.Frame(self)
-        center_frame.pack(fill="both", expand=True)
+        center_frame.pack(**QuotePageStyle.FramePack)
 
         self.quote_label = tk.Label(center_frame, text="Loading quote...", 
                                       **QuotePageStyle.QuoteLabel)
@@ -32,8 +33,9 @@ class QuotePage(tk.Frame):
         self.fetch_quote()
 
     def fetch_quote(self):
+        """Fetch anime quote through api call."""
         try:
-            response = requests.get(QUOTE_API_URL, timeout=10)
+            response = requests.get(self.QUOTE_API_URL, timeout=10)
             response.raise_for_status()
             
             data = response.json()
@@ -47,15 +49,17 @@ class QuotePage(tk.Frame):
 
         except requests.exceptions.RequestException as e :
             print(e)
-            self.after(0, self.update_ui, "Error: Could not fetch quote.", "", "", True)
+            self.after(0, self.update_ui, "The connection has been severed. We must rely on our own strength.", "Error", "", True)
         
         except Exception as e:
-            self.after(0, self.update_ui, f"An error occurred: {e}", "", "", True)
+            print(e)
+            self.after(0, self.update_ui, "The threads of fate have snapped. This error exceeds the boundaries of this world's logic.", "Error", "", True)
         
         finally:
-            self.after(UPDATE_INTERVAL_MS, self.fetch_quote)
+            self.after(self.UPDATE_INTERVAL_MS, self.fetch_quote)
 
     def update_ui(self, quote: str, character: str, anime: str, error: bool = False):
+        """Updates the quote in the screen."""
         foreground_color = QuotePageStyle.QuoteLabelStateColor["success_color"]
         if error:
             foreground_color = QuotePageStyle.QuoteLabelStateColor["error_color"]

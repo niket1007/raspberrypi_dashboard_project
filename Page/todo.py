@@ -9,13 +9,12 @@ class TodoPage(tk.Frame):
         self.redis = RedisStorage()
 
         # --- Todo List Content ---
-        # Equivalent to the second Label bound to root.todo_list
         self.todo_label = tk.Label(self, 
                                    text="Loading todos...", 
                                    font=("Helvetica", 12),
                                    justify="left",
                                    wraplength=400,
-                                   anchor="n") # Anchors text to the top (North)
+                                   anchor="center")
         self.todo_label.pack(side="top", expand=True, fill="both", padx=20, pady=20)
 
         self.load_todos()

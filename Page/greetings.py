@@ -1,8 +1,12 @@
 import tkinter as tk
 import time
 import datetime
+from Configs.Style import GreetingsPageStyle
 
 class GreetingsPage(tk.Frame):
+
+    DATETIME_UPDATE_TIMER = 1000
+
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
@@ -12,17 +16,14 @@ class GreetingsPage(tk.Frame):
         left_frame = tk.Frame(self)
         left_frame.pack(side="top", fill="both", expand=True, padx=20, pady=20)
 
-        self.time_label = tk.Label(left_frame, 
-                                    font=("Helvetica", 55, "bold"))
-        self.time_label.pack(side="top", expand=True, anchor="center")
+        self.time_label = tk.Label(left_frame, **GreetingsPageStyle.TimeLabel)
+        self.time_label.pack(**GreetingsPageStyle.TimeLabelPack)
         
-        self.date_label = tk.Label(left_frame, 
-                                    font=("Helvetica", 18, "bold"))
-        self.date_label.pack(side="top", expand=True, anchor="center")
+        self.date_label = tk.Label(left_frame, **GreetingsPageStyle.DateAndGreeting)
+        self.date_label.pack(**GreetingsPageStyle.DateAndGreetingPack)
 
-        self.greeting_label = tk.Label(left_frame, 
-                                    font=("Helvetica", 18, "bold"))
-        self.greeting_label.pack(side="top", expand=True, anchor="center")
+        self.greeting_label = tk.Label(left_frame, **GreetingsPageStyle.DateAndGreeting)
+        self.greeting_label.pack(**GreetingsPageStyle.DateAndGreetingPack)
 
         # --- Start the update loop ---
         self.update_time_and_greeting()
@@ -49,4 +50,4 @@ class GreetingsPage(tk.Frame):
         # Fixed: Uses the dynamic greeting function instead of hardcoded text
         self.greeting_label.config(text=self.get_greeting())
         
-        self.after(1000, self.update_time_and_greeting)
+        self.after(self.DATETIME_UPDATE_TIMER, self.update_time_and_greeting)
