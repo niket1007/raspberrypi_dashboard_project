@@ -1,7 +1,7 @@
 import tkinter as tk
 import time
 import datetime
-from Configs.Style import GreetingsPageStyle
+from Services.Style import GreetingsPageStyle
 
 class GreetingsPage(tk.Frame):
 

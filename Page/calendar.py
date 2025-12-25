@@ -3,20 +3,19 @@ from tkinter import ttk
 import calendar
 import datetime
 import holidays
+from decouple import config
+from Services.Redis.redis import RedisStorage
 
 class CalendarPage(ttk.Frame):
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.controller = controller
         self.widgetName = "Calendar"
-        self.config(cursor="none")
 
-        # --- Mock Data (Replacing Storage.Cache) ---
-        # In your real app, you would fetch this from your data source
-        self.user_events = {
-            "15": "Doctor Appointment", 
-            "25": "Project Deadline"
-        }
+        
+
+        self.redis = RedisStorage()
+        self.user_events = self.redis.get_calendar_user_data()
 
         # --- UI Layout ---
         # 1. Top: Month and Year Label
@@ -25,7 +24,8 @@ class CalendarPage(ttk.Frame):
 
         # 2. Middle: Calendar Grid Container
         self.calendar_frame = ttk.Frame(self)
-        self.calendar_frame.config(cursor="none")
+        if config("app_platform", "windows") != "windows":
+            self.calendar_frame.config(cursor="none")
         self.calendar_frame.pack(expand=True, fill="both", padx=20)
 
         # 3. Bottom: Info Label (equivalent to holiday_info_label)
@@ -128,12 +128,12 @@ class CalendarPage(ttk.Frame):
         """Updates the info label when a date is clicked."""
         info_parts = []
         if holiday_text:
-            info_parts.append(f"Holiday({day}): {holiday_text}")
+            info_parts.append(f"{holiday_text}")
         if user_text:
-            info_parts.append(f"Event({day}): {user_text}")
-            
+            info_parts.append(f"{user_text}")
+        
         if info_parts:
-            self.info_label.config(text="; ".join(info_parts), foreground="red")
+            text = f'Event {day}: {", ".join(info_parts)}'
+            self.info_label.config(text=text, foreground="red")
         else:
-            # Default text if nothing special on that date
             self.info_label.config(text=f"Selected Date: {day}", foreground="black")

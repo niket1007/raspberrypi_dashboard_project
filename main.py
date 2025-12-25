@@ -8,13 +8,15 @@ from Page.quote import QuotePage
 from Page.calendar import CalendarPage
 from Page.todo import TodoPage
 from decouple import config
-from Configs.Style import NavigationBarStyle
+from Services.Style import NavigationBarStyle
 from Services.Redis.redis import RedisStorage
+from Services.Redis.redis_sub import RedisSub
 
 class DashboardApp(tk.Tk):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         redis = RedisStorage()
+        _ = RedisSub()
         # --- Basic Window Setup ---
         self.title("Raspberry Pi Dashboard")
         self.geometry("480x320")
