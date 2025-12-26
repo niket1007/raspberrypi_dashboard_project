@@ -47,7 +47,7 @@ class GreetingsPage(tk.Frame):
 
         self.time_label.config(text=current_time)
         self.date_label.config(text=current_date)
-        # Fixed: Uses the dynamic greeting function instead of hardcoded text
+
         self.greeting_label.config(text=self.get_greeting())
         
         self.after(self.DATETIME_UPDATE_TIMER, self.update_time_and_greeting)

@@ -2,7 +2,6 @@ from redis import Redis
 from decouple import config
 import threading
 
-
 class RedisSub:
 
     @classmethod
