@@ -67,7 +67,7 @@ class GreetingsPageStyle:
 class TodoPageStyle:
     TodoLabel = {
         "text": "Loading todos...", 
-        "font": ("Helvetica", 12),
+        "font": ("Helvetica", 18),
         "justify": "left",
         "wraplength": 400,
         "anchor": "center"
@@ -137,7 +137,7 @@ class CalendarPageStyle:
 class MeetingPageStyle:
     MeetingLabel = {
         "text": "Loading todos...", 
-        "font": ("Helvetica", 12),
+        "font": ("Helvetica", 18),
         "justify": "left",
         "wraplength": 400,
         "anchor": "center"
