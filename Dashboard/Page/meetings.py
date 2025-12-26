@@ -9,7 +9,7 @@ class MeetingsPage(tk.Frame):
         self.widgetName = "Meetings"
         self.redis = RedisStorage()
 
-        # --- Todo List Content ---
+        # --- Meetings List Content ---
         self.meeting_label = tk.Label(self,**MeetingPageStyle.MeetingLabel)
         self.meeting_label.pack(**MeetingPageStyle.MeetingLabelPack)
 
