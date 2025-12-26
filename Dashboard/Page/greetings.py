@@ -13,16 +13,16 @@ class GreetingsPage(tk.Frame):
         self.widgetName = "Home"
 
         # --- Create a Split Layout ---
-        left_frame = tk.Frame(self)
-        left_frame.pack(side="top", fill="both", expand=True, padx=20, pady=20)
+        greeting_frame = tk.Frame(self)
+        greeting_frame.pack(**GreetingsPageStyle.MainFrame)
 
-        self.time_label = tk.Label(left_frame, **GreetingsPageStyle.TimeLabel)
+        self.time_label = tk.Label(greeting_frame, **GreetingsPageStyle.TimeLabel)
         self.time_label.pack(**GreetingsPageStyle.TimeLabelPack)
         
-        self.date_label = tk.Label(left_frame, **GreetingsPageStyle.DateAndGreeting)
+        self.date_label = tk.Label(greeting_frame, **GreetingsPageStyle.DateAndGreeting)
         self.date_label.pack(**GreetingsPageStyle.DateAndGreetingPack)
 
-        self.greeting_label = tk.Label(left_frame, **GreetingsPageStyle.DateAndGreeting)
+        self.greeting_label = tk.Label(greeting_frame, **GreetingsPageStyle.DateAndGreeting)
         self.greeting_label.pack(**GreetingsPageStyle.DateAndGreetingPack)
 
         # --- Start the update loop ---

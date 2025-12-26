@@ -1,5 +1,6 @@
 import tkinter as tk
 from Services.Redis.redis import RedisStorage
+from Services.Style import TodoPageStyle
 
 class TodoPage(tk.Frame):
     def __init__(self, parent, controller):
@@ -9,13 +10,8 @@ class TodoPage(tk.Frame):
         self.redis = RedisStorage()
 
         # --- Todo List Content ---
-        self.todo_label = tk.Label(self, 
-                                   text="Loading todos...", 
-                                   font=("Helvetica", 12),
-                                   justify="left",
-                                   wraplength=400,
-                                   anchor="center")
-        self.todo_label.pack(side="top", expand=True, fill="both", padx=20, pady=20)
+        self.todo_label = tk.Label(self,**TodoPageStyle.TodoLabel)
+        self.todo_label.pack(**TodoPageStyle.TodoLabelPack)
 
         self.load_todos()
 

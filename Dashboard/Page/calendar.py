@@ -1,44 +1,40 @@
 import tkinter as tk
-from tkinter import ttk
 import calendar
 import datetime
 import holidays
 from decouple import config
 from Services.Redis.redis import RedisStorage
+from Services.Style import CalendarPageStyle
 
-class CalendarPage(ttk.Frame):
+class CalendarPage(tk.Frame):
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.controller = controller
         self.widgetName = "Calendar"
-
-        
 
         self.redis = RedisStorage()
         self.user_events = self.redis.get_calendar_user_data()
 
         # --- UI Layout ---
         # 1. Top: Month and Year Label
-        self.month_label = ttk.Label(self, text="Loading...", font=("Helvetica", 9, "bold"))
-        self.month_label.pack(pady=(5, 10))
+        self.month_label = tk.Label(self, **CalendarPageStyle.MonthLabel)
+        self.month_label.pack(**CalendarPageStyle.MonthLabelPack)
 
         # 2. Middle: Calendar Grid Container
-        self.calendar_frame = ttk.Frame(self)
+        self.calendar_frame = tk.Frame(self)
         if config("app_platform", "windows") != "windows":
             self.calendar_frame.config(cursor="none")
-        self.calendar_frame.pack(expand=True, fill="both", padx=20)
+        self.calendar_frame.pack(**CalendarPageStyle.CalendarFramePack)
 
-        # 3. Bottom: Info Label (equivalent to holiday_info_label)
-        self.info_label = ttk.Label(self, text="Tap a date for info", 
-                                    font=("Helvetica", 10), 
-                                    foreground="gray")
-        self.info_label.pack(pady=5)
+        # 3. Bottom: Info Label
+        self.info_label = tk.Label(self, **CalendarPageStyle.InfoLabel)
+        self.info_label.pack(**CalendarPageStyle.InfoLabelPack)
 
         # --- Draw Weekday Headers ---
         days = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
         for col, day in enumerate(days):
-            lbl = ttk.Label(self.calendar_frame, text=day, font=("Helvetica", 8, "bold"))
-            lbl.grid(row=0, column=col, sticky="nsew", padx=20)
+            lbl = tk.Label(self.calendar_frame, text=day, **CalendarPageStyle.WeeekDayHeaderLabel)
+            lbl.grid(row=0, column=col, **CalendarPageStyle.WeekDayHeaderLabelPack)
             self.calendar_frame.grid_columnconfigure(col, weight=1)
 
         # --- Populate Data ---
@@ -52,11 +48,10 @@ class CalendarPage(ttk.Frame):
         # 1. Update Header
         self.month_label.config(text=today.strftime("%B %Y")) # e.g., "November 2025"
 
-        # 2. Fetch Holidays (India - as per your Kivy code)
+        # 2. Fetch Holiday
         holidays_dict = {}
         if holidays:
             try:
-                # Fetching holidays for IN (India)
                 holidays_dict = holidays.country_holidays('IN', years=year)
             except Exception as e:
                 print(f"Error loading holidays: {e}")
@@ -91,23 +86,22 @@ class CalendarPage(ttk.Frame):
                 fg_color = "black"
                 font_style = ("Helvetica", 8)
 
-                # Priority: Today > Holiday/Event
                 if is_today and (is_holiday or is_user_event):
+                    # Red foreground and blue background for today and holiday or user event
                     bg_color = "#007bff"
                     fg_color = "red"  
                     font_style = ("Helvetica", 11, "bold")
                 elif is_today:
-                    bg_color = "#007bff" # Blue background for "Today"
-                    fg_color = "white"   
+                    # Blue background for today and no holdiday or user event
+                    bg_color = "#007bff" 
+                    fg_color = "white" 
                     font_style = ("Helvetica", 11, "bold")
-                elif is_holiday or is_user_event:
-                    if not is_today:
-                        fg_color = "red" # Red text for holidays not on today
-                        font_style = ("Helvetica", 11, "bold")
-                    # If it IS today, we keep white text on blue bg
-
-                # We use standard tk.Button (not ttk) because ttk makes changing 
-                # specific background colors per-button difficult.
+                elif (is_holiday or is_user_event) and not is_today:
+                    # White background and red foreground for holiday or user event but not today
+                    fg_color = "red"
+                    font_style = ("Helvetica", 11, "bold")
+                
+                # Specific background colors per-button.
                 btn = tk.Button(self.calendar_frame, 
                                 text=str(day),
                                 bg=bg_color,
@@ -118,7 +112,6 @@ class CalendarPage(ttk.Frame):
                                 relief="flat",
                                 borderwidth=0,
                                 cursor="none",
-                                # Pass data to the click handler using lambda defaults
                                 command=lambda d=day, h=holiday_text, u=user_text: self.on_date_click(d, h, u))
                 
                 btn.grid(row=r+1, column=c, sticky="nsew", padx=2, pady=2, ipady=5)

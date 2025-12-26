@@ -37,6 +37,12 @@ class RedisStorage:
         if data is None:
             return REDIS["TODO_DATA"]
         return data
+    
+    def get_meetings_data(self) -> str:
+        data = self._redis.get("pages:meetings:data")
+        if data is None:
+            return REDIS["MEETINGS_DATA"]
+        return data
 
     def set_quote_data(self, data) -> None:
         stringfied = json.dumps(data)

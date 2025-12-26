@@ -3,7 +3,8 @@ import requests
 import time
 from decouple import config
 import geocoder
-from Services.Style import Style
+from Services.Style import WeatherPageStyle
+from Services.Static.static import WEATHER
 from Services.Redis.redis import RedisStorage
 
 class WeatherPage(tk.Frame):
@@ -26,14 +27,11 @@ class WeatherPage(tk.Frame):
         self.LAT, self.LONG = self.__get_coordinates()
 
         # --- Create UI Elements ---
-        self.weather_label = tk.Label(self, text="Loading weather...", 
-                                      font=(Style.font, 18),
-                                      justify="left")
-        self.weather_label.pack(side="top", pady=20)
+        self.weather_label = tk.Label(self, **WeatherPageStyle.WeatherLabel)
+        self.weather_label.pack(**WeatherPageStyle.WeatherLabelPack)
         
-        self.last_updated_label = tk.Label(self, text="Last updated: Never",
-                                           font=(Style.font, 8))
-        self.last_updated_label.pack(side="bottom", pady=5)
+        self.last_updated_label = tk.Label(self, **WeatherPageStyle.LastUpdatedLabel)
+        self.last_updated_label.pack(**WeatherPageStyle.LastUpdatedLabelPack)
         
         self.fetch_weather()
     
@@ -46,10 +44,10 @@ class WeatherPage(tk.Frame):
             self.after(0, self.update_ui, data)
         
         except requests.exceptions.RequestException:
-            self.after(0, self.update_ui, "Error:\nCould not fetch weather", True)
+            self.after(0, self.update_ui, WEATHER["Request_Error"], True)
         
         except Exception as e:
-            self.after(0, self.update_ui, f"An error occurred:\n{e}", True)
+            self.after(0, self.update_ui, WEATHER["Logic_Error"], True)
         
         finally:
             self.after(self.UPDATE_INTERVAL_MS, self.fetch_weather)
@@ -80,9 +78,10 @@ class WeatherPage(tk.Frame):
 
     def update_ui(self, weather_text: str, error: bool = False):
         """Updates the weather data on the screen."""
-        text_color = "black"
+        
+        text_color = WeatherPageStyle.WeatherLabelStateColor["success_color"]
         if error:
-            text_color = "red"
+            text_color = WeatherPageStyle.WeatherLabelStateColor["error_color"]
         
         self.weather_label.config(text=weather_text, foreground=text_color)
         self.last_updated_label.config(text=f"Last updated: {time.strftime('%I:%M:%S %p')}")
