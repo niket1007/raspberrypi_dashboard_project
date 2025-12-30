@@ -1,23 +1,23 @@
 REDIS = {
     "CONFIG_SCREEN" : [
         {
-            "name": "weather",
+            "name": "Weather",
             "visibility": True
         },
         {
-            "name": "todo",
+            "name": "Meetings",
             "visibility": True
         },
         {
-            "name": "quote",
+            "name": "Quote",
             "visibility": True
         },
         {
-            "name": "calendar",
+            "name": "Todo",
             "visibility": True
         },
         {
-            "name": "internet-speed-test",
+            "name": "Calendar",
             "visibility": True
         }
     ],
