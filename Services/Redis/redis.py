@@ -61,8 +61,9 @@ class RedisStorage:
         data = self._redis.get("pages:weather:api_data")
         return data
 
-    def get_calendar_user_data(self) -> dict|None:
+    def get_calendar_user_data(self) -> dict:
         data = self._redis.get("pages:calendar:user_data")
         if data is not None:
             data = json.loads(data)
-        return data
+            return data
+        return {}
