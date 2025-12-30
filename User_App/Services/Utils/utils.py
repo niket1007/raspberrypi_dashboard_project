@@ -38,13 +38,11 @@ def convert_meetings_str_to_dataframe(data: str|None) -> pd.DataFrame:
 
 def convert_meetings_dataframe_to_str(data: pd.DataFrame) -> str:
     data = data.to_dict()
-    print(data, type(data["DateTime"][0]), data["DateTime"][0])
     meetings = []
     for index in data["Meeting"]:
         meeting_name = data["Meeting"][index]
         date_time = data["DateTime"][index]
         date_time = date_time.strftime("%d %b %Y, %I:%M %p")
-        #YYYY-MM-DDTHH:mm:ss.
         meetings.append(
             f"• {meeting_name}({date_time})"
         )

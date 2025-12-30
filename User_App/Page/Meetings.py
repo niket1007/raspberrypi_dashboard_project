@@ -27,6 +27,5 @@ edited_df = st.data_editor(
 is_submit = st.button("Submit")
 
 if is_submit:
-    print(edited_df)
     data = convert_meetings_dataframe_to_str(edited_df)
     redis.set_meetings_data(data)
