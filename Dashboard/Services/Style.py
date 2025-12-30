@@ -123,6 +123,9 @@ class CalendarPageStyle:
         "font": ("Helvetica", 10),
         "foreground": "gray"
     }
+    InfoLabelSmallFont = {
+        "font": ("Helvetica", 8)
+    }
     InfoLabelPack = {
         "pady": 5
     }

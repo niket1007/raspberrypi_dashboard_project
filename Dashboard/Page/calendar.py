@@ -7,6 +7,9 @@ from Services.Redis.redis import RedisStorage
 from Services.Style import CalendarPageStyle
 
 class CalendarPage(tk.Frame):
+
+    UPDATE_INTERVAL = config("calendar_update_frequency", cast=int)
+
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.controller = controller
@@ -76,10 +79,10 @@ class CalendarPage(tk.Frame):
                 # --- Logic Checks (Ported from CalendarScreen.py) ---
                 is_today = (calc_date == today)
                 is_holiday = calc_date in holidays_dict
-                is_user_event = calc_date in self.user_events
+                is_user_event = str(calc_date) in self.user_events
                 
                 holiday_text = holidays_dict.get(calc_date, "")
-                user_text = self.user_events.get(str(day), "")
+                user_text = self.user_events.get(str(calc_date), "")
 
                 # --- Styling Logic ---
                 bg_color = "#f0f0f0" # Default gray/white
@@ -117,6 +120,8 @@ class CalendarPage(tk.Frame):
                 btn.grid(row=r+1, column=c, sticky="nsew", padx=2, pady=2, ipady=5)
                 self.calendar_frame.grid_rowconfigure(r+1, weight=1)
 
+        self.after(self.UPDATE_INTERVAL, self.populate_calendar)
+
     def on_date_click(self, day, holiday_text, user_text):
         """Updates the info label when a date is clicked."""
         info_parts = []
@@ -128,5 +133,7 @@ class CalendarPage(tk.Frame):
         if info_parts:
             text = f'Event {day}: {", ".join(info_parts)}'
             self.info_label.config(text=text, foreground="red")
+            if len(text) > 15:
+                self.info_label.config(**CalendarPageStyle.InfoLabelSmallFont)
         else:
             self.info_label.config(text=f"Selected Date: {day}", foreground="black")
