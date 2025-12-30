@@ -133,7 +133,7 @@ class CalendarPage(tk.Frame):
         if info_parts:
             text = f'Event {day}: {", ".join(info_parts)}'
             self.info_label.config(text=text, foreground="red")
-            if len(text) > 15:
+            if len(text) > 10:
                 self.info_label.config(**CalendarPageStyle.InfoLabelSmallFont)
         else:
             self.info_label.config(text=f"Selected Date: {day}", foreground="black")
