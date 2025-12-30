@@ -72,11 +72,11 @@ class CalendarPage(tk.Frame):
                     continue # Skip empty slots
 
                 calc_date = datetime.date(year, month, day)
-                
+
                 # --- Logic Checks (Ported from CalendarScreen.py) ---
                 is_today = (calc_date == today)
                 is_holiday = calc_date in holidays_dict
-                is_user_event = str(day) in self.user_events
+                is_user_event = calc_date in self.user_events
                 
                 holiday_text = holidays_dict.get(calc_date, "")
                 user_text = self.user_events.get(str(day), "")
