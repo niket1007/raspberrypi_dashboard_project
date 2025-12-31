@@ -30,29 +30,38 @@ class RedisStorage:
         self._redis.set("config:screens", data)
     
     def get_todo_data(self) -> str:
-        print("Called")
         data = self._redis.get("pages:todo:data")
         return data
     
-    def set_todo_data(self, data: str) -> None:
-        self._redis.set("pages:todo:data", data)
+    def set_todo_data(self, data: str|None) -> None:
+        if data is None:
+            self._redis.delete("pages:todo:data")
+        else:
+            self._redis.set("pages:todo:data", data)
     
     def get_meetings_data(self) -> str:
         data = self._redis.get("pages:meetings:data")
         return data
     
-    def set_meetings_data(self, data: str) -> None:
-        self._redis.set("pages:meetings:data", data)
+    def set_meetings_data(self, data: str|None) -> None:
+        if data is None:
+            self._redis.delete("pages:meetings:data")
+        else:
+            self._redis.set("pages:meetings:data", data)
 
     def get_calendar_user_data(self) -> dict|None:
         data = self._redis.get("pages:calendar:user_data")
-        if data is not None:
-            data = json.loads(data)
+        if data is None or data == "":
+            return data
+        data = json.loads(data)
         return data
 
-    def set_calendar_user_data(self, data: dict) -> None:
-        data = json.dumps(data)
-        self._redis.set("pages:calendar:user_data", data)
+    def set_calendar_user_data(self, data: dict|None) -> None:
+        if data is not None:
+            data = json.dumps(data)
+            self._redis.set("pages:calendar:user_data", data)
+        else:
+            self._redis.delete("pages:calendar:user_data")
     
     def publish_mesage(self, message: str):
         num = self._redis.publish("Dashboard-Commands", message)

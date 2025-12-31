@@ -4,22 +4,20 @@ from Services.Redis.redis import RedisStorage
 
 redis = RedisStorage()
 screens = None
-if "Screens" in st.session_state:
-    screens = st.session_state["Screens"]
-else:
+if "Screens" not in st.session_state:
     screens = redis.get_screen_configuration()
-    st.session_state["Screens"] = screens
+    screen_lists = [
+        {"header": "Visible", "items": []},
+        {"header": "Hidden", "items": []}
+    ]
 
-screen_lists = [
-    {"header": "Visible", "items": []},
-    {"header": "Hidden", "items": []}
-]
+    for screen in screens:
+        index = 0 if screen["visibility"] else 1
+        screen_lists[index]["items"].append(screen["name"])
 
-for screen in screens:
-    index = 0 if screen["visibility"] else 1
-    screen_lists[index]["items"].append(screen["name"])
+    st.session_state["Screens"] = screen_lists
 
-new_list = sort_items(screen_lists, multi_containers=True)
+new_list = sort_items(st.session_state["Screens"], multi_containers=True)
 is_submit = st.button("Submit")
 
 if is_submit:
@@ -35,3 +33,4 @@ if is_submit:
             "visibility": False
         })
     redis.set_screen_configuration(new_screens)
+    st.session_state["Screens"] = new_list
