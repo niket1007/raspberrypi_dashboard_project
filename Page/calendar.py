@@ -16,7 +16,6 @@ class CalendarPage(tk.Frame):
         self.widgetName = "Calendar"
 
         self.redis = RedisStorage()
-        self.user_events = self.redis.get_calendar_user_data()
 
         # --- UI Layout ---
         # 1. Top: Month and Year Label
@@ -47,6 +46,7 @@ class CalendarPage(tk.Frame):
         today = datetime.date.today()
         year = today.year
         month = today.month
+        self.user_events = self.redis.get_calendar_user_data()
 
         # 1. Update Header
         self.month_label.config(text=today.strftime("%B %Y")) # e.g., "November 2025"
