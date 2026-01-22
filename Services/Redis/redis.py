@@ -1,5 +1,6 @@
 from redis import Redis
 from decouple import config
+import threading
 from Services.Static.static import REDIS
 import json
 
@@ -23,10 +24,17 @@ class RedisStorage:
             decode_responses=True
         )
     
+    def set_screen_configuration(self) -> None:
+        data = json.dumps(REDIS["CONFIG_SCREEN"])
+        self._redis.set("config:screens", data)
+    
     def get_screen_configuration(self) -> dict:
         data = self._redis.get("config:screens")
         if data is None:
             data = REDIS["CONFIG_SCREEN"]
+            t = threading.Thread(target=self.set_screen_configuration)
+            t.daemon = True
+            t.start()
         else:
             data = json.loads(data)
         
