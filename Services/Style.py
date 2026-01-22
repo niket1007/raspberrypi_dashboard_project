@@ -14,7 +14,7 @@ class QuotePageStyle:
         "anchor": "center"
     }
     QuoteLabel: dict = {
-        "font": ("Helvetica", 12, "bold", "italic"), 
+        "font": ("Helvetica", 10, "bold", "italic"), 
         "wraplength": 300,
         "anchor": "center",
         "text": "Loading quote..."
@@ -48,7 +48,7 @@ class GreetingsPageStyle:
         "pady": 10
     }
     TimeLabel: dict = {
-        "font": ("Helvetica", 24, "bold")
+        "font": ("Helvetica", 30, "bold")
     }
     TimeLabelPack: dict = {
         "side": "top", 
@@ -56,7 +56,7 @@ class GreetingsPageStyle:
         "anchor": "center"
     }
     DateAndGreeting: dict = {
-        "font": ("Helvetica", 12, "bold")
+        "font": ("Helvetica", 15, "bold")
     }
     DateAndGreetingPack: dict = {
         "side": "top", 
@@ -83,7 +83,7 @@ class TodoPageStyle:
 class WeatherPageStyle:
     WeatherLabel = {
         "text": "Loading weather...", 
-        "font": ("Helvetica", 9),
+        "font": ("Helvetica", 15),
         "justify": "left"
     }
     WeatherLabelPack = {
@@ -116,7 +116,7 @@ class CalendarPageStyle:
     CalendarFramePack = {
         "expand": True,
         "fill": "both",
-        "padx": 10
+        "padx": 5
     }
     InfoLabel = {
         "text": "Tap a date for info", 
@@ -130,11 +130,11 @@ class CalendarPageStyle:
         "pady": 3
     }
     WeekDayHeaderLabel = {
-        "font": ("Helvetica", 7, "bold")
+        "font": ("Helvetica", 10, "bold")
     }
     WeekDayHeaderLabelPack = {
         "sticky": "nsew", 
-        "padx": 10
+        "padx": 5
     }
 
 class MeetingPageStyle:
