@@ -1,6 +1,7 @@
 import tkinter as tk
 from decouple import config
 import importlib
+import threading
 
 # Import our page modules
 from Page.greetings import GreetingsPage
@@ -95,6 +96,7 @@ class DashboardApp(tk.Tk):
         self.show_frame(page_frame)
     
 def setup_buttons(env: str):
+    env = config("app_platform", "windows")
     if env == "raspberrypi":
         from gpiozero import Button
         btn1 = Button(18, bounce_time=0.1)
@@ -118,8 +120,7 @@ def setup_buttons(env: str):
         
 # --- Main entry point ---
 if __name__ == "__main__":
-    env = config("app_platform", "windows")
-    setup_buttons(env)
+    threading.Thread(target=setup_buttons, daemon=True).start()
     app = DashboardApp()
     app.mainloop()
     
