@@ -127,7 +127,7 @@ class CalendarPageStyle:
         "font": ("Helvetica", 8)
     }
     InfoLabelPack = {
-        "pady": 3
+        "pady": 0
     }
     WeekDayHeaderLabel = {
         "font": ("Helvetica", 10, "bold")

@@ -117,7 +117,7 @@ class CalendarPage(tk.Frame):
                                 cursor="none",
                                 command=lambda d=day, h=holiday_text, u=user_text: self.on_date_click(d, h, u))
                 
-                btn.grid(row=r+1, column=c, sticky="nsew", padx=1, pady=1, ipady=2)
+                btn.grid(row=r+1, column=c, sticky="nsew", padx=0, pady=0, ipady=1)
                 self.calendar_frame.grid_rowconfigure(r+1, weight=1)
 
         self.after(self.UPDATE_INTERVAL, self.populate_calendar)
