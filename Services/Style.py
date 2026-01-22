@@ -120,7 +120,7 @@ class CalendarPageStyle:
     }
     InfoLabel = {
         "text": "Tap a date for info", 
-        "font": ("Helvetica", 8),
+        "font": ("Helvetica", 10),
         "foreground": "gray"
     }
     InfoLabelSmallFont = {
