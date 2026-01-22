@@ -14,8 +14,8 @@ class QuotePageStyle:
         "anchor": "center"
     }
     QuoteLabel: dict = {
-        "font": ("Helvetica", 10, "bold", "italic"), 
-        "wraplength": 300,
+        "font": ("Helvetica", 12, "bold", "italic"), 
+        "wraplength": 250,
         "anchor": "center",
         "text": "Loading quote..."
     }
