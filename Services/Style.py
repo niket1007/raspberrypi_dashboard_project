@@ -155,7 +155,7 @@ class MeetingPageStyle:
 
 class MainPageStyle:
     Title = "Raspberry Pi Dashboard"
-    Geometry = "480x320"
+    Geometry = "320x240"
     NavFramePack = {
         "side": "bottom", 
         "fill": "x"
