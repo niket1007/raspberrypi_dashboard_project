@@ -93,8 +93,33 @@ class DashboardApp(tk.Tk):
         self.page_label.config(text=page_frame.widgetName)
 
         self.show_frame(page_frame)
+    
+def setup_buttons(env: str):
+    if env == "raspberrypi":
+        from gpiozero import Button
+        btn1 = Button(18, bounce_time=0.1)
+        btn2 = Button(23, bounce_time=0.1)
+        btn3 = Button(24, bounce_time=0.1)
 
+        def key1_pressed():
+            print("Button 1 (GPIO 18) Pressed!")
+
+        def key2_pressed():
+            print("Button 2 (GPIO 23) Pressed!")
+
+        def key3_pressed():
+            print("Button 3 (GPIO 24) Pressed!")
+
+        # Assign the actions
+        btn1.when_pressed = key1_pressed
+        btn2.when_pressed = key2_pressed
+        btn3.when_pressed = key3_pressed
+        
+        
 # --- Main entry point ---
 if __name__ == "__main__":
+    env = config("app_platform", "windows")
+    setup_buttons(env)
     app = DashboardApp()
     app.mainloop()
+    
