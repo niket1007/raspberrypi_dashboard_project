@@ -101,9 +101,9 @@ class DashboardApp(tk.Tk):
         if env == "raspberrypi":
             try:
                 from gpiozero import Button
-                self.screen_btn_prev = Button(18, bounce_time=0.1)
-                self.screen_btn_next = Button(24, bounce_time=0.1)
-                self.screen_btn_restart = Button(16, bounce_time=0.1)
+                self.screen_btn_prev = Button(18, bounce_time=0.1) #K1
+                self.screen_btn_restart = Button(23, bounce_time=0.1) #K2
+                self.screen_btn_next = Button(24, bounce_time=0.1) # K3
                 self.screen_btn_prev.when_pressed = lambda: self.switch_page(-1)
                 self.screen_btn_next.when_pressed = lambda: self.switch_page(1)
                 self.screen_btn_restart.when_pressed = lambda: os.system("sudo shutdown -h now")
