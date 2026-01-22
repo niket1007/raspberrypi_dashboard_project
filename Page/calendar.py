@@ -35,7 +35,7 @@ class CalendarPage(tk.Frame):
         # --- Draw Weekday Headers ---
         days = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
         for col, day in enumerate(days):
-            lbl = tk.Label(self.calendar_frame, text=day, **CalendarPageStyle.WeeekDayHeaderLabel)
+            lbl = tk.Label(self.calendar_frame, text=day, **CalendarPageStyle.WeekDayHeaderLabel)
             lbl.grid(row=0, column=col, **CalendarPageStyle.WeekDayHeaderLabelPack)
             self.calendar_frame.grid_columnconfigure(col, weight=1)
 

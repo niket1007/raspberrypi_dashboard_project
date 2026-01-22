@@ -1,9 +1,9 @@
 class NavigationBarStyle:
     Button: dict = {}
     ScreenInfo: dict = {
-        "borderwidth":2, 
+        "borderwidth":1, 
         "relief": "sunken", 
-        "font": ("Helvetica", 10, "bold"), 
+        "font": ("Helvetica", 8, "bold"), 
         "anchor": "center"
     }
 
@@ -14,8 +14,8 @@ class QuotePageStyle:
         "anchor": "center"
     }
     QuoteLabel: dict = {
-        "font": ("Helvetica", 16, "bold", "italic"), 
-        "wraplength": 440,
+        "font": ("Helvetica", 12, "bold", "italic"), 
+        "wraplength": 300,
         "anchor": "center",
         "text": "Loading quote..."
     }
@@ -26,17 +26,17 @@ class QuotePageStyle:
     QuoteLabelPack: dict = {
         "side": "top", 
         "pady": (0,0), 
-        "padx": 20,
+        "padx": 10,
         "fill": "both",
         "expand": True
     }
     LastUpdatedLabel: dict = {
-        "font": ("Helvetica", 8),
+        "font": ("Helvetica", 6),
         "text": "Last updated: Never"
     }
     LastUpdatedLabelPack: dict = {
         "side": "bottom", 
-        "pady": 5
+        "pady": 3
     }
 
 class GreetingsPageStyle:
@@ -44,11 +44,11 @@ class GreetingsPageStyle:
         "side": "top", 
         "fill": "both", 
         "expand": True, 
-        "padx": 20, 
-        "pady": 20
+        "padx": 10, 
+        "pady": 10
     }
     TimeLabel: dict = {
-        "font": ("Helvetica", 55, "bold")
+        "font": ("Helvetica", 24, "bold")
     }
     TimeLabelPack: dict = {
         "side": "top", 
@@ -56,7 +56,7 @@ class GreetingsPageStyle:
         "anchor": "center"
     }
     DateAndGreeting: dict = {
-        "font": ("Helvetica", 18, "bold")
+        "font": ("Helvetica", 12, "bold")
     }
     DateAndGreetingPack: dict = {
         "side": "top", 
@@ -67,28 +67,28 @@ class GreetingsPageStyle:
 class TodoPageStyle:
     TodoLabel = {
         "text": "Loading todos...", 
-        "font": ("Helvetica", 18),
+        "font": ("Helvetica", 9),
         "justify": "left",
-        "wraplength": 400,
+        "wraplength": 300,
         "anchor": "center"
     }
     TodoLabelPack = {
         "side": "top",
         "expand": True, 
         "fill": "both", 
-        "padx": 20, 
-        "pady": 20
+        "padx": 10, 
+        "pady": 10
     }
 
 class WeatherPageStyle:
     WeatherLabel = {
         "text": "Loading weather...", 
-        "font": ("Helvetica", 18),
+        "font": ("Helvetica", 9),
         "justify": "left"
     }
     WeatherLabelPack = {
         "side": "top", 
-        "pady": 20,
+        "pady": 10,
         "expand": True,
         "fill": "both"
     }
@@ -98,59 +98,59 @@ class WeatherPageStyle:
     }
     LastUpdatedLabel = {
         "text": "Last updated: Never",
-        "font": ("Helvetica", 8)
+        "font": ("Helvetica", 6)
     }
     LastUpdatedLabelPack = {
         "side": "bottom", 
-        "pady": 5
+        "pady": 3
     }
 
 class CalendarPageStyle:
     MonthLabel = {
         "text": "Loading...", 
-        "font": ("Helvetica", 9, "bold")
+        "font": ("Helvetica", 8, "bold")
     }
     MonthLabelPack = {
-        "pady": (5, 10)
+        "pady": (3, 5)
     }
     CalendarFramePack = {
         "expand": True,
         "fill": "both",
-        "padx": 20
+        "padx": 10
     }
     InfoLabel = {
         "text": "Tap a date for info", 
-        "font": ("Helvetica", 10),
+        "font": ("Helvetica", 8),
         "foreground": "gray"
     }
     InfoLabelSmallFont = {
         "font": ("Helvetica", 8)
     }
     InfoLabelPack = {
-        "pady": 5
+        "pady": 3
     }
-    WeeekDayHeaderLabel = {
-        "font": ("Helvetica", 8, "bold")
+    WeekDayHeaderLabel = {
+        "font": ("Helvetica", 7, "bold")
     }
     WeekDayHeaderLabelPack = {
         "sticky": "nsew", 
-        "padx": 20
+        "padx": 10
     }
 
 class MeetingPageStyle:
     MeetingLabel = {
-        "text": "Loading todos...", 
-        "font": ("Helvetica", 18),
+        "text": "Loading meetings...", 
+        "font": ("Helvetica", 9),
         "justify": "left",
-        "wraplength": 400,
+        "wraplength": 300,
         "anchor": "center"
     }
     MeetingLabelPack = {
         "side": "top",
         "expand": True, 
         "fill": "both", 
-        "padx": 20, 
-        "pady": 20
+        "padx": 10, 
+        "pady": 10
     }
 
 class MainPageStyle:
@@ -171,9 +171,9 @@ class MainPageStyle:
         "sticky": "nsew"
     }
     ScreenInfoLabel = {
-        "borderwidth":2, 
+        "borderwidth":1, 
         "relief": "sunken", 
-        "font": ("Helvetica", 10, "bold"), 
+        "font": ("Helvetica", 8, "bold"), 
         "anchor": "center"
     }
     ScreenInfoLabelPack = {
@@ -181,8 +181,8 @@ class MainPageStyle:
         "fill": "x",
         "expand": True,
         "padx": 0,
-        "pady": 2,
-        "ipady": 5
+        "pady": 1,
+        "ipady": 3
     }
     ButtonPack = {
         "side": "left",
@@ -190,5 +190,5 @@ class MainPageStyle:
         "expand": True,
         "padx": 0,
         "pady": 0,
-        "ipady": 5
+        "ipady": 3
     }
