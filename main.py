@@ -64,6 +64,7 @@ class DashboardApp(tk.Tk):
         
         # --- Show the first page ---
         self.show_frame(self.page_list[0])
+        self.setup_hardware_buttons()
 
     def __get_page_lists(self) -> list:
         pages = [GreetingsPage]
@@ -94,29 +95,25 @@ class DashboardApp(tk.Tk):
         self.page_label.config(text=page_frame.widgetName)
 
         self.show_frame(page_frame)
+    
+    def setup_hardware_buttons(self):
+        env = config("app_platform", "windows")
+        if env == "raspberrypi":
+            try:
+                from gpiozero import Button
+                # Store buttons as instance attributes so they aren't garbage collected
+                self.btn_prev = Button(18, bounce_time=0.1)
+                self.btn_next = Button(24, bounce_time=0.1)
+                
+                # Link buttons directly to your existing switch_page method
+                # Using lambda to ensure the call happens on press
+                self.btn_prev.when_pressed = lambda: self.switch_page(-1)
+                self.btn_next.when_pressed = lambda: self.switch_page(1)
+                
+                print("Hardware buttons initialized.")
+            except Exception as e:
+                print(f"GPIO Error: {e}")
 
-def key1_pressed():
-    print("Button 1 (GPIO 18) Pressed!")
-
-def key2_pressed():
-    print("Button 2 (GPIO 23) Pressed!")
-
-def key3_pressed():
-    print("Button 3 (GPIO 24) Pressed!")
-
-def setup_buttons():
-    env = config("app_platform", "windows")
-    if env == "raspberrypi":
-        from gpiozero import Button
-        btn1 = Button(18, bounce_time=0.1)
-        btn2 = Button(23, bounce_time=0.1)
-        btn3 = Button(24, bounce_time=0.1)
-
-        # Assign the actions
-        btn1.when_pressed = key1_pressed
-        btn2.when_pressed = key2_pressed
-        btn3.when_pressed = key3_pressed
-        
         
 # --- Main entry point ---
 if __name__ == "__main__":
