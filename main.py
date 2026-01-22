@@ -104,7 +104,7 @@ def key2_pressed():
 def key3_pressed():
     print("Button 3 (GPIO 24) Pressed!")
 
-def setup_buttons(env: str):
+def setup_buttons():
     env = config("app_platform", "windows")
     if env == "raspberrypi":
         from gpiozero import Button
