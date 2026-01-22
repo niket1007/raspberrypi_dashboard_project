@@ -173,7 +173,7 @@ class MainPageStyle:
     ScreenInfoLabel = {
         "borderwidth":1, 
         "relief": "sunken", 
-        "font": ("Helvetica", 8, "bold"), 
+        "font": ("Helvetica", 10, "bold"), 
         "anchor": "center"
     }
     ScreenInfoLabelPack = {
@@ -190,5 +190,5 @@ class MainPageStyle:
         "expand": True,
         "padx": 0,
         "pady": 0,
-        "ipady": 3
+        "ipady": 1
     }
