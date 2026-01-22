@@ -31,7 +31,7 @@ class QuotePageStyle:
         "expand": True
     }
     LastUpdatedLabel: dict = {
-        "font": ("Helvetica", 6),
+        "font": ("Helvetica", 8),
         "text": "Last updated: Never"
     }
     LastUpdatedLabelPack: dict = {
@@ -98,7 +98,7 @@ class WeatherPageStyle:
     }
     LastUpdatedLabel = {
         "text": "Last updated: Never",
-        "font": ("Helvetica", 6)
+        "font": ("Helvetica", 8)
     }
     LastUpdatedLabelPack = {
         "side": "bottom", 
