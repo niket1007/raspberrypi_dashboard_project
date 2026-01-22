@@ -1,7 +1,7 @@
 import tkinter as tk
 from decouple import config
 import importlib
-import threading
+import os
 
 # Import our page modules
 from Page.greetings import GreetingsPage
@@ -101,14 +101,12 @@ class DashboardApp(tk.Tk):
         if env == "raspberrypi":
             try:
                 from gpiozero import Button
-                # Store buttons as instance attributes so they aren't garbage collected
-                self.btn_prev = Button(18, bounce_time=0.1)
-                self.btn_next = Button(24, bounce_time=0.1)
-                
-                # Link buttons directly to your existing switch_page method
-                # Using lambda to ensure the call happens on press
-                self.btn_prev.when_pressed = lambda: self.switch_page(-1)
-                self.btn_next.when_pressed = lambda: self.switch_page(1)
+                self.screen_btn_prev = Button(18, bounce_time=0.1)
+                self.screen_btn_next = Button(24, bounce_time=0.1)
+                self.screen_btn_restart = Button(16, bounce_time=0.1)
+                self.screen_btn_prev.when_pressed = lambda: self.switch_page(-1)
+                self.screen_btn_next.when_pressed = lambda: self.switch_page(1)
+                self.screen_btn_restart.when_pressed = lambda: os.system("sudo shutdown -h now")
                 
                 print("Hardware buttons initialized.")
             except Exception as e:
@@ -117,7 +115,6 @@ class DashboardApp(tk.Tk):
         
 # --- Main entry point ---
 if __name__ == "__main__":
-    threading.Thread(target=setup_buttons, daemon=True).start()
     app = DashboardApp()
     app.mainloop()
     
