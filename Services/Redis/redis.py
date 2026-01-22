@@ -32,9 +32,7 @@ class RedisStorage:
         data = self._redis.get("config:screens")
         if data is None:
             data = REDIS["CONFIG_SCREEN"]
-            t = threading.Thread(target=self.set_screen_configuration)
-            t.daemon = True
-            t.start()
+            threading.Thread(target=self.set_screen_configuration, daemon=True).start()
         else:
             data = json.loads(data)
         
