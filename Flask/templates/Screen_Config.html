@@ -1,0 +1,168 @@
+﻿{% extends "layout.html" %}
+
+{% block content %}
+<style>
+    h1 {
+        font-size: 1.4rem;
+        text-transform: uppercase;
+        text-shadow: 0 0 8px #18E310;
+        margin-bottom: 20px;
+    }
+
+    .config-container {
+        width: 100%;
+        max-width: 500px;
+        border: 2px solid #18E310;
+        padding: 10px;
+        box-shadow: inset 0 0 10px rgba(24, 227, 16, 0.2);
+    }
+
+    .screen-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px 10px;
+        border-bottom: 1px solid #18E310;
+    }
+
+    .screen-row:last-child { border-bottom: none; }
+
+    .screen-name {
+        font-weight: bold;
+        flex-grow: 1;
+        text-transform: uppercase;
+    }
+
+    .toggle-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-right: 20px;
+    }
+
+    input[type="checkbox"] {
+        appearance: none;
+        width: 40px;
+        height: 20px;
+        border: 2px solid #18E310;
+        position: relative;
+        cursor: pointer;
+        background: transparent;
+    }
+
+    input[type="checkbox"]:checked {
+        background-color: #18E310;
+    }
+
+    input[type="checkbox"]:checked::after {
+        content: "ON";
+        color: #050505;
+        font-size: 10px;
+        font-weight: bold;
+        position: absolute;
+        left: 50%; top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    input[type="checkbox"]:not(:checked)::after {
+        content: "OFF";
+        color: #18E310;
+        font-size: 10px;
+        position: absolute;
+        left: 50%; top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .order-input {
+        background: #050505;
+        border: 1px solid #18E310;
+        color: #18E310;
+        width: 45px;
+        padding: 5px;
+        text-align: center;
+        font-family: 'Courier New', Courier, monospace;
+    }
+
+    .save-btn {
+        margin-top: 30px;
+        background-color: #18E310;
+        color: #050505;
+        border: none;
+        padding: 15px 40px;
+        font-family: 'Courier New', Courier, monospace;
+        font-weight: bold;
+        text-transform: uppercase;
+        cursor: pointer;
+        box-shadow: 0 0 15px #18E310;
+    }
+
+    .save-btn:active {
+        transform: scale(0.95);
+        box-shadow: 0 0 5px #18E310;
+    }
+
+    label { font-size: 0.7rem; margin-bottom: 4px; display: block; opacity: 0.8; }
+</style>
+
+<h1>> SCREEN_CONFIG</h1>
+
+<div class="config-container">
+    <div class="screen-row">
+        <div class="screen-name">Weather</div>
+        <div class="toggle-container">
+            <input type="checkbox" id="weather_vis" checked>
+        </div>
+        <div>
+            <label>ORDER</label>
+            <input type="number" class="order-input" value="1">
+        </div>
+    </div>
+
+    <div class="screen-row">
+        <div class="screen-name">Calendar</div>
+        <div class="toggle-container">
+            <input type="checkbox" id="cal_vis" checked>
+        </div>
+        <div>
+            <label>ORDER</label>
+            <input type="number" class="order-input" value="2">
+        </div>
+    </div>
+
+    <div class="screen-row">
+        <div class="screen-name">Todo</div>
+        <div class="toggle-container">
+            <input type="checkbox" id="todo_vis">
+        </div>
+        <div>
+            <label>ORDER</label>
+            <input type="number" class="order-input" value="3">
+        </div>
+    </div>
+</div>
+
+<button class="save-btn" onclick="saveConfig()">[ SAVE_CHANGES ]</button>
+
+<script>
+    function saveConfig() {
+        // Collect data from inputs
+        const config = {
+            weather: {
+                visible: document.getElementById('weather_vis').checked,
+                order: document.querySelectorAll('.order-input')[0].value
+            },
+            calendar: {
+                visible: document.getElementById('cal_vis').checked,
+                order: document.querySelectorAll('.order-input')[1].value
+            },
+            todo: {
+                visible: document.getElementById('todo_vis').checked,
+                order: document.querySelectorAll('.order-input')[2].value
+            }
+        };
+
+        console.log("Transmitting configuration to log...", config);
+        // Add your fetch() or XMLHttpRequest logic here to POST to Flask
+    }
+</script>
+{% endblock %}

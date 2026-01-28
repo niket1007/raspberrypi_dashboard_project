@@ -1,0 +1,131 @@
+﻿{% extends "layout.html" %}
+
+{% block content %}
+<style>
+    h1 {
+        font-size: 1.4rem;
+        text-transform: uppercase;
+        text-shadow: 0 0 8px #18E310;
+        margin-bottom: 25px;
+    }
+
+    .entry-container {
+        width: 100%;
+        max-width: 500px;
+        border: 2px solid #18E310;
+        padding: 15px;
+        margin-bottom: 30px;
+        box-shadow: inset 0 0 10px rgba(24, 227, 16, 0.1);
+    }
+
+    .input-group {
+        display: flex;
+        gap: 10px;
+    }
+
+    input[type="text"] {
+        flex-grow: 1;
+        background: #000;
+        border: 1px solid #18E310;
+        color: #18E310;
+        padding: 10px;
+        font-family: 'Courier New', Courier, monospace;
+        outline: none;
+    }
+
+    .add-btn {
+        background: #18E310;
+        color: #050505;
+        border: none;
+        padding: 0 20px;
+        font-weight: bold;
+        cursor: pointer;
+        text-transform: uppercase;
+        font-family: 'Courier New', Courier, monospace;
+    }
+
+    .list-container {
+        width: 100%;
+        max-width: 500px;
+        border: 1px solid #18E310;
+    }
+
+    .task-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px;
+        border-bottom: 1px solid #18E310;
+    }
+
+    .task-row:last-child { border-bottom: none; }
+
+    .task-text {
+        font-size: 0.9rem;
+        text-transform: uppercase;
+    }
+
+    .complete-btn {
+        background: transparent;
+        color: #18E310;
+        border: 1px solid #18E310;
+        padding: 5px 10px;
+        font-size: 0.7rem;
+        cursor: pointer;
+        font-family: 'Courier New', Courier, monospace;
+    }
+
+    .complete-btn:hover {
+        background: rgba(24, 227, 16, 0.1);
+    }
+
+    .complete-btn:active {
+        background: #18E310;
+        color: #050505;
+    }
+
+    .label {
+        font-size: 0.7rem;
+        margin-bottom: 5px;
+        display: block;
+        opacity: 0.8;
+    }
+</style>
+
+<h1>> TODO_MANAGER</h1>
+
+<div class="entry-container">
+    <span class="label">NEW_ENTRY:</span>
+    <div class="input-group">
+        <input type="text" id="taskInput" placeholder="ENTER TASK_STRING..." autocomplete="off">
+        <button class="add-btn" onclick="addTask()">[ADD]</button>
+    </div>
+</div>
+
+<span class="label" style="width:100%; max-width:500px;">ACTIVE_LOG:</span>
+<div class="list-container">
+    <div class="task-row">
+        <span class="task-text">Update System Drivers</span>
+        <button class="complete-btn" onclick="completeTask(1)">[MARK_DONE]</button>
+    </div>
+    <div class="task-row">
+        <span class="task-text">Review Meeting Notes</span>
+        <button class="complete-btn" onclick="completeTask(2)">[MARK_DONE]</button>
+    </div>
+</div>
+
+<script>
+    function addTask() {
+        const val = document.getElementById('taskInput').value;
+        if (val.trim() === "") return;
+        
+        console.log("Pushing to Redis: " + val);
+        // Add your fetch() logic here to POST to Flask
+    }
+
+    function completeTask(id) {
+        console.log("Marking ID " + id + " as complete");
+        // Add your fetch() logic here to POST to Flask
+    }
+</script>
+{% endblock %}

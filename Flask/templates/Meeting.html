@@ -1,0 +1,109 @@
+﻿{% extends "layout.html" %}
+
+{% block content %}
+<style>
+    h1 {
+        font-size: 1.4rem;
+        text-transform: uppercase;
+        text-shadow: 0 0 8px #18E310;
+        margin-bottom: 30px;
+    }
+
+    .form-container {
+        width: 100%;
+        max-width: 500px;
+        border: 2px solid #18E310;
+        padding: 25px;
+        box-shadow: inset 0 0 10px rgba(24, 227, 16, 0.1);
+    }
+
+    .input-group {
+        margin-bottom: 25px;
+    }
+
+    .label {
+        font-size: 0.8rem;
+        margin-bottom: 8px;
+        display: block;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    input[type="text"], 
+    input[type="date"], 
+    input[type="time"] {
+        width: 100%;
+        background: #000;
+        border: 1px solid #18E310;
+        color: #18E310;
+        padding: 12px;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 1rem;
+        outline: none;
+        box-sizing: border-box;
+    }
+
+    input::-webkit-calendar-picker-indicator {
+        filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg) brightness(118%) contrast(119%);
+        cursor: pointer;
+    }
+
+    .submit-btn {
+        width: 100%;
+        background-color: #18E310;
+        color: #050505;
+        border: none;
+        padding: 15px;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 1.1rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        cursor: pointer;
+        box-shadow: 0 0 15px rgba(24, 227, 16, 0.4);
+        margin-top: 10px;
+    }
+
+    .submit-btn:active {
+        transform: scale(0.98);
+        box-shadow: 0 0 5px #18E310;
+    }
+</style>
+
+<h1>> MARK_MEETINGS</h1>
+
+<div class="form-container">
+    <div class="input-group">
+        <span class="label">IDENTIFIER (TITLE):</span>
+        <input type="text" id="meetingTitle" placeholder="ENTER SUBJECT..." autocomplete="off">
+    </div>
+
+    <div class="input-group">
+        <span class="label">TEMPORAL_COORD (DATE):</span>
+        <input type="date" id="meetingDate">
+    </div>
+
+    <div class="input-group">
+        <span class="label">CHRONO_MARK (TIME):</span>
+        <input type="time" id="meetingTime">
+    </div>
+
+    <button class="submit-btn" onclick="submitMeeting()">[ COMMIT_TO_LOG ]</button>
+</div>
+
+<script>
+    function submitMeeting() {
+        const title = document.getElementById('meetingTitle').value;
+        const date = document.getElementById('meetingDate').value;
+        const time = document.getElementById('meetingTime').value;
+
+        const meetingData = {
+            title: title.toUpperCase(),
+            date: date,
+            time: time
+        };
+
+        console.log("Transmitting to log:", meetingData);
+        // Flask POST logic goes here
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TERMINAL_HUD_V1.0</title>
+    <style>
+        :root {
+            --retro-green: #18E310;
+            --retro-bg: #050505;
+        }
+        body {
+            background-color: var(--retro-bg);
+            color: var(--retro-green);
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+        }
+        /* Sidebar Styling */
+        .sidebar {
+            width: 200px;
+            border-right: 2px ridge var(--retro-green);
+            display: flex;
+            flex-direction: column;
+            padding: 20px 10px;
+            box-sizing: border-box;
+        }
+        .sidebar-title {
+            font-weight: bold;
+            margin-bottom: 30px;
+            font-size: 1.2em;
+            text-align: center;
+        }
+        .nav-link {
+            color: var(--retro-green);
+            text-decoration: none;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid transparent;
+            display: block;
+        }
+        .nav-link:hover {
+            background-color: var(--retro-green);
+            color: var(--retro-bg);
+        }
+        /* Main Content Area */
+        .content {
+            flex-grow: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-title">> NAVIGATION</div>
+        <a href="/" class="nav-link">> CONFIG</a>
+        <a href="/todo" class="nav-link">> TODO</a>
+        <a href="/meetings" class="nav-link">> MEETINGS</a>
+        <a href="/calendar" class="nav-link">> CALENDAR</a>
+    </div>
+
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
