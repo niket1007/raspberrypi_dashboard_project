@@ -6,7 +6,7 @@ import os
 # Import our page modules
 from Page.greetings import GreetingsPage
 
-from Services.Style import MainPageStyle, NavigationBarStyle
+from Services.Style import MainPageStyle
 from Services.Redis.redis import RedisStorage
 from Services.Redis.redis_sub import RedisSub
 
@@ -20,10 +20,6 @@ class DashboardApp(tk.Tk):
         # --- Basic Window Setup ---
         self.title(MainPageStyle.Title)
         self.geometry(MainPageStyle.Geometry)
-        
-        # Apply Cyberpunk background color to main window
-        self.config(bg=MainPageStyle.BackgroundColor)
-        
         if config("app_platform", "windows") == "windows":
             self.attributes("-fullscreen", False)
         else:
@@ -31,11 +27,11 @@ class DashboardApp(tk.Tk):
             self.config(cursor="none")
 
         # --- Navigation Bar ---
-        nav_frame = tk.Frame(self, bg=NavigationBarStyle.ScreenInfo["bg"])
+        nav_frame = tk.Frame(self)
         nav_frame.pack(**MainPageStyle.NavFramePack)
 
         # --- Main Container for Pages ---
-        container = tk.Frame(self, background=MainPageStyle.BackgroundColor)
+        container = tk.Frame(self)
         container.pack(**MainPageStyle.MainContainerPack)
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
@@ -48,33 +44,19 @@ class DashboardApp(tk.Tk):
         for index in range(len(self.page_list)):
             frame = self.page_list[index](parent=container, controller=self)
             
-            # Apply cyberpunk background to each page frame
-            frame.config(bg=MainPageStyle.BackgroundColor)
-            
             self.page_list[index] = frame
             
             frame.grid(**MainPageStyle.EachPageFrameGrid)
 
         # --- Add Navigation Buttons (Next / Prev) ---
-        btn_prev = tk.Button(
-            nav_frame, 
-            text="◄◄ PREV",
-            command=lambda: self.switch_page(-1),
-            **NavigationBarStyle.Button
-        )
+        btn_prev = tk.Button(nav_frame, text="<< Prev", 
+                              command=lambda: self.switch_page(-1))
         
-        btn_next = tk.Button(
-            nav_frame, 
-            text="NEXT ►►",
-            command=lambda: self.switch_page(1),
-            **NavigationBarStyle.Button
-        )
+        btn_next = tk.Button(nav_frame, text="Next >>", 
+                              command=lambda: self.switch_page(1))
         
-        self.page_label = tk.Label(
-            nav_frame, 
-            text=self.page_list[0].widgetName.upper(),
-            **MainPageStyle.ScreenInfoLabel
-        )
+        self.page_label = tk.Label(nav_frame, text=self.page_list[0].widgetName, 
+                                   **MainPageStyle.ScreenInfoLabel)
         
         btn_prev.pack(**MainPageStyle.ButtonPack)
         self.page_label.pack(**MainPageStyle.ScreenInfoLabelPack)
@@ -90,8 +72,8 @@ class DashboardApp(tk.Tk):
 
         for screen in screens:
             if screen["visibility"]:
-                module_name = f"Page.{screen['name'].lower()}"
-                class_name = f"{screen['name'].capitalize()}Page"
+                module_name = f"Page.{screen["name"].lower()}"
+                class_name = f"{screen["name"].capitalize()}Page"
                 module = importlib.import_module(module_name)
                 page_class = getattr(module, class_name)
                 pages.append(page_class)
@@ -110,7 +92,7 @@ class DashboardApp(tk.Tk):
         
         page_frame = self.page_list[new_index]
         self.current_page_index = new_index
-        self.page_label.config(text=page_frame.widgetName.upper())
+        self.page_label.config(text=page_frame.widgetName)
 
         self.show_frame(page_frame)
     
@@ -135,3 +117,4 @@ class DashboardApp(tk.Tk):
 if __name__ == "__main__":
     app = DashboardApp()
     app.mainloop()
+    

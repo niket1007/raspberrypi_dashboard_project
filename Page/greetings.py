@@ -1,20 +1,20 @@
 import tkinter as tk
 import time
 import datetime
-from Services.Style import GreetingsPageStyle, MainPageStyle
+from Services.Style import GreetingsPageStyle
 
 class GreetingsPage(tk.Frame):
 
     DATETIME_UPDATE_TIMER = 1000
 
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent, background=MainPageStyle.BackgroundColor)
+        tk.Frame.__init__(self, parent)
         self.controller = controller
         self.widgetName = "Home"
 
         # --- Create a Split Layout ---
-        greeting_frame = tk.Frame(self, **GreetingsPageStyle.MainFrame)
-        greeting_frame.pack(**GreetingsPageStyle.MainFramePack)
+        greeting_frame = tk.Frame(self)
+        greeting_frame.pack(**GreetingsPageStyle.MainFrame)
 
         self.time_label = tk.Label(greeting_frame, **GreetingsPageStyle.TimeLabel)
         self.time_label.pack(**GreetingsPageStyle.TimeLabelPack)
@@ -33,17 +33,17 @@ class GreetingsPage(tk.Frame):
         current_hour = datetime.datetime.now().hour
         
         if 5 <= current_hour < 12:
-            return "⚡ GOOD MORNING"
+            return "Good morning!"
         elif 12 <= current_hour < 18:
-            return "⚡ GOOD AFTERNOON"
+            return "Good afternoon!"
         else:
-            return "⚡ GOOD EVENING"
+            return "Good evening!"
 
     def update_time_and_greeting(self):
         """Updates the time, date, and greeting labels every second."""
         
-        current_time = time.strftime("%H:%M:%S")  # 24-hour format for cyberpunk
-        current_date = time.strftime("%A // %B %d // %Y").upper()
+        current_time = time.strftime("%I:%M:%S %p")
+        current_date = time.strftime("%A, %B %d, %Y")
 
         self.time_label.config(text=current_time)
         self.date_label.config(text=current_date)
