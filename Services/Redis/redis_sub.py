@@ -23,6 +23,6 @@ class RedisSub:
     def __start_listening(self):
         sub = self._redis.pubsub()
         sub.subscribe("Dashboard-Commands")
-        
+
         for message in sub.listen():
-            print(message.get("data", None))
+            print("Redis Subscriber:",message.get("data", None))

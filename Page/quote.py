@@ -60,7 +60,12 @@ class QuotePage(tk.Frame):
         with open(quote_data_path, "r") as file:
             data = json.load(file)
         
-        quote = random.choice(data)
+        quote = ""
+        while True:
+            quote = random.choice(data)
+            if len(quote) <= config("quote_max_length", cast=int, default=50):
+                break
+        
         self.update_redis_data(quote)
 
         return quote
