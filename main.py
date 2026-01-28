@@ -2,6 +2,8 @@ import tkinter as tk
 from decouple import config
 import importlib
 import os
+import setproctitle
+setproctitle.setproctitle("raspberry-pi-dashboard")
 
 # Import our page modules
 from Page.greetings import GreetingsPage
