@@ -56,7 +56,6 @@ class WeatherPage(tk.Frame):
 
 
     def __fetch_weather_api(self):
-        """Updates the weather data through api call."""
         url = f"{self.WEATHER_API_URL}?key={self.WEATHER_API_KEY}&q={self.LAT},{self.LONG}"
         
         response = requests.get(url, timeout=10)
@@ -79,7 +78,6 @@ class WeatherPage(tk.Frame):
         return display_text
 
     def update_ui(self, weather_text: str, error: bool = False):
-        """Updates the weather data on the screen."""
         
         text_color = WeatherPageStyle.WeatherLabelStateColor["success_color"]
         if error:

@@ -56,7 +56,6 @@ class QuotePage(tk.Frame):
 
     
     def __fetch_quote_file(self):
-        """Fetch anime quote through reading the quote data file."""
 
         quote_data_path = os.path.join(os.getcwd(), "Data", "quotes.json")
         with open(quote_data_path, "r") as file:
@@ -73,7 +72,6 @@ class QuotePage(tk.Frame):
         return quote
 
     def update_ui(self, data: dict, error: bool = False):
-        """Updates the quote in the screen."""
 
         foreground_color = QuotePageStyle.QuoteLabelStateColor["success_color"]
         if error:

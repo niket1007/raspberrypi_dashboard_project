@@ -58,10 +58,15 @@ class GreetingsPageStyle:
         "expand": True, 
         "anchor": "center"
     }
-    DateAndGreeting: dict = {
+    GreetingLabel: dict = {
+        "font": ("Courier", 20, "bold"),
+        "fg": RETRO_GREEN,               
+        "bg": RETRO_BG  
+    }
+    DateLabel: dict = {    
         "font": ("Courier", 12, "bold"),
         "fg": RETRO_GREEN,               
-        "bg": RETRO_BG                   
+        "bg": RETRO_BG               
     }
     DateAndGreetingPack: dict = {
         "side": "top", 

@@ -10,7 +10,7 @@ class GreetingsPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        self.widgetName = "" #Kept empty for styling
+        self.widgetName = "" # Kept empty for styling
 
         self.configure(bg=GreetingsPageStyle.RETRO_BG)
         
@@ -21,28 +21,26 @@ class GreetingsPage(tk.Frame):
         self.time_label = tk.Label(self, **GreetingsPageStyle.TimeLabel)
         self.time_label.pack(**GreetingsPageStyle.TimeLabelPack)
         
-        self.date_label = tk.Label(self, **GreetingsPageStyle.DateAndGreeting)
+        self.date_label = tk.Label(self, **GreetingsPageStyle.DateLabel)
         self.date_label.pack(**GreetingsPageStyle.DateAndGreetingPack)
 
-        self.greeting_label = tk.Label(greeting_frame, **GreetingsPageStyle.DateAndGreeting)
+        self.greeting_label = tk.Label(greeting_frame, **GreetingsPageStyle.GreetingLabel)
         self.greeting_label.pack(**GreetingsPageStyle.DateAndGreetingPack)
 
         # --- Start the update loop ---
         self.update_time_and_greeting()
 
     def get_greeting(self):
-        """Returns a time-appropriate greeting."""
         current_hour = datetime.datetime.now().hour
         
         if 5 <= current_hour < 12:
-            return "Good morning!"
+            return "Good Morning!"
         elif 12 <= current_hour < 18:
-            return "Good afternoon!"
+            return "Good Afternoon!"
         else:
-            return "Good evening!"
+            return "Good Evening!"
 
     def update_time_and_greeting(self):
-        """Updates the time, date, and greeting labels every second."""
         
         current_time = time.strftime("%I:%M:%S %p")
         current_date = time.strftime("%A, %B %d, %Y")

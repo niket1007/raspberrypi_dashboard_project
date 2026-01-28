@@ -126,7 +126,6 @@ class CalendarPage(tk.Frame):
         self.after(self.UPDATE_INTERVAL, self.populate_calendar)
 
     def on_date_click(self, day, holiday_text, user_text):
-        """Updates the info label when a date is clicked."""
         info_parts = []
         if holiday_text:
             info_parts.append(f"{holiday_text}")
