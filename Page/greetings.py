@@ -10,16 +10,18 @@ class GreetingsPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        self.widgetName = "Home"
+        self.widgetName = "" #Kept empty for styling
 
+        self.configure(bg=GreetingsPageStyle.RETRO_BG)
+        
         # --- Create a Split Layout ---
-        greeting_frame = tk.Frame(self)
+        greeting_frame = tk.Frame(self, bg=GreetingsPageStyle.RETRO_BG)
         greeting_frame.pack(**GreetingsPageStyle.MainFrame)
 
-        self.time_label = tk.Label(greeting_frame, **GreetingsPageStyle.TimeLabel)
+        self.time_label = tk.Label(self, **GreetingsPageStyle.TimeLabel)
         self.time_label.pack(**GreetingsPageStyle.TimeLabelPack)
         
-        self.date_label = tk.Label(greeting_frame, **GreetingsPageStyle.DateAndGreeting)
+        self.date_label = tk.Label(self, **GreetingsPageStyle.DateAndGreeting)
         self.date_label.pack(**GreetingsPageStyle.DateAndGreetingPack)
 
         self.greeting_label = tk.Label(greeting_frame, **GreetingsPageStyle.DateAndGreeting)

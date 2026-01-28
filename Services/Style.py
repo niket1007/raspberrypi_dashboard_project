@@ -1,27 +1,23 @@
-class NavigationBarStyle:
-    Button: dict = {}
-    ScreenInfo: dict = {
-        "borderwidth":1, 
-        "relief": "sunken", 
-        "font": ("Helvetica", 8, "bold"), 
-        "anchor": "center"
-    }
-
 class QuotePageStyle:
+    RETRO_GREEN = "#18E310"
+    RETRO_BG = "#050505"
+
     FramePack: dict = {
         "fill": "both", 
         "expand": True,
         "anchor": "center"
     }
     QuoteLabel: dict = {
-        "font": ("Helvetica", 12, "bold", "italic"), 
+        "font": ("Courier", 12, "bold", "italic"),
+        "fg": RETRO_GREEN,
+        "bg": RETRO_BG,
         "wraplength": 250,
         "anchor": "center",
         "text": "Loading quote..."
     }
     QuoteLabelStateColor: dict = {
-        "error_color": "red",
-        "success_color": "black"
+        "error_color": "#FF0000",                  
+        "success_color": "#18E310"                
     }
     QuoteLabelPack: dict = {
         "side": "top", 
@@ -31,7 +27,9 @@ class QuotePageStyle:
         "expand": True
     }
     LastUpdatedLabel: dict = {
-        "font": ("Helvetica", 8),
+        "font": ("Courier", 10),                    
+        "fg": RETRO_GREEN,                          
+        "bg": RETRO_BG,                            
         "text": "Last updated: Never"
     }
     LastUpdatedLabelPack: dict = {
@@ -40,6 +38,9 @@ class QuotePageStyle:
     }
 
 class GreetingsPageStyle:
+    RETRO_GREEN = "#18E310"
+    RETRO_BG = "#050505"
+
     MainFrame: dict = {
         "side": "top", 
         "fill": "both", 
@@ -48,7 +49,9 @@ class GreetingsPageStyle:
         "pady": 10
     }
     TimeLabel: dict = {
-        "font": ("Helvetica", 30, "bold")
+        "font": ("Courier", 30, "bold"),
+        "fg": RETRO_GREEN,              
+        "bg": RETRO_BG                  
     }
     TimeLabelPack: dict = {
         "side": "top", 
@@ -56,7 +59,9 @@ class GreetingsPageStyle:
         "anchor": "center"
     }
     DateAndGreeting: dict = {
-        "font": ("Helvetica", 15, "bold")
+        "font": ("Courier", 12, "bold"),
+        "fg": RETRO_GREEN,               
+        "bg": RETRO_BG                   
     }
     DateAndGreetingPack: dict = {
         "side": "top", 
@@ -65,9 +70,14 @@ class GreetingsPageStyle:
     }
 
 class TodoPageStyle:
+    RETRO_GREEN = "#18E310"
+    RETRO_BG = "#050505"
+
     TodoLabel = {
         "text": "Loading todos...", 
-        "font": ("Helvetica", 12),
+        "font": ("Courier", 12),              
+        "fg": RETRO_GREEN,                     
+        "bg": RETRO_BG,                        
         "justify": "left",
         "wraplength": 250,
         "anchor": "center"
@@ -81,9 +91,14 @@ class TodoPageStyle:
     }
 
 class WeatherPageStyle:
+    RETRO_GREEN = "#18E310"
+    RETRO_BG = "#050505"
+
     WeatherLabel = {
         "text": "Loading weather...", 
-        "font": ("Helvetica", 15),
+        "font": ("Courier", 13),           
+        "fg": RETRO_GREEN,                    
+        "bg": RETRO_BG,                        
         "justify": "left"
     }
     WeatherLabelPack = {
@@ -93,12 +108,14 @@ class WeatherPageStyle:
         "fill": "both"
     }
     WeatherLabelStateColor: dict = {
-        "error_color": "red",
-        "success_color": "black"
+        "error_color": "#FF0000",           
+        "success_color": "#18E310"            
     }
     LastUpdatedLabel = {
         "text": "Last updated: Never",
-        "font": ("Helvetica", 8)
+        "font": ("Courier", 10),            
+        "fg": RETRO_GREEN,                    
+        "bg": RETRO_BG                        
     }
     LastUpdatedLabelPack = {
         "side": "bottom", 
@@ -106,9 +123,14 @@ class WeatherPageStyle:
     }
 
 class CalendarPageStyle:
+    RETRO_GREEN = "#18E310"
+    RETRO_BG = "#050505"
+
     MonthLabel = {
         "text": "Loading...", 
-        "font": ("Helvetica", 8, "bold")
+        "font": ("Courier", 10, "bold"),     
+        "fg": RETRO_GREEN,                      
+        "bg": RETRO_BG                         
     }
     MonthLabelPack = {
         "pady": (3, 5)
@@ -119,18 +141,23 @@ class CalendarPageStyle:
         "padx": 5
     }
     InfoLabel = {
-        "text": "Tap a date for info", 
-        "font": ("Helvetica", 10),
-        "foreground": "gray"
+        "text": "SELECT DATE FOR INFO",        
+        "font": ("Courier", 10),                
+        "fg": RETRO_GREEN,                      
+        "bg": RETRO_BG                          
     }
     InfoLabelSmallFont = {
-        "font": ("Helvetica", 8)
+        "font": ("Courier", 8),                
+        "fg": RETRO_GREEN,
+        "bg": RETRO_BG
     }
     InfoLabelPack = {
         "pady": 0
     }
     WeekDayHeaderLabel = {
-        "font": ("Helvetica", 10, "bold")
+        "font": ("Courier", 10, "bold"),
+        "fg": RETRO_GREEN,                     
+        "bg": RETRO_BG                          
     }
     WeekDayHeaderLabelPack = {
         "sticky": "nsew", 
@@ -138,9 +165,14 @@ class CalendarPageStyle:
     }
 
 class MeetingPageStyle:
+    RETRO_GREEN = "#18E310"
+    RETRO_BG = "#050505"
+
     MeetingLabel = {
         "text": "Loading meetings...", 
-        "font": ("Helvetica", 12),
+        "font": ("Courier", 12),              
+        "fg": RETRO_GREEN,                    
+        "bg": RETRO_BG,                        
         "justify": "left",
         "wraplength": 250,
         "anchor": "center"
@@ -154,41 +186,62 @@ class MeetingPageStyle:
     }
 
 class MainPageStyle:
-    Title = "Raspberry Pi Dashboard"
+    RETRO_BG = "#050505"
+    RETRO_GREEN = "#18E310"
+    
+    Title = "Dashboard"
     Geometry = "320x240"
+
     NavFramePack = {
         "side": "bottom", 
         "fill": "x"
     }
+    
     MainContainerPack = {
         "side": "top",
         "fill": "both",
         "expand": True
     }
+
     EachPageFrameGrid = {
         "row": 0,
         "column": 0,
         "sticky": "nsew"
     }
+
     ScreenInfoLabel = {
-        "borderwidth":1, 
-        "relief": "sunken", 
-        "font": ("Helvetica", 10, "bold"), 
-        "anchor": "center"
+        "font": ("Courier", 11, "bold"), 
+        "anchor": "center",
+        "fg": "#18E310",
+        "bg": "#050505"
     }
+
     ScreenInfoLabelPack = {
         "side": "left",
         "fill": "x",
         "expand": True,
-        "padx": 0,
-        "pady": 1,
+        "padx": 2,
+        "pady": 2,
         "ipady": 3
     }
+
+    ButtonStyle = {
+        "font": ("Courier", 9, "bold"),
+        "bg": "#050505",
+        "fg": "#18E310",
+        "activebackground": "#18E310",
+        "activeforeground": "#050505",
+        "relief": "flat",
+        "highlightthickness": 1,
+        "highlightbackground": "#18E310",
+        "bd": 0
+    }
+
     ButtonPack = {
         "side": "left",
         "fill": "x",
         "expand": True,
-        "padx": 0,
-        "pady": 0,
+        "padx": 1,
+        "pady": 2,
         "ipady": 1
     }

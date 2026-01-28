@@ -13,6 +13,8 @@ class TodoPage(tk.Frame):
         self.widgetName = "Todo"
         self.redis = RedisStorage()
 
+        self.configure(bg=TodoPageStyle.RETRO_BG)
+
         # --- Todo List Content ---
         self.todo_label = tk.Label(self,**TodoPageStyle.TodoLabel)
         self.todo_label.pack(**TodoPageStyle.TodoLabelPack)

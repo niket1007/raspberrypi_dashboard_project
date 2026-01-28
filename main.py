@@ -22,6 +22,10 @@ class DashboardApp(tk.Tk):
         # --- Basic Window Setup ---
         self.title(MainPageStyle.Title)
         self.geometry(MainPageStyle.Geometry)
+        
+        # Set Global Retro Background
+        self.configure(bg=MainPageStyle.RETRO_BG) 
+
         if config("app_platform", "windows") == "windows":
             self.attributes("-fullscreen", False)
         else:
@@ -29,11 +33,13 @@ class DashboardApp(tk.Tk):
             self.config(cursor="none")
 
         # --- Navigation Bar ---
-        nav_frame = tk.Frame(self)
+        # Apply Retro Black to the navigation frame
+        nav_frame = tk.Frame(self, bg=MainPageStyle.RETRO_BG) 
         nav_frame.pack(**MainPageStyle.NavFramePack)
 
         # --- Main Container for Pages ---
-        container = tk.Frame(self)
+        # Ensure the page container also uses the Retro Background
+        container = tk.Frame(self, bg=MainPageStyle.RETRO_BG) 
         container.pack(**MainPageStyle.MainContainerPack)
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
@@ -45,26 +51,27 @@ class DashboardApp(tk.Tk):
         # --- Instantiate Pages ---
         for index in range(len(self.page_list)):
             frame = self.page_list[index](parent=container, controller=self)
-            
             self.page_list[index] = frame
-            
             frame.grid(**MainPageStyle.EachPageFrameGrid)
 
         # --- Add Navigation Buttons (Next / Prev) ---
-        btn_prev = tk.Button(nav_frame, text="<< Prev", 
-                              command=lambda: self.switch_page(-1))
+        # Apply retro button styles to Next and Prev
+        btn_prev = tk.Button(nav_frame, text="<< PREV", 
+                              command=lambda: self.switch_page(-1),
+                              **MainPageStyle.ButtonStyle)
         
-        btn_next = tk.Button(nav_frame, text="Next >>", 
-                              command=lambda: self.switch_page(1))
+        btn_next = tk.Button(nav_frame, text="NEXT >>", 
+                              command=lambda: self.switch_page(1),
+                              **MainPageStyle.ButtonStyle)
         
-        self.page_label = tk.Label(nav_frame, text=self.page_list[0].widgetName, 
+        # Center label updated with ridge border and green text
+        self.page_label = tk.Label(nav_frame, text=self.page_list[0].widgetName.upper(), 
                                    **MainPageStyle.ScreenInfoLabel)
         
         btn_prev.pack(**MainPageStyle.ButtonPack)
         self.page_label.pack(**MainPageStyle.ScreenInfoLabelPack)
         btn_next.pack(**MainPageStyle.ButtonPack)
         
-        # --- Show the first page ---
         self.show_frame(self.page_list[0])
         self.setup_hardware_buttons()
 

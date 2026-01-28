@@ -18,8 +18,10 @@ class QuotePage(tk.Frame):
         self.widgetName = "Quote"
         self.redis = RedisStorage()
 
+        self.configure(bg=QuotePageStyle.RETRO_BG)
+
         # --- Create UI Elements ---
-        center_frame = tk.Frame(self)
+        center_frame = tk.Frame(self, bg=QuotePageStyle.RETRO_BG)
         center_frame.pack(**QuotePageStyle.FramePack)
 
         self.quote_label = tk.Label(center_frame, **QuotePageStyle.QuoteLabel)

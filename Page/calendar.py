@@ -17,13 +17,15 @@ class CalendarPage(tk.Frame):
 
         self.redis = RedisStorage()
 
+        self.configure(bg=CalendarPageStyle.RETRO_BG)
+
         # --- UI Layout ---
         # 1. Top: Month and Year Label
         self.month_label = tk.Label(self, **CalendarPageStyle.MonthLabel)
         self.month_label.pack(**CalendarPageStyle.MonthLabelPack)
 
         # 2. Middle: Calendar Grid Container
-        self.calendar_frame = tk.Frame(self)
+        self.calendar_frame = tk.Frame(self, bg=CalendarPageStyle.RETRO_BG)
         if config("app_platform", "windows") != "windows":
             self.calendar_frame.config(cursor="none")
         self.calendar_frame.pack(**CalendarPageStyle.CalendarFramePack)
@@ -76,7 +78,6 @@ class CalendarPage(tk.Frame):
 
                 calc_date = datetime.date(year, month, day)
 
-                # --- Logic Checks (Ported from CalendarScreen.py) ---
                 is_today = (calc_date == today)
                 is_holiday = calc_date in holidays_dict
                 is_user_event = str(calc_date) in self.user_events
@@ -85,24 +86,26 @@ class CalendarPage(tk.Frame):
                 user_text = self.user_events.get(str(calc_date), "")
 
                 # --- Styling Logic ---
-                bg_color = "#f0f0f0" # Default gray/white
-                fg_color = "black"
-                font_style = ("Helvetica", 8)
+                bg_color = "#050505" # Default gray/white
+                fg_color = "#18E310"
+                font_style = ("Courier", 10)
 
                 if is_today and (is_holiday or is_user_event):
-                    # Red foreground and blue background for today and holiday or user event
-                    bg_color = "#007bff"
+                    # Red foreground and 18E310 background for today and holiday 
+                    # or user event
+                    bg_color = "#18E310"
                     fg_color = "red"  
-                    font_style = ("Helvetica", 9, "bold")
+                    font_style = ("Courier", 10, "bold")
                 elif is_today:
-                    # Blue background for today and no holdiday or user event
-                    bg_color = "#007bff" 
+                    # 18E310 background for today and no holdiday or user event
+                    bg_color = "#18E310" 
                     fg_color = "white" 
-                    font_style = ("Helvetica", 9, "bold")
+                    font_style = ("Courier", 10, "bold")
                 elif (is_holiday or is_user_event) and not is_today:
-                    # White background and red foreground for holiday or user event but not today
+                    # Red foreground for holiday or user event 
+                    # but not today
                     fg_color = "red"
-                    font_style = ("Helvetica", 9, "bold")
+                    font_style = ("Courier", 10, "bold")
                 
                 # Specific background colors per-button.
                 btn = tk.Button(self.calendar_frame, 
@@ -132,7 +135,7 @@ class CalendarPage(tk.Frame):
         
         if info_parts:
             text = f'Event {day}: {", ".join(info_parts)}'
-            self.info_label.config(text=text, foreground="red")
+            self.info_label.config(text=text, foreground="white")
             if len(text) > 30:
                 self.info_label.config(**CalendarPageStyle.InfoLabelSmallFont)
         else:

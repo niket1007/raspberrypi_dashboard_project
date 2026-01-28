@@ -26,6 +26,8 @@ class WeatherPage(tk.Frame):
 
         self.LAT, self.LONG = self.__get_coordinates()
 
+        self.configure(bg=WeatherPageStyle.RETRO_BG)
+
         # --- Create UI Elements ---
         self.weather_label = tk.Label(self, **WeatherPageStyle.WeatherLabel)
         self.weather_label.pack(**WeatherPageStyle.WeatherLabelPack)
