@@ -3,7 +3,7 @@ import requests
 import time
 from decouple import config
 import geocoder
-from Services.Style import WeatherPageStyle
+from Services.Style import WeatherPageStyle, MainPageStyle
 from Services.Static.static import WEATHER
 from Services.Redis.redis import RedisStorage
 
@@ -19,7 +19,7 @@ class WeatherPage(tk.Frame):
         return g.latlng
     
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent, bg=MainPageStyle.BackgroundColor)
         self.controller = controller
         self.widgetName = "Weather"
         self.redis = RedisStorage()
@@ -67,10 +67,11 @@ class WeatherPage(tk.Frame):
         condition = data['current']['condition']['text']
         humidity = data['current']['humidity']
         
-        display_text = f"Location: {location}\n"
-        display_text += f"Current temperature: {temp}°C\n"
-        display_text += f"Condition: {condition}\n"
-        display_text += f"Humidity: {humidity}%"
+        # Cyberpunk-styled formatting
+        display_text = f"▶ LOCATION: {location}\n"
+        display_text += f"▶ TEMPERATURE: {temp}°C\n"
+        display_text += f"▶ CONDITION: {condition}\n"
+        display_text += f"▶ HUMIDITY: {humidity}%"
 
         self.redis.set_weather_data(display_text)
 
@@ -84,5 +85,4 @@ class WeatherPage(tk.Frame):
             text_color = WeatherPageStyle.WeatherLabelStateColor["error_color"]
         
         self.weather_label.config(text=weather_text, foreground=text_color)
-        self.last_updated_label.config(text=f"Last updated: {time.strftime('%I:%M:%S %p')}")
-        
+        self.last_updated_label.config(text=f"LAST UPDATE: {time.strftime('%H:%M:%S')}")

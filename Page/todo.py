@@ -1,20 +1,20 @@
 import tkinter as tk
 from decouple import config
 from Services.Redis.redis import RedisStorage
-from Services.Style import TodoPageStyle
+from Services.Style import TodoPageStyle, MainPageStyle
 
 class TodoPage(tk.Frame):
 
     UPDATE_INTERVAL = config("todo_redis_frequency", cast=int)
 
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent, bg=MainPageStyle.BackgroundColor)
         self.controller = controller
         self.widgetName = "Todo"
         self.redis = RedisStorage()
 
         # --- Todo List Content ---
-        self.todo_label = tk.Label(self,**TodoPageStyle.TodoLabel)
+        self.todo_label = tk.Label(self, **TodoPageStyle.TodoLabel)
         self.todo_label.pack(**TodoPageStyle.TodoLabelPack)
 
         self.load_todos()
