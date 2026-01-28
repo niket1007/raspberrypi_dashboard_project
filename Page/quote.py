@@ -4,7 +4,7 @@ import random
 from decouple import config
 import os
 import json
-from Services.Style import QuotePageStyle
+from Services.Style import QuotePageStyle, MainPageStyle
 from Services.Redis.redis import RedisStorage
 from Services.Static.static import QUOTE
 
@@ -13,13 +13,13 @@ class QuotePage(tk.Frame):
     UPDATE_INTERVAL_MS = config("quote_file_call_frequency", cast=int)
     
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent, bg=MainPageStyle.BackgroundColor)
         self.controller = controller
         self.widgetName = "Quote"
         self.redis = RedisStorage()
 
         # --- Create UI Elements ---
-        center_frame = tk.Frame(self)
+        center_frame = tk.Frame(self, bg=MainPageStyle.BackgroundColor)
         center_frame.pack(**QuotePageStyle.FramePack)
 
         self.quote_label = tk.Label(center_frame, **QuotePageStyle.QuoteLabel)
@@ -72,5 +72,8 @@ class QuotePage(tk.Frame):
         if error:
             foreground_color = QuotePageStyle.QuoteLabelStateColor["error_color"]
 
-        self.quote_label.config(text=data["quote"], foreground=foreground_color)
-        self.last_updated_label.config(text=f"Last updated: {time.strftime('%I:%M:%S %p')}")
+        # Add cyberpunk styling to quote display
+        quote_text = f"⚡ {data['quote']}"
+        
+        self.quote_label.config(text=quote_text, foreground=foreground_color)
+        self.last_updated_label.config(text=f"LAST UPDATE: {time.strftime('%H:%M:%S')}")

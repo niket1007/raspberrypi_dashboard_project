@@ -4,14 +4,14 @@ import datetime
 import holidays
 from decouple import config
 from Services.Redis.redis import RedisStorage
-from Services.Style import CalendarPageStyle
+from Services.Style import CalendarPageStyle, MainPageStyle
 
 class CalendarPage(tk.Frame):
 
     UPDATE_INTERVAL = config("calendar_update_frequency", cast=int)
 
     def __init__(self, parent, controller):
-        super().__init__(parent)
+        super().__init__(parent, bg=MainPageStyle.BackgroundColor)
         self.controller = controller
         self.widgetName = "Calendar"
 
@@ -23,7 +23,7 @@ class CalendarPage(tk.Frame):
         self.month_label.pack(**CalendarPageStyle.MonthLabelPack)
 
         # 2. Middle: Calendar Grid Container
-        self.calendar_frame = tk.Frame(self)
+        self.calendar_frame = tk.Frame(self, bg=MainPageStyle.BackgroundColor)
         if config("app_platform", "windows") != "windows":
             self.calendar_frame.config(cursor="none")
         self.calendar_frame.pack(**CalendarPageStyle.CalendarFramePack)
@@ -33,7 +33,7 @@ class CalendarPage(tk.Frame):
         self.info_label.pack(**CalendarPageStyle.InfoLabelPack)
 
         # --- Draw Weekday Headers ---
-        days = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
+        days = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU']
         for col, day in enumerate(days):
             lbl = tk.Label(self.calendar_frame, text=day, **CalendarPageStyle.WeekDayHeaderLabel)
             lbl.grid(row=0, column=col, **CalendarPageStyle.WeekDayHeaderLabelPack)
@@ -48,8 +48,8 @@ class CalendarPage(tk.Frame):
         month = today.month
         self.user_events = self.redis.get_calendar_user_data()
 
-        # 1. Update Header
-        self.month_label.config(text=today.strftime("%B %Y")) # e.g., "November 2025"
+        # 1. Update Header (Cyberpunk style)
+        self.month_label.config(text=today.strftime("%B %Y").upper())
 
         # 2. Fetch Holiday
         holidays_dict = {}
@@ -65,7 +65,6 @@ class CalendarPage(tk.Frame):
                 widget.destroy()
 
         # 4. Generate Month Matrix
-        # Returns a list of weeks, where each day is a number (0 = day belongs to other month)
         cal = calendar.monthcalendar(year, month)
 
         # 5. Draw Buttons for Dates
@@ -76,7 +75,7 @@ class CalendarPage(tk.Frame):
 
                 calc_date = datetime.date(year, month, day)
 
-                # --- Logic Checks (Ported from CalendarScreen.py) ---
+                # --- Logic Checks ---
                 is_today = (calc_date == today)
                 is_holiday = calc_date in holidays_dict
                 is_user_event = str(calc_date) in self.user_events
@@ -84,27 +83,26 @@ class CalendarPage(tk.Frame):
                 holiday_text = holidays_dict.get(calc_date, "")
                 user_text = self.user_events.get(str(calc_date), "")
 
-                # --- Styling Logic ---
-                bg_color = "#f0f0f0" # Default gray/white
-                fg_color = "black"
-                font_style = ("Helvetica", 8)
+                # --- Cyberpunk Styling Logic ---
+                bg_color = "#1a1a2e"  # Default dark grid
+                fg_color = "#a0a0ff"  # Dimmed text
+                font_style = ("Courier New", 8)
 
                 if is_today and (is_holiday or is_user_event):
-                    # Red foreground and blue background for today and holiday or user event
-                    bg_color = "#007bff"
-                    fg_color = "red"  
-                    font_style = ("Helvetica", 9, "bold")
+                    # Cyan background with magenta text for today + event
+                    bg_color = "#00f2ff"
+                    fg_color = "#ff00ff"  
+                    font_style = ("Orbitron", 9, "bold")
                 elif is_today:
-                    # Blue background for today and no holdiday or user event
-                    bg_color = "#007bff" 
-                    fg_color = "white" 
-                    font_style = ("Helvetica", 9, "bold")
+                    # Cyan background for today
+                    bg_color = "#00f2ff" 
+                    fg_color = "#0a0a0a" 
+                    font_style = ("Orbitron", 9, "bold")
                 elif (is_holiday or is_user_event) and not is_today:
-                    # White background and red foreground for holiday or user event but not today
-                    fg_color = "red"
-                    font_style = ("Helvetica", 9, "bold")
+                    # Magenta text for holidays/events
+                    fg_color = "#ff00ff"
+                    font_style = ("Courier New", 9, "bold")
                 
-                # Specific background colors per-button.
                 btn = tk.Button(self.calendar_frame, 
                                 text=str(day),
                                 bg=bg_color,
@@ -113,11 +111,11 @@ class CalendarPage(tk.Frame):
                                 activeforeground=fg_color,
                                 font=font_style,
                                 relief="flat",
-                                borderwidth=0,
+                                borderwidth=1,
                                 cursor="none",
                                 command=lambda d=day, h=holiday_text, u=user_text: self.on_date_click(d, h, u))
                 
-                btn.grid(row=r+1, column=c, sticky="nsew", padx=0, pady=0, ipady=1)
+                btn.grid(row=r+1, column=c, sticky="nsew", padx=1, pady=1, ipady=2)
                 self.calendar_frame.grid_rowconfigure(r+1, weight=1)
 
         self.after(self.UPDATE_INTERVAL, self.populate_calendar)
@@ -131,9 +129,9 @@ class CalendarPage(tk.Frame):
             info_parts.append(f"{user_text}")
         
         if info_parts:
-            text = f'Event {day}: {", ".join(info_parts)}'
-            self.info_label.config(text=text, foreground="red")
+            text = f'▶ EVENT {day}: {", ".join(info_parts)}'.upper()
+            self.info_label.config(text=text, foreground="#ff00ff")
             if len(text) > 30:
                 self.info_label.config(**CalendarPageStyle.InfoLabelSmallFont)
         else:
-            self.info_label.config(text=f"Selected Date: {day}", foreground="black")
+            self.info_label.config(text=f"▶ DATE: {day}", foreground="#a0a0ff")

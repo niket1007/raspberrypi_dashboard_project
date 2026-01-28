@@ -1,20 +1,20 @@
 import tkinter as tk
 from decouple import config
 from Services.Redis.redis import RedisStorage
-from Services.Style import MeetingPageStyle
+from Services.Style import MeetingPageStyle, MainPageStyle
 
 class MeetingsPage(tk.Frame):
 
     UPDATE_INTERVAL = config("meetings_redis_frequency", cast=int)
 
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent, bg=MainPageStyle.BackgroundColor)
         self.controller = controller
         self.widgetName = "Meetings"
         self.redis = RedisStorage()
 
         # --- Meetings List Content ---
-        self.meeting_label = tk.Label(self,**MeetingPageStyle.MeetingLabel)
+        self.meeting_label = tk.Label(self, **MeetingPageStyle.MeetingLabel)
         self.meeting_label.pack(**MeetingPageStyle.MeetingLabelPack)
 
         self.load_meetings()
