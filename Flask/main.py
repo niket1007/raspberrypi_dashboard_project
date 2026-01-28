@@ -20,4 +20,4 @@ def calendar_func():
     return render_template("Calendar.html")
 
 
-app.run(host="localhost", port=8080, debug=True)
+app.run(host="0.0.0.0", port=8080, debug=True)

@@ -2,6 +2,22 @@
 
 {% block content %}
 <style>
+    .form-container, .config-container, .list-container {
+        width: 100%;
+        max-width: 500px; /* Keep it constrained on desktop */
+        box-sizing: border-box; /* Crucial for mobile padding */
+    }
+
+    @media (max-width: 480px) {
+        h1 {
+            font-size: 1.1rem; /* Smaller headers on mobile */
+        }
+        .submit-btn, .save-btn {
+            padding: 12px;
+            font-size: 0.9rem;
+        }
+    }
+
     h1 {
         font-size: 1.4rem;
         text-transform: uppercase;

@@ -2,62 +2,115 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TERMINAL_HUD_V1.0</title>
     <style>
         :root {
             --retro-green: #18E310;
             --retro-bg: #050505;
         }
+        
         body {
             background-color: var(--retro-bg);
             color: var(--retro-green);
             font-family: 'Courier New', Courier, monospace;
             display: flex;
+            flex-direction: row; /* Desktop Default */
             margin: 0;
             height: 100vh;
+            width: 100vw;
             overflow: hidden;
         }
-        /* Sidebar Styling */
+
+        /* Sidebar Styling (Desktop) */
         .sidebar {
             width: 200px;
+            min-width: 200px;
             border-right: 2px ridge var(--retro-green);
             display: flex;
             flex-direction: column;
             padding: 20px 10px;
             box-sizing: border-box;
+            background-color: var(--retro-bg);
+            z-index: 10;
         }
+
         .sidebar-title {
             font-weight: bold;
             margin-bottom: 30px;
-            font-size: 1.2em;
+            font-size: 1.1em;
             text-align: center;
         }
+
         .nav-link {
             color: var(--retro-green);
             text-decoration: none;
-            padding: 10px;
+            padding: 12px;
             margin: 5px 0;
-            border: 1px solid transparent;
+            border: 1px solid var(--retro-green);
             display: block;
+            text-align: center;
+            font-size: 0.9em;
         }
-        .nav-link:hover {
+
+        .nav-link:hover, .nav-link:active {
             background-color: var(--retro-green);
             color: var(--retro-bg);
         }
+
         /* Main Content Area */
         .content {
             flex-grow: 1;
-            padding: 40px;
+            padding: 20px;
             overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center forms for mobile */
+        }
+
+        /* --- MOBILE RESPONSIVENESS --- */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column; /* Stack Nav on top of Content */
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 2px ridge var(--retro-green);
+                padding: 10px;
+                flex-direction: row; /* Horizontal nav for mobile */
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 5px;
+            }
+
+            .sidebar-title {
+                display: none; /* Hide title to save space on mobile */
+            }
+
+            .nav-link {
+                margin: 2px;
+                padding: 8px 12px;
+                font-size: 0.8em;
+                flex: 1 1 auto; /* Buttons grow to fill width */
+            }
+
+            .content {
+                padding: 15px;
+                width: 100%;
+                box-sizing: border-box;
+            }
         }
     </style>
 </head>
 <body>
     <div class="sidebar">
         <div class="sidebar-title">> NAVIGATION</div>
-        <a href="/" class="nav-link">> CONFIG</a>
+        <a href="/" class="nav-link">> SCREEN CONFIG</a>
         <a href="/todo" class="nav-link">> TODO</a>
-        <a href="/meetings" class="nav-link">> MEETINGS</a>
+        <a href="/meetings" class="nav-link">> MEETING</a>
         <a href="/calendar" class="nav-link">> CALENDAR</a>
     </div>
 
