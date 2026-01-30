@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request
 from Services.redis_service import RedisStorage
 from decouple import config
+import setproctitle
+setproctitle.setproctitle("raspberry-pi-user-app")
 
 app = Flask(__name__)
 
