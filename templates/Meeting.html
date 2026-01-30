@@ -187,7 +187,7 @@
 </div>
 
 <script>
-    function submitMeeting() {
+    async function submitMeeting() {
         const title = document.getElementById('meetingTitle').value;
         const date = document.getElementById('meetingDate').value;
         const time = document.getElementById('meetingTime').value;
@@ -204,8 +204,12 @@
         };
 
         console.log("Transmitting to log:", meetingData);
-        status = send_data_to_redis(meetingData, true)
+        status = await send_data_to_redis(meetingData, true)
         if(status) {
+            document.getElementById('meetingTitle').value = "";
+            document.getElementById('meetingDate').value = "";
+            document.getElementById('meetingTime').value = ""
+            
             div_count = document.getElementsByClassName("event-row").length;
             div = document.getElementsByClassName("list-container")[0];
             div.innerHTML += "<div class='event-row'><div class='event-info'><div class='event-header'>" + 
@@ -216,7 +220,7 @@
         }
     }
 
-    function deleteEvent(eventId) {
+    async function deleteEvent(eventId) {
         let elements = document.getElementsByClassName("event-row");
         let elementToRemove = null;
         let meetings = [];
@@ -236,35 +240,33 @@
 
             index += 1;
         }
-        status = send_data_to_redis(meetings)
+        status = await send_data_to_redis(meetings)
         if(status) {
             div = document.getElementsByClassName("list-container")[0];
             div.removeChild(elementToRemove);
         }
     }
 
-    function send_data_to_redis(data, is_append=false) {
+    async function send_data_to_redis(data, is_append=false) {
         if(is_append) {
             data["is_append"] = true
         }
-        fetch("/update-meeting-data", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-            alert(data["success"])
+        try{
+            const response = await fetch("/update-meeting-data", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            const result = await response.json()
+            alert(result["success"])
             return true;
-        })
-        .catch((error) => {
+        } catch (error) {
             console.error('Error:', error);
-            alert(data["error"])
+            alert("Server issue, please refresh the page.")
             return false;
-        });
+        }
     }
 </script>
 {% endblock %}

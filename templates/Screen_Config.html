@@ -145,7 +145,7 @@
 <button class="save-btn" onclick="saveConfig()">[ SAVE_CHANGES ]</button>
 
 <script>
-    function saveConfig() {
+    async function saveConfig() {
         let config = {};
         let screen_rows = document.querySelectorAll(".screen-row");
         
@@ -180,22 +180,22 @@
             }
         }
 
-        fetch("/process-screen-data", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(config)
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-            alert(data["success"])
-        })
-        .catch((error) => {
+        try{
+            const response = await fetch("/process-screen-data", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            const result = await response.json()
+            alert(result["success"])
+            return true;
+        } catch (error) {
             console.error('Error:', error);
-            alert(data["error"])
-        });
+            alert("Server issue, please refresh the page.")
+            return false;
+        }
     }
 </script>
 {% endblock %}

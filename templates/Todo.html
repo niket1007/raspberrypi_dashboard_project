@@ -133,7 +133,7 @@
 
 
 <script>
-    function addTask() {
+    async function addTask() {
         const val = document.getElementById('taskInput').value;
         if (val.trim() === "") return;
         let elements = document.getElementsByClassName("task-text");
@@ -142,14 +142,16 @@
             todos.push("• "+element.textContent);
         }
         todos.push("• "+val.trim());
-        status = send_data_to_redis(todos);
+        status = await send_data_to_redis(todos);
+        
         if(status) {
+            document.getElementById('taskInput').value = "";
             div = document.getElementsByClassName("list-container")[0];
             div.innerHTML += "<div class='task-row'><span class='task-text'>"+val.trim()+"</span><button class='complete-btn' onclick='completeTask("+todos.length+")'>[MARK_DONE]</button></div>"
         }
     }
 
-    function completeTask(id) {
+    async function completeTask(id) {
         let elements = document.getElementsByClassName("task-text");
         let elementToRemove = null;
         let todos = [];
@@ -163,32 +165,30 @@
             }
             index = index + 1;
         }
-        status = send_data_to_redis(todos);
+        status = await send_data_to_redis(todos);
         if(status) {
             div = document.getElementsByClassName("list-container")[0];
             div.removeChild(elementToRemove.parentElement);
         }
     }
 
-    function send_data_to_redis(data) {
-        fetch("/update-todo-data", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-            alert(data["success"])
+    async function send_data_to_redis(data) {
+        try{
+            const response = await fetch("/update-todo-data", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            const result = await response.json()
+            alert(result["success"])
             return true;
-        })
-        .catch((error) => {
+        } catch (error) {
             console.error('Error:', error);
-            alert(data["error"])
+            alert("Server issue, please refresh the page.")
             return false;
-        });
+        }
     }
 </script>
 {% endblock %}

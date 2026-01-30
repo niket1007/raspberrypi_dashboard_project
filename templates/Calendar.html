@@ -185,7 +185,7 @@
 </div>
 
 <script>
-    function commitEvent() {
+    async function commitEvent() {
         const description = document.getElementById('eventDesc').value;
         const date = document.getElementById('eventDate').value;
 
@@ -200,7 +200,7 @@
         };
 
         console.log("Transmitting payload to Flask:", payload);
-        status = send_data_to_redis(payload, true);
+        status = await send_data_to_redis(payload, true);
         if(status) {
             div_count = document.getElementsByClassName("event-row").length;
             div = document.getElementsByClassName("list-container")[0];
@@ -211,7 +211,7 @@
         }
     }
 
-    function deleteEvent(dateKey) {
+    async function deleteEvent(dateKey) {
         console.log("Deleting event for date:", dateKey);
         let description = document.getElementsByClassName('event-header')[(dateKey-1)].textContent;
         let date = document.getElementsByClassName('event-date')[(dateKey-1)].textContent;
@@ -223,35 +223,33 @@
             date: date
         };
 
-        status = send_data_to_redis(payload)
+        status = await send_data_to_redis(payload)
         if(status) {
             div = document.getElementsByClassName("event-row")[dateKey-1];
             div.parentNode.removeChild(div);
         }
     }
 
-    function send_data_to_redis(data, is_append=false) {
+    async function send_data_to_redis(data, is_append=false) {
         if(is_append) {
             data["is_append"] = is_append
         }
-        fetch("/update-calendar-data", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-            alert(data["success"])
+        try{
+            const response = await fetch("/update-calendar-data", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            const result = await response.json()
+            alert(result["success"])
             return true;
-        })
-        .catch((error) => {
+        } catch (error) {
             console.error('Error:', error);
-            alert(data["error"])
+            alert("Server issue, please refresh the page.")
             return false;
-        });
+        }
     }
 </script>
 {% endblock %}
