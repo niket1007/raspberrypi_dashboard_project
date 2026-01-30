@@ -48,11 +48,11 @@ def transform_meeting_list_dict_to_str(data: list|dict) -> str|None:
     if data == [] or data is None:
         return None
     if isinstance(data, dict):
-        return data["title"] + ": " + data["date"] + " " + data["time"] + "\n"
+        return "• " + data["title"] + ": " + data["date"] + " " + data["time"] + "\n"
     else:
         combined_data = ""
         for item in data:
-            combined_data += item["title"] + ": " + item["date"] + " " + item["time"] + "\n"
+            combined_data += "• " + item["title"] + ": " + item["date"] + " " + item["time"] + "\n"
         return combined_data
 
 def transform_calendar_str_to_list(data: str|None) -> list:
