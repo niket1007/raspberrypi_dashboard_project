@@ -17,9 +17,7 @@
             display: flex;
             flex-direction: row;
             margin: 0;
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden;
+            min-height: 100vh;
         }
 
         .sidebar {
@@ -69,6 +67,8 @@
         @media (max-width: 768px) {
             body {
                 flex-direction: column;
+                overflow-y: auto;
+                height: auto
             }
 
             .sidebar {
@@ -81,6 +81,8 @@
                 flex-wrap: wrap;
                 justify-content: center;
                 gap: 5px;
+                position: sticky;
+                top: 0;
             }
 
             .sidebar-title {
@@ -98,6 +100,8 @@
                 padding: 15px;
                 width: 100%;
                 box-sizing: border-box;
+                overflow-y: visible;
+                flex-grow: 0;
             }
         }
     </style>
