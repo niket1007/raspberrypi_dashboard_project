@@ -2,27 +2,12 @@
 
 {% block content %}
 <style>
-    .form-container, .config-container, .list-container {
-        width: 100%;
-        max-width: 500px; /* Keep it constrained on desktop */
-        box-sizing: border-box; /* Crucial for mobile padding */
-    }
-
-    @media (max-width: 480px) {
-        h1 {
-            font-size: 1.1rem; /* Smaller headers on mobile */
-        }
-        .submit-btn, .save-btn {
-            padding: 12px;
-            font-size: 0.9rem;
-        }
-    }
-
     h1 {
         font-size: 1.4rem;
         text-transform: uppercase;
         text-shadow: 0 0 8px #18E310;
         margin-bottom: 30px;
+        text-align: center;
     }
 
     .form-container {
@@ -31,6 +16,7 @@
         border: 2px solid #18E310;
         padding: 25px;
         box-shadow: inset 0 0 10px rgba(24, 227, 16, 0.1);
+        box-sizing: border-box;
     }
 
     .input-group {
@@ -46,7 +32,7 @@
     }
 
     input[type="text"], 
-    input[type="date"], 
+    input[type="date"],
     input[type="time"] {
         width: 100%;
         background: #000;
@@ -77,15 +63,89 @@
         cursor: pointer;
         box-shadow: 0 0 15px rgba(24, 227, 16, 0.4);
         margin-top: 10px;
+        transition: all 0.1s ease;
     }
 
     .submit-btn:active {
         transform: scale(0.98);
         box-shadow: 0 0 5px #18E310;
+        background-color: #050505;
+        color: #18E310;
+        border: 1px solid #18E310;
+    }
+
+    .list-container {
+        width: 100%;
+        max-width: 500px;
+        border: 1px solid #18E310;
+        background: rgba(24, 227, 16, 0.05);
+        box-sizing: border-box;
+    }
+
+    .event-row {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px;
+        border-bottom: 1px solid #18E310;
+    }
+
+    .event-row:last-child { border-bottom: none; }
+
+    .event-info {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .event-header {
+        display: flex;
+        justify-content: space-between;
+        font-weight: bold;
+        text-transform: uppercase;
+        margin-bottom: 5px;
+    }
+
+    .event-details {
+        font-size: 0.90rem;
+        opacity: 0.8;
+    }
+
+    .list-label {
+        font-size: 0.7rem;
+        margin: 30px 0 5px 0;
+        display: block;
+        opacity: 0.8;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .delete-btn {
+        background: transparent;
+        color: #FF0000;
+        border: 1px solid #FF0000;
+        padding: 5px 8px;
+        font-size: 0.7rem;
+        cursor: pointer;
+        font-family: 'Courier New', Courier, monospace;
+        margin-left: 10px;
+        text-transform: uppercase;
+    }
+
+    .delete-btn:hover {
+        background: rgba(255, 0, 0, 0.1);
+        box-shadow: 0 0 8px #FF0000;
+    }
+
+    @media (max-width: 480px) {
+        h1 { font-size: 1.1rem; }
+        .submit-btn { padding: 12px; font-size: 0.9rem; }
+        .event-header { flex-direction: column; gap: 2px; }
     }
 </style>
 
-<h1>> MARK_MEETINGS</h1>
+<h1>> MEETING_MARKER</h1>
 
 <div class="form-container">
     <div class="input-group">
@@ -106,20 +166,105 @@
     <button class="submit-btn" onclick="submitMeeting()">[ COMMIT_TO_LOG ]</button>
 </div>
 
+<span class="list-label" style="width:100%; max-width:500px;">ACTIVE_EVENT_LOG:</span>
+<div class="list-container">
+    {% if data.length > 0 %}
+        {% for index,event in data.events %}
+        <div class="event-row">
+            <div class="event-info">
+                <div class="event-header">
+                    <span class="event-title">> {{ event.title }}</span>
+                    <span class="event-time">[{{ event.time }}]</span>
+                </div>
+                <div class="event-details">
+                    DATE: {{ event.date }}
+                </div>
+            </div>
+            <button class="delete-btn" onclick="deleteEvent('{{ index }}')">[X]</button>
+        </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
 <script>
     function submitMeeting() {
         const title = document.getElementById('meetingTitle').value;
         const date = document.getElementById('meetingDate').value;
         const time = document.getElementById('meetingTime').value;
 
+        if(!title || !date || !time) {
+            alert("ERROR: NULL_DATA_DETECTED");
+            return;
+        }
+
         const meetingData = {
-            title: title.toUpperCase(),
+            title: title,
             date: date,
             time: time
         };
 
         console.log("Transmitting to log:", meetingData);
-        // Flask POST logic goes here
+        status = send_data_to_redis(meetingData, true)
+        if(status) {
+            div_count = document.getElementsByClassName("event-row").length;
+            div = document.getElementsByClassName("list-container")[0];
+            div.innerHTML += "<div class='event-row'><div class='event-info'><div class='event-header'>" + 
+                "<span class='event-title'>> " + title + "</span>" + 
+                "<span class='event-time'>["+ time +"]</span></div>" + 
+                "<div class='event-details'>DATE: " + date +"</div></div>" + 
+                "<button class='delete-btn' onclick=deleteEvent('"+ (div_count+1) +"')>[X]</button></div>"
+        }
+    }
+
+    function deleteEvent(eventId) {
+        let elements = document.getElementsByClassName("event-row");
+        let elementToRemove = null;
+        let meetings = [];
+        let index = 1;
+
+        for(let element of elements) {
+            if(index != eventId) {
+                meetings.push({
+                    "title": element.getElementsByClassName("event-title")[0].textContent.replaceAll("> ", ""),
+                    "date": element.getElementsByClassName("event-details")[0].textContent.trim().replaceAll("DATE: ", "") ,
+                    "time": element.getElementsByClassName("event-time")[0].textContent.replaceAll("[", "").replaceAll("]", "")
+                })
+            }
+            else {
+                elementToRemove = element;
+            }
+
+            index += 1;
+        }
+        status = send_data_to_redis(meetings)
+        if(status) {
+            div = document.getElementsByClassName("list-container")[0];
+            div.removeChild(elementToRemove);
+        }
+    }
+
+    function send_data_to_redis(data, is_append=false) {
+        if(is_append) {
+            data["is_append"] = true
+        }
+        fetch("/update-meeting-data", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            alert(data["success"])
+            return true;
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            alert(data["error"])
+            return false;
+        });
     }
 </script>
 {% endblock %}

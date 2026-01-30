@@ -4,20 +4,20 @@
 <style>
     .form-container, .config-container, .list-container {
         width: 100%;
-        max-width: 500px; /* Keep it constrained on desktop */
-        box-sizing: border-box; /* Crucial for mobile padding */
+        max-width: 500px;
+        box-sizing: border-box;
     }
 
     @media (max-width: 480px) {
         h1 {
-            font-size: 1.1rem; /* Smaller headers on mobile */
+            font-size: 1.1rem;
         }
         .submit-btn, .save-btn {
             padding: 12px;
             font-size: 0.9rem;
         }
     }
-    
+
     h1 {
         font-size: 1.4rem;
         text-transform: uppercase;
@@ -123,62 +123,79 @@
 <h1>> SCREEN_CONFIG</h1>
 
 <div class="config-container">
-    <div class="screen-row">
-        <div class="screen-name">Weather</div>
-        <div class="toggle-container">
-            <input type="checkbox" id="weather_vis" checked>
-        </div>
-        <div>
-            <label>ORDER</label>
-            <input type="number" class="order-input" value="1">
-        </div>
-    </div>
 
+    {% for index,screen in data.screens %}
     <div class="screen-row">
-        <div class="screen-name">Calendar</div>
+        <div class="screen-name">{{screen.name}}</div>
         <div class="toggle-container">
-            <input type="checkbox" id="cal_vis" checked>
+            {% if screen.visibility %}
+                <input type="checkbox" class="{{screen.name}}_vis" checked>
+            {% else %} 
+                <input type="checkbox" class="{{screen.name}}_vis" unchecked>
+            {% endif %} 
         </div>
         <div>
             <label>ORDER</label>
-            <input type="number" class="order-input" value="2">
+            <input type="number" class="order-input" value="{{index}}" max="{{ data.length }}" min="1">
         </div>
     </div>
-
-    <div class="screen-row">
-        <div class="screen-name">Todo</div>
-        <div class="toggle-container">
-            <input type="checkbox" id="todo_vis">
-        </div>
-        <div>
-            <label>ORDER</label>
-            <input type="number" class="order-input" value="3">
-        </div>
-    </div>
+    {% endfor %}
 </div>
 
 <button class="save-btn" onclick="saveConfig()">[ SAVE_CHANGES ]</button>
 
 <script>
     function saveConfig() {
-        // Collect data from inputs
-        const config = {
-            weather: {
-                visible: document.getElementById('weather_vis').checked,
-                order: document.querySelectorAll('.order-input')[0].value
-            },
-            calendar: {
-                visible: document.getElementById('cal_vis').checked,
-                order: document.querySelectorAll('.order-input')[1].value
-            },
-            todo: {
-                visible: document.getElementById('todo_vis').checked,
-                order: document.querySelectorAll('.order-input')[2].value
-            }
-        };
+        let config = {};
+        let screen_rows = document.querySelectorAll(".screen-row");
+        
+        for( let element of screen_rows) {
 
-        console.log("Transmitting configuration to log...", config);
-        // Add your fetch() or XMLHttpRequest logic here to POST to Flask
+            screen_name = element.querySelector(".screen-name").textContent
+            checked = element.querySelector("."+screen_name+"_vis").checked
+            order = element.querySelector('.order-input').value
+            max_length = element.querySelector('.order-input').max
+
+            data = {
+                    "name": screen_name,
+                    "visible": checked,
+                    "order": order
+                }
+
+            if(!checked) {
+                if(-1 in config) {
+                    config[-1].push(data)
+                }
+                else {
+                    config[-1] = [data]
+                }
+            }
+            else {
+                if(order in config) {
+                    alert('Mulitple screen has same order value.')
+                    return
+                }
+                config[order] = data
+
+            }
+        }
+
+        fetch("/process-screen-data", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(config)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            alert(data["success"])
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            alert(data["error"])
+        });
     }
 </script>
 {% endblock %}

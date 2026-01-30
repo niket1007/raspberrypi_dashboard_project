@@ -88,6 +88,65 @@
         color: #18E310;
         border: 1px solid #18E310;
     }
+
+    .list-container {
+        width: 100%;
+        max-width: 500px;
+        border: 1px solid #18E310;
+        background: rgba(24, 227, 16, 0.05);
+        box-sizing: border-box;
+    }
+
+    .event-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px;
+        border-bottom: 1px solid #18E310;
+    }
+
+    .event-row:last-child { border-bottom: none; }
+
+    .event-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .event-header {
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+    }
+
+    .event-date {
+        font-size: 0.90rem;
+        opacity: 0.7;
+        margin-top: 4px;
+    }
+
+    .delete-btn {
+        background: transparent;
+        color: #FF0000;
+        border: 1px solid #FF0000;
+        padding: 4px 8px;
+        font-size: 0.7rem;
+        cursor: pointer;
+        font-family: 'Courier New', Courier, monospace;
+    }
+
+    .delete-btn:hover {
+        background: #FF0000;
+        color: #000;
+    }
+
+    .list-label {
+        font-size: 0.7rem;
+        margin: 30px 0 5px 0;
+        display: block;
+        opacity: 0.8;
+        width: 100%;
+        max-width: 500px;
+    }
 </style>
 
 <h1>> CALENDAR</h1>
@@ -106,6 +165,25 @@
     <button class="submit-btn" onclick="commitEvent()">[ COMMIT_TO_CALENDAR ]</button>
 </div>
 
+<span class="list-label" style="width:100%; max-width:500px;">ACTIVE_EVENT_LOG:</span>
+<div class="list-container">
+    {% if data.length %}
+        {% set div = namespace(count = 1) %}
+        {% for event in data.events %}
+            {% for title in event[1] %}
+                <div class="event-row">
+                    <div class="event-info">
+                        <span class="event-header">{{ title }}</span>
+                        <span class="event-date">DATE: {{ event[0] }}</span>
+                    </div>
+                    <button class="delete-btn" onclick="deleteEvent('{{ div.count }}')">[X]</button>
+                    {% set div.count = div.count + 1 %}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+</div>
+
 <script>
     function commitEvent() {
         const description = document.getElementById('eventDesc').value;
@@ -117,12 +195,63 @@
         }
 
         const payload = {
-            event: description.toUpperCase(),
+            event: description,
             date: date
         };
 
         console.log("Transmitting payload to Flask:", payload);
-        // Your fetch() or Flask POST logic goes here
+        status = send_data_to_redis(payload, true);
+        if(status) {
+            div_count = document.getElementsByClassName("event-row").length;
+            div = document.getElementsByClassName("list-container")[0];
+            div.innerHTML += "<div class='event-row'><div class='event-info'>" + 
+                "<span class='event-header'>"+ description +"</span>" + 
+                "<span class='event-date'>DATE: "+ date +"</span></div>" + 
+                "<button class='delete-btn' onclick=deleteEvent('"+ (div_count+1) +"')>[X]</button></div>"
+        }
+    }
+
+    function deleteEvent(dateKey) {
+        console.log("Deleting event for date:", dateKey);
+        let description = document.getElementsByClassName('event-header')[(dateKey-1)].textContent;
+        let date = document.getElementsByClassName('event-date')[(dateKey-1)].textContent;
+
+        date = date.replaceAll("DATE: ", "")
+
+        const payload = {
+            event: description,
+            date: date
+        };
+
+        status = send_data_to_redis(payload)
+        if(status) {
+            div = document.getElementsByClassName("event-row")[dateKey-1];
+            div.parentNode.removeChild(div);
+        }
+    }
+
+    function send_data_to_redis(data, is_append=false) {
+        if(is_append) {
+            data["is_append"] = is_append
+        }
+        fetch("/update-calendar-data", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            alert(data["success"])
+            return true;
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            alert(data["error"])
+            return false;
+        });
     }
 </script>
 {% endblock %}

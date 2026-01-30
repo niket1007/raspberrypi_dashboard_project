@@ -4,13 +4,13 @@
 <style>
     .form-container, .config-container, .list-container {
         width: 100%;
-        max-width: 500px; /* Keep it constrained on desktop */
-        box-sizing: border-box; /* Crucial for mobile padding */
+        max-width: 500px; 
+        box-sizing: border-box; 
     }
 
     @media (max-width: 480px) {
         h1 {
-            font-size: 1.1rem; /* Smaller headers on mobile */
+            font-size: 1.1rem; 
         }
         .submit-btn, .save-btn {
             padding: 12px;
@@ -118,30 +118,77 @@
     </div>
 </div>
 
+
 <span class="label" style="width:100%; max-width:500px;">ACTIVE_LOG:</span>
 <div class="list-container">
-    <div class="task-row">
-        <span class="task-text">Update System Drivers</span>
-        <button class="complete-btn" onclick="completeTask(1)">[MARK_DONE]</button>
-    </div>
-    <div class="task-row">
-        <span class="task-text">Review Meeting Notes</span>
-        <button class="complete-btn" onclick="completeTask(2)">[MARK_DONE]</button>
-    </div>
+    {% if data.length > 0 %}
+        {% for index,todo in data.todos %}
+            <div class="task-row" >
+                <span class="task-text">{{todo}}</span>
+                <button class="complete-btn" onclick="completeTask({{index}})">[MARK_DONE]</button>
+            </div>
+        {% endfor %}
+    {% endif %}
 </div>
+
 
 <script>
     function addTask() {
         const val = document.getElementById('taskInput').value;
         if (val.trim() === "") return;
-        
-        console.log("Pushing to Redis: " + val);
-        // Add your fetch() logic here to POST to Flask
+        let elements = document.getElementsByClassName("task-text");
+        let todos = [];
+        for(let element of elements) {
+            todos.push("• "+element.textContent);
+        }
+        todos.push("• "+val.trim());
+        status = send_data_to_redis(todos);
+        if(status) {
+            div = document.getElementsByClassName("list-container")[0];
+            div.innerHTML += "<div class='task-row'><span class='task-text'>"+val.trim()+"</span><button class='complete-btn' onclick='completeTask("+todos.length+")'>[MARK_DONE]</button></div>"
+        }
     }
 
     function completeTask(id) {
-        console.log("Marking ID " + id + " as complete");
-        // Add your fetch() logic here to POST to Flask
+        let elements = document.getElementsByClassName("task-text");
+        let elementToRemove = null;
+        let todos = [];
+        let index = 1;
+        for(let element of elements) {
+            if(index != id) {
+                todos.push("• "+element.textContent);
+            }
+            else {
+                elementToRemove = element;
+            }
+            index = index + 1;
+        }
+        status = send_data_to_redis(todos);
+        if(status) {
+            div = document.getElementsByClassName("list-container")[0];
+            div.removeChild(elementToRemove.parentElement);
+        }
+    }
+
+    function send_data_to_redis(data) {
+        fetch("/update-todo-data", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            alert(data["success"])
+            return true;
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            alert(data["error"])
+            return false;
+        });
     }
 </script>
 {% endblock %}
