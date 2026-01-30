@@ -15,14 +15,13 @@
             color: var(--retro-green);
             font-family: 'Courier New', Courier, monospace;
             display: flex;
-            flex-direction: row; /* Desktop Default */
+            flex-direction: row;
             margin: 0;
             height: 100vh;
             width: 100vw;
             overflow: hidden;
         }
 
-        /* Sidebar Styling (Desktop) */
         .sidebar {
             width: 200px;
             min-width: 200px;
@@ -58,20 +57,18 @@
             color: var(--retro-bg);
         }
 
-        /* Main Content Area */
         .content {
             flex-grow: 1;
             padding: 20px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            align-items: center; /* Center forms for mobile */
+            align-items: center;
         }
 
-        /* --- MOBILE RESPONSIVENESS --- */
         @media (max-width: 768px) {
             body {
-                flex-direction: column; /* Stack Nav on top of Content */
+                flex-direction: column;
             }
 
             .sidebar {
@@ -80,21 +77,21 @@
                 border-right: none;
                 border-bottom: 2px ridge var(--retro-green);
                 padding: 10px;
-                flex-direction: row; /* Horizontal nav for mobile */
+                flex-direction: row;
                 flex-wrap: wrap;
                 justify-content: center;
                 gap: 5px;
             }
 
             .sidebar-title {
-                display: none; /* Hide title to save space on mobile */
+                display: none;
             }
 
             .nav-link {
                 margin: 2px;
                 padding: 8px 12px;
                 font-size: 0.8em;
-                flex: 1 1 auto; /* Buttons grow to fill width */
+                flex: 1 1 auto;
             }
 
             .content {
