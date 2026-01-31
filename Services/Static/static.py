@@ -38,3 +38,11 @@ WEATHER = {
     "Request_Error": "The invisible threads that bind us to the world have been severed. We stand alone in the digital void, where no voice can reach the distant stars. - Error(API)",
     "Logic_Error": "The laws of this world have been overwritten. A glitch in the fabric of reality has emerged, defying the very logic upon which our journey was built. - Error(Logic)"
 }
+
+VOLTAGE_STATUS = {
+    "0x0": "Healthy",
+    "0x1": "Under-Voltage now",
+    "0x2": "ARM frequency capped",
+    "0x50000": "Past Issues",
+    "0x50005": "Critical"
+}

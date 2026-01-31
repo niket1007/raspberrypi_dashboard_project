@@ -250,3 +250,71 @@ class MainPageStyle:
         "pady": 2,
         "ipady": 1
     }
+
+class SysteminfoStyle:
+    RETRO_BG = "#050505"
+    RETRO_GREEN = "#18E310"
+
+    TopFramePack = {
+        "side": "top", 
+        "expand": True, 
+        "fill": "both"
+    }
+
+    BottomFramePack = {
+        "side": "top", 
+        "expand": True, 
+        "fill": "both"
+    }
+
+    CPULabel = {
+        "font": ("Courier", 12, "bold"), 
+        "text": "CPU Status:\nXX%", 
+        "bg": RETRO_BG,
+        "fg": RETRO_GREEN
+    }
+
+    CPULabelPack = {
+        "side": "left", 
+        "expand": True, 
+        "fill": "both"
+    }
+
+    MemoryLabel = {
+        "font": ("Courier", 12, "bold"), 
+        "text": "Memory Status:\nXX%", 
+        "bg": RETRO_BG,
+        "fg": RETRO_GREEN
+    }
+
+    MemoryLabelPack = {
+        "side": "left", 
+        "expand": True, 
+        "fill": "both"
+    }
+
+    VoltageLabel = {
+        "font": ("Courier", 12, "bold"), 
+        "text": "Voltage Status:\nActive/Issue", 
+        "bg": RETRO_BG,
+        "fg": RETRO_GREEN
+    }
+
+    VoltageLabelPack = {
+        "side": "left", 
+        "expand": True, 
+        "fill": "both"
+    }
+
+    TempLabel = {
+        "font": ("Courier", 12, "bold"), 
+        "text": "Temp Status:\nXX.XC", 
+        "bg": RETRO_BG,
+        "fg": RETRO_GREEN
+    }
+
+    TempLabelPack = {
+        "side": "left", 
+        "expand": True, 
+        "fill": "both"
+    }
