@@ -7,7 +7,6 @@ setproctitle.setproctitle("raspberry-pi-dashboard")
 
 # Import our page modules
 from Page.greetings import GreetingsPage
-from Page.systeminfo import SysteminfoPage
 
 from Services.Style import MainPageStyle
 from Services.Redis.redis import RedisStorage
@@ -77,7 +76,7 @@ class DashboardApp(tk.Tk):
         self.setup_hardware_buttons()
 
     def __get_page_lists(self) -> list:
-        pages = [GreetingsPage, SysteminfoPage]
+        pages = [GreetingsPage]
         screens = self.redis.get_screen_configuration()
 
         for screen in screens:

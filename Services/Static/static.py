@@ -19,6 +19,10 @@ REDIS = {
         {
             "name": "Calendar",
             "visibility": True
+        },
+        {
+            "name": "Systeminfo",
+            "visibility": True
         }
     ],
     "TODO_DATA" : "• All targets eliminated. The battlefield is clear... for now.",
