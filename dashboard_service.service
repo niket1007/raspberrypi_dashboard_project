@@ -1,0 +1,16 @@
+[Unit]
+Description=Dashboard
+After=graphical.target multi-user.target default.target
+
+[Service]
+User=pi
+WorkingDirectory=/home/pi/Documents/Project/Dashboard
+ExecStart=/bin/bash /home/pi/Documents/Project/Dashboard/dashboard_app_launcher.sh
+ExecStartPre=/bin/sleep 30
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=/home/pi/.Xauthority
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=graphical.target
