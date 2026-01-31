@@ -74,7 +74,7 @@ class SysteminfoPage(tk.Frame):
         except Exception as e:
             return "Error"
     
-    def __get_cpu_memory(self):
+    def __get_cpu_memory(self)-> list:
         try:
             result = subprocess.run(
                 args=['top -b | head -n 5'], 
@@ -101,7 +101,7 @@ class SysteminfoPage(tk.Frame):
         
         cpu_usage, mem_usage = self.__get_cpu_memory()
         self.cpu_label.config(text=f"CPU Status:\n{cpu_usage}%")
-        self.memory_label.config(text=f"Memory Status:\n{mem_usage}%")
+        self.memory_label.config(text=f"Memory Status:\n{mem_usage:.1f}%")
     
         self.after(self.UPDATE_INTERVAL_MS, self.populate_data)
 
