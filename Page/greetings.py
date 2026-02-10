@@ -1,16 +1,21 @@
 import tkinter as tk
 import time
 import datetime
+import holidays
+
 from Services.Style import GreetingsPageStyle
+from Services.Redis.redis import RedisStorage
 
 class GreetingsPage(tk.Frame):
 
     DATETIME_UPDATE_TIMER = 1000
+    COUNT_UPDATE_TIMER = 10000
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
         self.widgetName = "" # Kept empty for styling
+        self._redis = RedisStorage()
 
         self.configure(bg=GreetingsPageStyle.RETRO_BG)
         
@@ -18,27 +23,44 @@ class GreetingsPage(tk.Frame):
         greeting_frame = tk.Frame(self, bg=GreetingsPageStyle.RETRO_BG)
         greeting_frame.pack(**GreetingsPageStyle.MainFrame)
 
-        self.time_label = tk.Label(self, **GreetingsPageStyle.TimeLabel)
-        self.time_label.pack(**GreetingsPageStyle.TimeLabelPack)
-        
-        self.date_label = tk.Label(self, **GreetingsPageStyle.DateLabel)
-        self.date_label.pack(**GreetingsPageStyle.DateAndGreetingPack)
+        meeting_event_frame = tk.Frame(self, bg=GreetingsPageStyle.RETRO_BG)
+        meeting_event_frame.pack(**GreetingsPageStyle.MainFrame)
 
-        self.greeting_label = tk.Label(greeting_frame, **GreetingsPageStyle.GreetingLabel)
-        self.greeting_label.pack(**GreetingsPageStyle.DateAndGreetingPack)
+        self.time_label = tk.Label(greeting_frame, **GreetingsPageStyle.TimeLabel)
+        self.time_label.pack(**GreetingsPageStyle.TimeLabelPack, ipady=0)
+        
+        self.date_label = tk.Label(greeting_frame, **GreetingsPageStyle.DateLabel)
+        self.date_label.pack(**GreetingsPageStyle.DateAndCountPack, ipady=0)
+
+        self.meeting_and_event_label = tk.Label(meeting_event_frame, **GreetingsPageStyle.CountLabel)
+        self.meeting_and_event_label.pack(**GreetingsPageStyle.DateAndCountPack)
 
         # --- Start the update loop ---
         self.update_time_and_greeting()
+        self.update_meeting_and_event_count()
 
-    def get_greeting(self):
-        current_hour = datetime.datetime.now().hour
+    def update_meeting_and_event_count(self):
+        today = datetime.date.today()
+        year = today.year
+        user_events = self._redis.get_calendar_user_data()
+        holidays_dict = holidays.country_holidays('IN', years=year)
+        meetings = self._redis.get_meetings_data()
+        meetings_count, holidays_count, user_events_count = 0, 0, 0
+
+        if meetings is not None:
+            meetings_count = 0
+            for meeting in meetings.split("\n"):
+                if str(today) in meeting:
+                    meetings_count += 1
+        if holidays_dict is not None:
+            holidays_count =  len(holidays_dict.get(today, {}))
+        if user_events is not None:
+            user_events_count =  len(user_events.get(str(today), {}))
         
-        if 5 <= current_hour < 12:
-            return "Good Morning!"
-        elif 12 <= current_hour < 18:
-            return "Good Afternoon!"
-        else:
-            return "Good Evening!"
+        text = f"> DAILY_BRIEFING_INITIATED\n> TOTAL_EVENTS: {user_events_count + holidays_count}\n> ACTIVE_MEETINGS: {meetings_count}"
+        self.meeting_and_event_label.config(text=text)
+
+        self.after(self.COUNT_UPDATE_TIMER, self.update_meeting_and_event_count)
 
     def update_time_and_greeting(self):
         
@@ -47,7 +69,5 @@ class GreetingsPage(tk.Frame):
 
         self.time_label.config(text=current_time)
         self.date_label.config(text=current_date)
-
-        self.greeting_label.config(text=self.get_greeting())
         
         self.after(self.DATETIME_UPDATE_TIMER, self.update_time_and_greeting)

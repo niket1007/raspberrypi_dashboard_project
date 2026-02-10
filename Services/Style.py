@@ -49,7 +49,7 @@ class GreetingsPageStyle:
         "pady": 10
     }
     TimeLabel: dict = {
-        "font": ("Courier", 30, "bold"),
+        "font": ("Courier", 20, "bold"),
         "fg": RETRO_GREEN,              
         "bg": RETRO_BG                  
     }
@@ -58,8 +58,8 @@ class GreetingsPageStyle:
         "expand": True, 
         "anchor": "center"
     }
-    GreetingLabel: dict = {
-        "font": ("Courier", 20, "bold"),
+    CountLabel: dict = {
+        "font": ("Courier", 12, "bold"),
         "fg": RETRO_GREEN,               
         "bg": RETRO_BG  
     }
@@ -68,7 +68,7 @@ class GreetingsPageStyle:
         "fg": RETRO_GREEN,               
         "bg": RETRO_BG               
     }
-    DateAndGreetingPack: dict = {
+    DateAndCountPack: dict = {
         "side": "top", 
         "expand": True, 
         "anchor": "center"
