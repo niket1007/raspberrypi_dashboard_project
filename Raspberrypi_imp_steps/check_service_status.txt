@@ -1,0 +1,5 @@
+dashboard_service
+    sudo systemctl status dashboard_service
+
+user_app_service
+    sudo systemctl status user_app_service

@@ -121,9 +121,6 @@ class DashboardApp(tk.Tk):
             except Exception as e:
                 print(f"GPIO Error: {e}")
 
-        
-# --- Main entry point ---
 if __name__ == "__main__":
     app = DashboardApp()
     app.mainloop()
-    
