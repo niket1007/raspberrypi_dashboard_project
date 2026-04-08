@@ -10,7 +10,9 @@ class RedisSub:
             cls.instance = super(RedisSub, cls).__new__(cls)
         return cls.instance
 
-    def __init__(self):
+    def __init__(self, callback):
+        self.callback = callback 
+        
         self._redis = Redis(
             host=config("redis_host", cast=str),
             port=config("redis_port", cast=int),
@@ -18,11 +20,16 @@ class RedisSub:
             password=config("redis_password", cast=str),
             decode_responses=True
         )
-        sub_thread = threading.Thread(target=self.__start_listening, daemon=True).start()
+        threading.Thread(target=self.__start_listening, daemon=True).start()
 
     def __start_listening(self):
         sub = self._redis.pubsub()
-        sub.subscribe("Dashboard-Commands")
+
+        sub.subscribe("live_notifications") 
 
         for message in sub.listen():
-            print("Redis Subscriber:",message.get("data", None))
+            if message.get("type", None) != "subscribe":
+                data = message.get("data")
+                print("Received Message", data)
+                if self.callback:
+                    self.callback(data)

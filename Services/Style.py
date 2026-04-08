@@ -318,3 +318,25 @@ class SysteminfoStyle:
         "expand": True, 
         "fill": "both"
     }
+
+class NotificationStyle:
+    RETRO_BG = "#050505"
+    RETRO_GREEN = "#18E310"
+
+    FramePlace = {
+        "x": 0, "y": 0,
+        "relwidth": 1, "relheight": 1
+    }
+    Label = {
+        "font": ("Courier", 14, "bold"),
+        "fg": "#18E310",  
+        "bg": "#050505",       
+        "wraplength": 280,
+        "justify": "center"
+    }
+    LabelPack = {
+        "expand": True,
+        "fill": "both",
+        "padx": 10,
+        "pady": 10
+    }

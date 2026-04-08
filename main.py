@@ -5,25 +5,27 @@ import os
 import setproctitle
 setproctitle.setproctitle("raspberry-pi-dashboard")
 
-# Import our page modules
+# Pages
 from Page.greetings import GreetingsPage
 
-from Services.Style import MainPageStyle
+# Services
+from Services.Style import MainPageStyle, NotificationStyle
 from Services.Redis.redis import RedisStorage
 from Services.Redis.redis_sub import RedisSub
+from Services.NotificationService import NotificationService
 
 class DashboardApp(tk.Tk):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.redis = RedisStorage()
-        _ = RedisSub()
+        self._notif_service = NotificationService()
+        
+        self.redis_sub = RedisSub(self.trigger_notification)
         
         # --- Basic Window Setup ---
         self.title(MainPageStyle.Title)
         self.geometry(MainPageStyle.Geometry)
-        
-        # Set Global Retro Background
         self.configure(bg=MainPageStyle.RETRO_BG) 
 
         if config("app_platform", "windows") == "windows":
@@ -33,12 +35,10 @@ class DashboardApp(tk.Tk):
             self.config(cursor="none")
 
         # --- Navigation Bar ---
-        # Apply Retro Black to the navigation frame
         nav_frame = tk.Frame(self, bg=MainPageStyle.RETRO_BG) 
         nav_frame.pack(**MainPageStyle.NavFramePack)
 
         # --- Main Container for Pages ---
-        # Ensure the page container also uses the Retro Background
         container = tk.Frame(self, bg=MainPageStyle.RETRO_BG) 
         container.pack(**MainPageStyle.MainContainerPack)
         container.grid_rowconfigure(0, weight=1)
@@ -54,8 +54,13 @@ class DashboardApp(tk.Tk):
             self.page_list[index] = frame
             frame.grid(**MainPageStyle.EachPageFrameGrid)
 
+        # --- Notification Overlay Setup ---
+        self.notification_timer = None
+        self.notification_frame = tk.Frame(self, bg=NotificationStyle.RETRO_BG)
+        self.notification_label = tk.Label(self.notification_frame, text="", **NotificationStyle.Label)
+        self.notification_label.pack(**NotificationStyle.LabelPack)
+
         # --- Add Navigation Buttons (Next / Prev) ---
-        # Apply retro button styles to Next and Prev
         btn_prev = tk.Button(nav_frame, text="<< PREV", 
                               command=lambda: self.switch_page(-1),
                               **MainPageStyle.ButtonStyle)
@@ -64,7 +69,6 @@ class DashboardApp(tk.Tk):
                               command=lambda: self.switch_page(1),
                               **MainPageStyle.ButtonStyle)
         
-        # Center label updated with ridge border and green text
         self.page_label = tk.Label(nav_frame, text=self.page_list[0].widgetName.upper(), 
                                    **MainPageStyle.ScreenInfoLabel)
         
@@ -75,34 +79,70 @@ class DashboardApp(tk.Tk):
         self.show_frame(self.page_list[0])
         self.setup_hardware_buttons()
 
+    # NOTIFICATION LOGIC
+    def trigger_notification(self, data):
+        self.after(0, self.show_notification, data)
+
+    def show_notification(self, data):
+        """Displays the overlay and starts the 30-second timer."""
+        # try:
+        #     notif_data = json.loads(data)
+        #     app_name = notif_data.get("app_name", "Alert")
+        #     title = notif_data.get("title", "")
+        #     text = notif_data.get("text", "")
+            
+        #     display_text = f"[{app_name}]\n\n{title}\n{text}"
+        # except json.JSONDecodeError:
+        #     display_text = str(data)
+        display_text = self._notif_service.get_message(data)
+        if display_text != "skip":
+            # Update the text
+            old_value = self.notification_label.cget("text")
+            print("Old Value", old_value)
+            self.notification_label.config(text=display_text)
+            
+            # Place the overlay over the entire screen
+            self.notification_frame.place(**NotificationStyle.FramePlace)
+            self.notification_frame.tkraise()
+
+            # Cancel old timer if notification is 
+            if self.notification_timer is not None:
+                self.after_cancel(self.notification_timer)
+
+            # Set a new timer to hide the notification after 30 seconds (30000 ms)
+            self.notification_timer = self.after(30000, self.hide_notification)
+
+    def hide_notification(self):
+        """Hides the overlay, revealing the standard pages underneath."""
+        self.notification_label.config(text=None)
+        self.notification_frame.place_forget()
+        self.notification_timer = None
+
+
+    # ==========================================
+    # STANDARD PAGE LOGIC
+    # ==========================================
     def __get_page_lists(self) -> list:
         pages = [GreetingsPage]
         screens = self.redis.get_screen_configuration()
 
         for screen in screens:
             if screen["visibility"]:
-                module_name = f"Page.{screen["name"].lower()}"
-                class_name = f"{screen["name"].capitalize()}Page"
+                module_name = f"Page.{screen['name'].lower()}"
+                class_name = f"{screen['name'].capitalize()}Page"
                 module = importlib.import_module(module_name)
                 page_class = getattr(module, class_name)
                 pages.append(page_class)
         return pages
 
     def show_frame(self, page_frame: tk.Frame):
-        """Brings the specified frame to the front."""
         page_frame.tkraise()
 
     def switch_page(self, delta):
-        """
-        Moves to the next or previous page.
-        delta = 1 for Next, -1 for Prev
-        """
         new_index = (self.current_page_index + delta) % len(self.page_list)
-        
         page_frame = self.page_list[new_index]
         self.current_page_index = new_index
         self.page_label.config(text=page_frame.widgetName)
-
         self.show_frame(page_frame)
     
     def setup_hardware_buttons(self):
