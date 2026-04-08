@@ -5,7 +5,7 @@ After=graphical.target multi-user.target default.target
 [Service]
 User=pi
 WorkingDirectory=/home/pi/Documents/Project/User_App
-ExecStart=/bin/bash /home/pi/Documents/Project/Dashboard/user_app_launcher.sh
+ExecStart=/bin/bash /home/pi/Documents/Project/User_App/user_app_launcher.sh
 ExecStartPre=/bin/sleep 60
 Restart=always
 RestartSec=10
