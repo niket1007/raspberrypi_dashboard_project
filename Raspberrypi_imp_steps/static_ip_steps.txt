@@ -1,0 +1,35 @@
+Here are the complete, step-by-step instructions for setting a permanent static IP address directly on your Raspberry Pi.
+
+Prerequisites: You need to know your desired static IP (e.g., `192.168.1.50`) and your Wi-Fi Router's IP address (the Gateway, e.g., `192.168.1.1`).
+
+1. Open your Raspberry Pi terminal (via SSH or directly connected screen) and type the following command, then press Enter:
+   sudo nmtui
+
+2. Use your keyboard arrow keys to select Edit a connection and press Enter.
+
+3. Select your current Wi-Fi network name from the list and press Enter.
+
+4. Use the down arrow key to navigate to IPv4 CONFIGURATION.
+
+5. Press Enter to change it from `<Automatic>` to `<Manual>`.
+
+6. Use the right arrow key to move over to `<Show>` (next to IPv4 CONFIGURATION) and press Enter to expand the menu.
+
+7. Navigate to Addresses and select `<Add>`.
+
+8. Type your desired static IP address, making sure to include the subnet size at the end (e.g., `192.168.1.50/24`). 
+
+9. Navigate down to Gateway and type your router's exact IP address (e.g., `192.168.1.1`). [To fet the router ip address, run ipconfig in laptop and look for Default Gateway]
+
+10. Navigate down to DNS servers, select `<Add>`, and type `8.8.8.8` (Google's DNS).
+
+11. Select `<Add>` again on the line below it and type `1.1.1.1` (Cloudflare's DNS, as a backup).
+
+12. Use the down arrow to scroll all the way to the bottom right of the screen until `<OK>` is highlighted, then press Enter to save.
+
+13. Select `<Back>` and press Enter.
+
+14. Select `<Quit>` and press Enter to exit the tool entirely.
+
+15. Back in your normal terminal window, type the following command and press Enter to restart the Pi and apply all the changes
+    sudo reboot

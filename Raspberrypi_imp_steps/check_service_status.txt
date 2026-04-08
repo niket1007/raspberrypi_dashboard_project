@@ -3,3 +3,6 @@ dashboard_service
 
 user_app_service
     sudo systemctl status user_app_service
+
+notification_listener_service
+    sudo systemctl status notification_listener_service

@@ -1,0 +1,16 @@
+1. Create a service
+    sudo nano /etc/systemd/system/<service_name>.service
+
+2. Add the Configuration to service file
+
+3. Reload the Systemd Daemon
+    sudo systemctl daemon-reload
+
+4. Enable the Service on Boot
+    sudo systemctl enable <service_name>.service
+
+5. Start the Service Now
+    sudo systemctl start <service_name>.service
+
+6. Check the Status
+    sudo systemctl status <service_name>.service
