@@ -1,0 +1,14 @@
+[Unit]
+Description=Dashboard
+After=graphical.target multi-user.target default.target
+
+[Service]
+User=pi
+WorkingDirectory=/home/pi/Documents/Project/Notification_Listener
+ExecStart=/bin/bash /home/pi/Documents/Project/Notification_Listener/notification_listener.sh
+ExecStartPre=/bin/sleep 60
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=graphical.target
