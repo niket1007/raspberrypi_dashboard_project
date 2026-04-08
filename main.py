@@ -84,33 +84,21 @@ class DashboardApp(tk.Tk):
         self.after(0, self.show_notification, data)
 
     def show_notification(self, data):
-        """Displays the overlay and starts the 30-second timer."""
-        # try:
-        #     notif_data = json.loads(data)
-        #     app_name = notif_data.get("app_name", "Alert")
-        #     title = notif_data.get("title", "")
-        #     text = notif_data.get("text", "")
-            
-        #     display_text = f"[{app_name}]\n\n{title}\n{text}"
-        # except json.JSONDecodeError:
-        #     display_text = str(data)
+
         display_text = self._notif_service.get_message(data)
         if display_text != "skip":
-            # Update the text
-            old_value = self.notification_label.cget("text")
-            print("Old Value", old_value)
             self.notification_label.config(text=display_text)
-            
-            # Place the overlay over the entire screen
+
             self.notification_frame.place(**NotificationStyle.FramePlace)
             self.notification_frame.tkraise()
 
-            # Cancel old timer if notification is 
+            # Cancel old timer if old notification is still on
             if self.notification_timer is not None:
                 self.after_cancel(self.notification_timer)
 
             # Set a new timer to hide the notification after 30 seconds (30000 ms)
-            self.notification_timer = self.after(30000, self.hide_notification)
+            self.notification_timer = self.after(
+                config("notification_screen_live"), self.hide_notification)
 
     def hide_notification(self):
         """Hides the overlay, revealing the standard pages underneath."""
