@@ -1,11 +1,7 @@
 import json
 
 class NotificationService():
-    GMAIL = "Gmail"
     SKIP_APP = ["Automate", "Myntra", "Moto Actions & Gestures", "Phone"]
-    CLOCK = "Clock"
-    WHATSAPP = "WhatsApp"
-    TEAMS = "Teams"
 
     def get_message(self, data: str) -> str:
         data = json.loads(data)
