@@ -34,6 +34,7 @@ class NotificationService():
                 return "skip"
             title = data.get("title")
             text = data.get("text")
+            text =  text[:40] + "...." if len(text) > 40 else text 
             ticker_text = data.get("ticker_text")
 
             if app_name == title:

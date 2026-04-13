@@ -84,7 +84,6 @@ class DashboardApp(tk.Tk):
         self.after(0, self.show_notification, data)
 
     def show_notification(self, data):
-
         display_text = self._notif_service.get_message(data)
         if display_text != "skip":
             self.notification_label.config(text=display_text)
@@ -101,7 +100,6 @@ class DashboardApp(tk.Tk):
                 config("notification_screen_live"), self.hide_notification)
 
     def hide_notification(self):
-        """Hides the overlay, revealing the standard pages underneath."""
         self.notification_label.config(text=None)
         self.notification_frame.place_forget()
         self.notification_timer = None
