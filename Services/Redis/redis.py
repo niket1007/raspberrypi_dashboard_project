@@ -16,6 +16,9 @@ class RedisStorage:
         return cls.instance
 
     def __init__(self):
+        if hasattr(self, '_redis'):
+            return
+        
         self._redis = Redis(
             host=config("redis_host", cast=str),
             port=config("redis_port", cast=int),

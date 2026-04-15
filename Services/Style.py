@@ -323,20 +323,46 @@ class NotificationStyle:
     RETRO_BG = "#050505"
     RETRO_GREEN = "#18E310"
 
+    TAG_COLORS = {
+        "NOTIF":   {"bg": "#58a6ff", "fg": "#050505"},
+        "INCALL":  {"bg": "#f85149", "fg": "#ffffff"},
+        "OUTCALL": {"bg": "#f85149", "fg": "#ffffff"},
+        "BATT":    {"bg": "#f5a623", "fg": "#050505"},
+        "DEFAULT": {"bg": "#18E310", "fg": "#050505"},
+    }
     FramePlace = {
         "x": 0, "y": 0,
         "relwidth": 1, "relheight": 1
     }
-    Label = {
-        "font": ("Courier", 14, "bold"),
-        "fg": "#18E310",  
-        "bg": "#050505",       
-        "wraplength": 280,
-        "justify": "center"
+    CardBorder = {
+        "bg": "#0a0a0a",
+        "highlightthickness": 1,
+        "highlightbackground": "#18E310",
+        "relief": "flat",
+        "bd": 0
     }
-    LabelPack = {
-        "expand": True,
-        "fill": "both",
-        "padx": 10,
-        "pady": 10
+    TagLabel = {
+        "font": ("Courier", 8, "bold"),
+        "padx": 5, "pady": 1,
+        "relief": "flat"
+    }
+    TitleLabel = {
+        "font": ("Courier", 13, "bold"),
+        "fg": "#18E310",
+        "bg": "#0a0a0a",
+        "anchor": "w"
+    }
+    BodyLabel = {
+        "font": ("Courier", 11),
+        "fg": "#18E310",
+        "bg": "#0a0a0a",
+        "justify": "left",
+        "wraplength": 280,
+        "anchor": "w"
+    }
+    TimeLabel = {
+        "font": ("Courier", 9),
+        "fg": "#18E310",
+        "bg": "#0a0a0a",
+        "anchor": "e"
     }

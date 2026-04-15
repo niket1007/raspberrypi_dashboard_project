@@ -3,8 +3,8 @@ import json
 class NotificationService():
     SKIP_APP = ["Automate", "Myntra", "Moto Actions & Gestures", "Phone"]
 
-    def get_message(self, data: str) -> str:
-        data = json.loads(data)
+    def get_message(self, data) -> str:
+        data: dict = json.loads(data)
 
         msg_type = data.get("type", None)
         if data.get("type") == "batterystat":
@@ -30,7 +30,7 @@ class NotificationService():
                 return "skip"
             title = data.get("title")
             text = data.get("text")
-            text =  text[:40] + "...." if len(text) > 40 else text 
+            text =  text[:40] + "...." if len(text) > 40 and text is not None else text 
             ticker_text = data.get("ticker_text")
 
             if app_name == title:

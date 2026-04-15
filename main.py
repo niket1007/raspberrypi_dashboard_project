@@ -7,26 +7,25 @@ setproctitle.setproctitle("raspberry-pi-dashboard")
 
 # Pages
 from Page.greetings import GreetingsPage
+from Page.notification import NotificationOverlay
 
 # Services
-from Services.Style import MainPageStyle, NotificationStyle
+from Services.Style import MainPageStyle
 from Services.Redis.redis import RedisStorage
 from Services.Redis.redis_sub import RedisSub
-from Services.NotificationService import NotificationService
+
 
 class DashboardApp(tk.Tk):
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.redis = RedisStorage()
-        self._notif_service = NotificationService()
-        
         self.redis_sub = RedisSub(self.trigger_notification)
-        
+
         # --- Basic Window Setup ---
         self.title(MainPageStyle.Title)
         self.geometry(MainPageStyle.Geometry)
-        self.configure(bg=MainPageStyle.RETRO_BG) 
+        self.configure(bg=MainPageStyle.RETRO_BG)
 
         if config("app_platform", "windows") == "windows":
             self.attributes("-fullscreen", False)
@@ -35,11 +34,11 @@ class DashboardApp(tk.Tk):
             self.config(cursor="none")
 
         # --- Navigation Bar ---
-        nav_frame = tk.Frame(self, bg=MainPageStyle.RETRO_BG) 
+        nav_frame = tk.Frame(self, bg=MainPageStyle.RETRO_BG)
         nav_frame.pack(**MainPageStyle.NavFramePack)
 
         # --- Main Container for Pages ---
-        container = tk.Frame(self, bg=MainPageStyle.RETRO_BG) 
+        container = tk.Frame(self, bg=MainPageStyle.RETRO_BG)
         container.pack(**MainPageStyle.MainContainerPack)
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
@@ -54,56 +53,33 @@ class DashboardApp(tk.Tk):
             self.page_list[index] = frame
             frame.grid(**MainPageStyle.EachPageFrameGrid)
 
-        # --- Notification Overlay Setup ---
-        self.notification_timer = None
-        self.notification_frame = tk.Frame(self, bg=NotificationStyle.RETRO_BG)
-        self.notification_label = tk.Label(self.notification_frame, text="", **NotificationStyle.Label)
-        self.notification_label.pack(**NotificationStyle.LabelPack)
+        # --- Notification Overlay ---
+        self.notification_overlay = NotificationOverlay(parent=self, controller=self)
 
-        # --- Add Navigation Buttons (Next / Prev) ---
-        btn_prev = tk.Button(nav_frame, text="<< PREV", 
-                              command=lambda: self.switch_page(-1),
-                              **MainPageStyle.ButtonStyle)
-        
-        btn_next = tk.Button(nav_frame, text="NEXT >>", 
-                              command=lambda: self.switch_page(1),
-                              **MainPageStyle.ButtonStyle)
-        
-        self.page_label = tk.Label(nav_frame, text=self.page_list[0].widgetName.upper(), 
+        # --- Navigation Buttons ---
+        btn_prev = tk.Button(nav_frame, text="<< PREV",
+                             command=lambda: self.switch_page(-1),
+                             **MainPageStyle.ButtonStyle)
+
+        btn_next = tk.Button(nav_frame, text="NEXT >>",
+                             command=lambda: self.switch_page(1),
+                             **MainPageStyle.ButtonStyle)
+
+        self.page_label = tk.Label(nav_frame, text=self.page_list[0].widgetName.upper(),
                                    **MainPageStyle.ScreenInfoLabel)
-        
+
         btn_prev.pack(**MainPageStyle.ButtonPack)
         self.page_label.pack(**MainPageStyle.ScreenInfoLabelPack)
         btn_next.pack(**MainPageStyle.ButtonPack)
-        
+
         self.show_frame(self.page_list[0])
         self.setup_hardware_buttons()
 
+    # ==========================================
     # NOTIFICATION LOGIC
-    def trigger_notification(self, data):
-        self.after(0, self.show_notification, data)
-
-    def show_notification(self, data):
-        display_text = self._notif_service.get_message(data)
-        if display_text != "skip":
-            self.notification_label.config(text=display_text)
-
-            self.notification_frame.place(**NotificationStyle.FramePlace)
-            self.notification_frame.tkraise()
-
-            # Cancel old timer if old notification is still on
-            if self.notification_timer is not None:
-                self.after_cancel(self.notification_timer)
-
-            # Set a new timer to hide the notification after 30 seconds (30000 ms)
-            self.notification_timer = self.after(
-                config("notification_screen_live"), self.hide_notification)
-
-    def hide_notification(self):
-        self.notification_label.config(text=None)
-        self.notification_frame.place_forget()
-        self.notification_timer = None
-
+    # ==========================================
+    def trigger_notification(self, data: str):
+        self.after(0, self.notification_overlay.show, data)
 
     # ==========================================
     # STANDARD PAGE LOGIC
@@ -124,28 +100,28 @@ class DashboardApp(tk.Tk):
     def show_frame(self, page_frame: tk.Frame):
         page_frame.tkraise()
 
-    def switch_page(self, delta):
+    def switch_page(self, delta: int):
         new_index = (self.current_page_index + delta) % len(self.page_list)
         page_frame = self.page_list[new_index]
         self.current_page_index = new_index
         self.page_label.config(text=page_frame.widgetName)
         self.show_frame(page_frame)
-    
+
     def setup_hardware_buttons(self):
         env = config("app_platform", "windows")
         if env == "raspberrypi":
             try:
                 from gpiozero import Button
-                self.screen_btn_prev = Button(18, bounce_time=0.1) #K1
-                self.screen_btn_restart = Button(23, bounce_time=0.1) #K2
-                self.screen_btn_next = Button(24, bounce_time=0.1) # K3
+                self.screen_btn_prev = Button(18, bounce_time=0.1)     # K1
+                self.screen_btn_restart = Button(23, bounce_time=0.1)  # K2
+                self.screen_btn_next = Button(24, bounce_time=0.1)     # K3
                 self.screen_btn_prev.when_pressed = lambda: self.switch_page(-1)
                 self.screen_btn_next.when_pressed = lambda: self.switch_page(1)
                 self.screen_btn_restart.when_pressed = lambda: os.system("sudo shutdown -h now")
-                
                 print("Hardware buttons initialized.")
             except Exception as e:
                 print(f"GPIO Error: {e}")
+
 
 if __name__ == "__main__":
     app = DashboardApp()
