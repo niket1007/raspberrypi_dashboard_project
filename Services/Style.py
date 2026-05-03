@@ -38,41 +38,165 @@ class QuotePageStyle:
     }
 
 class GreetingsPageStyle:
-    RETRO_GREEN = "#18E310"
-    RETRO_BG = "#050505"
+    FRAME_BG_ONE = "#001100"
+    FRAME_BG_TWO = "#000000"
+    HIGHLIGHT_COLOR = "#003300"
+    LABEL_FG = "#00CC33"
 
-    MainFrame: dict = {
-        "side": "top", 
-        "fill": "both", 
-        "expand": True, 
-        "padx": 10, 
-        "pady": 10
+    BoldFont11 = {"family":"Helvetica", "size":11, "weight":"bold"}
+    NormalFont9 = {"family":"Helvetica", "size":9, "weight":"normal"}
+    BoldFont9 = {"family":"Helvetica", "size":9, "weight":"bold"}
+    UnderlineBold9 = {"family":"Helvetica", "size":9, "weight":"bold", "underline":True}
+
+    FrameOne = {
+        "bg": FRAME_BG_ONE, 
+        "relief":"solid",
+        "highlightcolor":HIGHLIGHT_COLOR, 
+        "highlightthickness":1, 
+        "highlightbackground": HIGHLIGHT_COLOR
     }
-    TimeLabel: dict = {
-        "font": ("Courier", 20, "bold"),
-        "fg": RETRO_GREEN,              
-        "bg": RETRO_BG                  
+
+    FrameTwo = {
+        "bg": FRAME_BG_TWO, 
+        "relief":"solid",
+        "highlightcolor":HIGHLIGHT_COLOR, 
+        "highlightthickness":1, 
+        "highlightbackground": HIGHLIGHT_COLOR
     }
-    TimeLabelPack: dict = {
-        "side": "top", 
-        "expand": True, 
-        "anchor": "center"
+
+    LabelWithoutText = {
+        "background":FRAME_BG_ONE,
+        "foreground":LABEL_FG,
     }
-    CountLabel: dict = {
-        "font": ("Courier", 12, "bold"),
-        "fg": RETRO_GREEN,               
-        "bg": RETRO_BG  
+
+    TopFrame1Place = {
+        "x":0, 
+        "y":0,
+        "height": 50,
+        "width": 145
     }
-    DateLabel: dict = {    
-        "font": ("Courier", 12, "bold"),
-        "fg": RETRO_GREEN,               
-        "bg": RETRO_BG               
+    TopFrame2Place = {
+        "x":145, 
+        "y":0,
+        "height": 50,
+        "width": 175
     }
-    DateAndCountPack: dict = {
-        "side": "top", 
-        "expand": True, 
-        "anchor": "center"
+    MidFrame1Place = {
+        "x":0, 
+        "y":50,
+        "height": 105,
+        "width": 145
     }
+    MidFrame2Place = {
+        "x":145, 
+        "y":50,
+        "height": 105,
+        "width": 175
+    }
+    SecondLastFramePlace = {
+        "x":0, 
+        "y":148,
+        "height": 62,
+        "width": 320
+    }
+    LastFrame1Place = {
+        "x":0, 
+        "y":209,
+        "height": 31,
+        "width": 60
+    }
+    LastFrame2Place = {
+        "x":60, 
+        "y":209,
+        "height": 31,
+        "width": 260
+    }
+
+    TimeLablePlace = {
+        "x":5, 
+        "y":8,
+        "height": 18,
+        "width": 135
+    }
+    DateLabelPlace = {
+        "x":5, 
+        "y":27,
+        "height": 18,
+        "width": 135
+    }
+    TempLabelPlace = {
+        "x":10, 
+        "y":8
+    }
+    TempLocLabelPlace = {
+        "x":10, 
+        "y":27,
+        "height": 18,
+        "width": 167
+    }
+
+    TodoLabelPlace = {
+        "x":1, 
+        "y":1,
+        "height": 18,
+        "width": 50
+    }
+    TodoItemsPlace = {
+        "x":5, 
+        "y":22
+    }
+    TodoMorePlace = {
+        "x":90, 
+        "y":75
+    }
+
+    MeetingsLabelPlace = {
+        "x":1, 
+        "y":1
+    }
+    MeetingsItemsPlace = {
+        "x":5, 
+        "y":22
+    }
+    MeetingsMorePlace = {
+        "x":120, 
+        "y":75
+    }
+
+    EventLabelPlace ={
+        "x":1, 
+        "y":1
+    }
+    EventsItem1Place = {
+        "x":1, 
+        "y":20
+    }
+    EventsItem2Place = {
+        "x":1, 
+        "y":40
+    }
+    EventsItem3Place = {
+        "x":165, 
+        "y":5
+    }
+    EventsItem4Place = {
+        "x":165, 
+        "y":20
+    }
+    EventsMorePlace = {
+        "x":210, 
+        "y":40
+    }
+
+    QuoteLabelPlace = {
+        "x":5, 
+        "y":5
+    }
+    QuoteTextPlace = {
+        "x":5, 
+        "y":5
+    }
+
 
 class TodoPageStyle:
     RETRO_GREEN = "#18E310"

@@ -41,15 +41,15 @@ class RedisStorage:
         
         return data
     
-    def get_todo_data(self) -> str:
+    def get_todo_data(self, default_msg: bool=True) -> str:
         data = self._redis.get("pages:todo:data")
-        if data is None:
+        if data is None and default_msg:
             return REDIS["TODO_DATA"]
         return data
     
-    def get_meetings_data(self) -> str:
+    def get_meetings_data(self, default_msg: bool=True) -> str:
         data = self._redis.get("pages:meetings:data")
-        if data is None:
+        if data is None and default_msg:
             return REDIS["MEETINGS_DATA"]
         return data
 
@@ -64,10 +64,13 @@ class RedisStorage:
         return data
 
     def set_weather_data(self, data: str) -> None:
-        self._redis.set("pages:weather:api_data", data, ex=self.WEATHER_EXPIRE)
-    
+        stringifed = json.dumps(data)
+        self._redis.set("pages:weather:api_data", stringifed, ex=self.WEATHER_EXPIRE)
+
     def get_weather_data(self) -> str|None:
         data = self._redis.get("pages:weather:api_data")
+        if data is not None:
+            data = json.loads(data)
         return data
 
     def get_calendar_user_data(self) -> dict:

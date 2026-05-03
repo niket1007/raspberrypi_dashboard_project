@@ -2,21 +2,16 @@ import tkinter as tk
 import requests
 import time
 from decouple import config
-import geocoder
+
 from Services.Style import WeatherPageStyle
 from Services.Static.static import WEATHER
 from Services.Redis.redis import RedisStorage
+from Services.utils import Utils
 
 class WeatherPage(tk.Frame):
 
-    WEATHER_API_KEY = config("weather_api_key", cast=str)
-    WEATHER_API_URL = config("weather_api_path", cast=str)
-    UNITS = "metric"
+    # Update in every 10 min = 600000ms
     UPDATE_INTERVAL_MS = config("weather_api_call_frequency", cast=int)
-    
-    def __get_coordinates(self):
-        g = geocoder.ip('me') 
-        return g.latlng
     
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -24,7 +19,7 @@ class WeatherPage(tk.Frame):
         self.widgetName = "Weather"
         self.redis = RedisStorage()
 
-        self.LAT, self.LONG = self.__get_coordinates()
+        self.utils = Utils()
 
         self.configure(bg=WeatherPageStyle.RETRO_BG)
 
@@ -38,10 +33,16 @@ class WeatherPage(tk.Frame):
         self.fetch_weather()
     
     def fetch_weather(self):
+        """
+        Fetch data from redis and if data not found then call the weather api.
+        Once data is available then call the update ui with details
+        If an error in between, then anime style error line is shown to user
+        """
+
         try:
             data = self.redis.get_weather_data()
             if data is None:
-                data = self.__fetch_weather_api()
+                data = self.utils.call_weather_api()
             
             self.after(0, self.update_ui, data)
         
@@ -54,34 +55,22 @@ class WeatherPage(tk.Frame):
         finally:
             self.after(self.UPDATE_INTERVAL_MS, self.fetch_weather)
 
+    def update_ui(self, weather_data: dict|str, error: bool = False):
+        """
+        Update ui with weather data if error is False and text color is neon green (success color).
+        If error is True then change text color to red (error color) and show error message in weather_data
+        """
 
-    def __fetch_weather_api(self):
-        url = f"{self.WEATHER_API_URL}?key={self.WEATHER_API_KEY}&q={self.LAT},{self.LONG}"
-        
-        response = requests.get(url, timeout=10)
-        response.raise_for_status()
-        
-        data = response.json()
-        
-        location = f"{data['location']['name']}, {data['location']['country']}"
-        temp = data['current']["temp_c"]
-        condition = data['current']['condition']['text']
-        humidity = data['current']['humidity']
-        
-        display_text = f"Location: {location}\n"
-        display_text += f"Current temperature: {temp}°C\n"
-        display_text += f"Condition: {condition}\n"
-        display_text += f"Humidity: {humidity}%"
-
-        self.redis.set_weather_data(display_text)
-
-        return display_text
-
-    def update_ui(self, weather_text: str, error: bool = False):
-        
-        text_color = WeatherPageStyle.WeatherLabelStateColor["success_color"]
         if error:
             text_color = WeatherPageStyle.WeatherLabelStateColor["error_color"]
+            weather_text = weather_data
+        else:
+            weather_text = f"Location: {weather_data['city_name']}, {weather_data['country']}\n"
+            weather_text += f"Current temperature: {weather_data['temp']}°C\n"
+            weather_text += f"Condition: {weather_data['condition']}\n"
+            weather_text += f"Humidity: {weather_data['humidity']}%"
+
+            text_color = WeatherPageStyle.WeatherLabelStateColor["success_color"]    
         
         self.weather_label.config(text=weather_text, foreground=text_color)
         self.last_updated_label.config(text=f"Last updated: {time.strftime('%I:%M:%S %p')}")

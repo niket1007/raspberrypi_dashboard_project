@@ -4,9 +4,12 @@ import random
 from decouple import config
 import os
 import json
+
+# Services
 from Services.Style import QuotePageStyle
 from Services.Redis.redis import RedisStorage
 from Services.Static.static import QUOTE
+from Services.utils import Utils
 
 class QuotePage(tk.Frame):
     
@@ -16,7 +19,8 @@ class QuotePage(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
         self.widgetName = "Quote"
-        self.redis = RedisStorage()
+        self._redis = RedisStorage()
+        self._utils = Utils()
 
         self.configure(bg=QuotePageStyle.RETRO_BG)
 
@@ -32,14 +36,12 @@ class QuotePage(tk.Frame):
         
         self.fetch_quote()
     
-    def update_redis_data(self, data: dict):
-        self.redis.set_quote_data(data)
-    
+
     def fetch_quote(self):
         try:
-            data = self.redis.get_quote_data()
+            data = self._redis.get_quote_data()
             if data is None:
-                data = self.__fetch_quote_file()
+                data = self._utils.fetch_quote_data()
             
             self.after(0, self.update_ui, data)
 
@@ -53,23 +55,6 @@ class QuotePage(tk.Frame):
         
         finally:
             self.after(self.UPDATE_INTERVAL_MS, self.fetch_quote)
-
-    
-    def __fetch_quote_file(self):
-
-        quote_data_path = os.path.join(os.getcwd(), "Data", "quotes.json")
-        with open(quote_data_path, "r") as file:
-            data = json.load(file)
-        
-        quote = ""
-        while True:
-            quote = random.choice(data)
-            if len(quote) <= config("quote_max_length", cast=int, default=50):
-                break
-        
-        self.update_redis_data(quote)
-
-        return quote
 
     def update_ui(self, data: dict, error: bool = False):
 

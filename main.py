@@ -34,8 +34,8 @@ class DashboardApp(tk.Tk):
             self.config(cursor="none")
 
         # --- Navigation Bar ---
-        nav_frame = tk.Frame(self, bg=MainPageStyle.RETRO_BG)
-        nav_frame.pack(**MainPageStyle.NavFramePack)
+        # nav_frame = tk.Frame(self, bg=MainPageStyle.RETRO_BG)
+        # nav_frame.pack(**MainPageStyle.NavFramePack)
 
         # --- Main Container for Pages ---
         container = tk.Frame(self, bg=MainPageStyle.RETRO_BG)
@@ -55,22 +55,6 @@ class DashboardApp(tk.Tk):
 
         # --- Notification Overlay ---
         self.notification_overlay = NotificationOverlay(parent=self, controller=self)
-
-        # --- Navigation Buttons ---
-        btn_prev = tk.Button(nav_frame, text="<< PREV",
-                             command=lambda: self.switch_page(-1),
-                             **MainPageStyle.ButtonStyle)
-
-        btn_next = tk.Button(nav_frame, text="NEXT >>",
-                             command=lambda: self.switch_page(1),
-                             **MainPageStyle.ButtonStyle)
-
-        self.page_label = tk.Label(nav_frame, text=self.page_list[0].widgetName.upper(),
-                                   **MainPageStyle.ScreenInfoLabel)
-
-        btn_prev.pack(**MainPageStyle.ButtonPack)
-        self.page_label.pack(**MainPageStyle.ScreenInfoLabelPack)
-        btn_next.pack(**MainPageStyle.ButtonPack)
 
         self.show_frame(self.page_list[0])
         self.setup_hardware_buttons()
@@ -104,7 +88,6 @@ class DashboardApp(tk.Tk):
         new_index = (self.current_page_index + delta) % len(self.page_list)
         page_frame = self.page_list[new_index]
         self.current_page_index = new_index
-        self.page_label.config(text=page_frame.widgetName)
         self.show_frame(page_frame)
 
     def setup_hardware_buttons(self):
