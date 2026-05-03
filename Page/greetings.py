@@ -255,6 +255,11 @@ class GreetingsPage(tk.Frame):
             
             yyyy_mm = f"{year}-0{month}-" if month < 10 else f"{year}-{month}-"
 
+            # Clean old value in Fields
+            for field in fields:
+                field.config(text=None)
+            self.events_more.config(text=None)
+
             for date in user_event_data:
                 day = int(date[-2:])
                 if yyyy_mm in date and day >= today_day:
