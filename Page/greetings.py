@@ -141,7 +141,7 @@ class GreetingsPage(tk.Frame):
     def update_time_and_greeting(self):
         
         current_time = time.strftime("%I:%M:%S %p")
-        current_date = time.strftime(r"%A, %B %d, %Y")
+        current_date = time.strftime(r"%a, %B %d, %Y")
 
         self.time_label.config(text=current_time)
         self.date_label.config(text=current_date)
