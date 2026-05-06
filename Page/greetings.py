@@ -257,8 +257,8 @@ class GreetingsPage(tk.Frame):
 
             # Clean old value in Fields
             for field in fields:
-                field.config(text=None)
-            self.events_more.config(text=None)
+                field.config(text="")
+            self.events_more.config(text="")
 
             for date in user_event_data:
                 day = int(date[-2:])
