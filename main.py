@@ -1,39 +1,54 @@
-from flask import Flask, request, jsonify
-from decouple import config
-from redis import Redis
-import json
+#!/usr/bin/env python3
 
-app = Flask(__name__)
+import dbus.mainloop.glib
 
-CLIENT_ID = config("api_client_id", cast=str)
-CLIENT_SECRET = config("api_client_secret", cast=str)
+from advertisement import Advertisement
+from bletools import BleTools, Agent
+from service import Application, NotificationService
 
-_redis = Redis(
-    host=config("redis_host", cast=str),
-    port=config("redis_port", cast=int),
-    username=config("redis_username", cast=str, default=None),
-    password=config("redis_password", cast=str, default=None),
-    decode_responses=True
-)
 
-@app.route("/push_notifications", methods=["POST"])
-def push_notifications():
+def main():
+    dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
-    username = request.headers.get("Username", None)
-    password = request.headers.get("Password", None)
+    bus = BleTools.get_bus()
+    adapter = BleTools.find_adapter(bus)
 
-    if username != CLIENT_ID or password != CLIENT_SECRET:
-        return jsonify({
-            "message": "Unauthorized user"
-        }), 403
+    print(f"Using adapter: {adapter}")
 
-    body = request.json
+    # Keep the Bluetooth adapter powered.
+    BleTools.power_adapter(bus, adapter)
 
-    _redis.publish("live_notifications", json.dumps(body))
+    # Build GATT application.
+    app = Application(bus)
+    service = NotificationService(bus)
+    app.add_service(service)
 
-    return jsonify({
-        "msg": "Message Published."
-    }), 202
+    # Build advertisement and authentication agent.
+    advertisement = Advertisement(bus)
+    agent = Agent(bus, "/org/bluez/nsw/agent")
+
+    # Register everything with BlueZ.
+    app.register(adapter)
+    advertisement.register(adapter)
+    BleTools.register_agent(bus, agent)
+
+    print()
+    print("============================================")
+    print(" BLE notification receiver")
+    print("============================================")
+    print("Device : NRPI")
+    print("Service: 6E400001-B5A3-F393-E0A9-E50E24DCCA9E")
+    print("RX     : 6E400002-B5A3-F393-E0A9-E50E24DCCA9E")
+    print()
+    print("Waiting for Gadgetbridge...")
+    print("Press Ctrl+C to stop.")
+    print()
+
+    try:
+        app.run()
+    except KeyboardInterrupt:
+        print("\nStopping...")
+
 
 if __name__ == "__main__":
-    app.run(host=config("host", cast=str), port=config("port", cast=int))
+    main()
