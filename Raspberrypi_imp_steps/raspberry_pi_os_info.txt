@@ -1,0 +1,1 @@
+OS Name: Raspberry Pi OS [Legacy, 32 bit] Lite (Bookworm)
