@@ -1,1 +1,5 @@
 Screen Information: https://www.waveshare.com/wiki/3.2inch_RPi_LCD_(B)
+
+sudo raspi-config
+    1) Sytem Options -> Boot -> GUI
+    2) System Options -> Auto Login -> True
